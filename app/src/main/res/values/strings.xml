@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DateHelper</string>
+    <string name="image_app_icon">Date Helper Icon</string>
+    <string name="text_app_mission">Advice for successful dates</string>
+    <string name="button_facebook">Login with Facebook</string>
+    <string name="button_google">Sign in with Google</string>
 </resources>
