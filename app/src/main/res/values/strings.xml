@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DateHelper</string>
+    <string name="ask_question_hint">Ask Your Question</string>
 </resources>

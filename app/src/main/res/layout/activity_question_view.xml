@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QuestionView">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars[14]" />
+    </android.support.v7.widget.CardView>
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+
+    <TextView
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:scrollHorizontally="false"
+        android:minLines="2"
+        android:textSize="@android:dimen/app_icon_size"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/textview_border"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Movies"
+        android:textColor="@color/colorTopBar"
+        android:textSize="24dp"
+        app:layout_constraintStart_toEndOf="@+id/tag2"
+        app:layout_constraintTop_toTopOf="@+id/tag" />
+
+    <TextView
+        android:id="@+id/tag2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Movies"
+        android:textColor="@color/colorTopBar"
+        android:textSize="24dp"
+        app:layout_constraintStart_toEndOf="@+id/tag"
+        app:layout_constraintTop_toTopOf="@+id/tag" />
+
+    <TextView
+        android:id="@+id/tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        android:text="art"
+        android:textColor="@color/colorTopBar"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <!--Comments section -->
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="64dp"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/tag1">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars[14]" />
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/comment1"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/textview_border"
+        android:ems="10"
+        android:minLines="2"
+        android:scrollHorizontally="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@android:dimen/app_icon_size"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
+        app:layout_constraintStart_toEndOf="@+id/cardView2"
+        app:layout_constraintTop_toTopOf="@+id/cardView2" />
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/comment1" />
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton5"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
+
+    <!-- comment 2-->
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="64dp"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/comment1" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars[14]" />
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/comment3"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/textview_border"
+        android:ems="10"
+        android:minLines="2"
+        android:scrollHorizontally="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@android:dimen/app_icon_size"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton7"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cardView2"
+        app:layout_constraintTop_toTopOf="@+id/cardView3" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/comment3" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton7"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton7" />
+
+</android.support.constraint.ConstraintLayout>
