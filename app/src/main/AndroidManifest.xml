@@ -9,6 +9,20 @@
         android:roundIcon="@mipmap/date_helper_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".GenderSelector"
+                  android:parentActivityName=".ProfileSelector">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProfileSelector"/>
+        </activity>
+        <activity
+            android:name=".ProfileSelector"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

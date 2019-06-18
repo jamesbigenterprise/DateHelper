@@ -4,4 +4,10 @@
     <string name="text_app_mission">Advice for successful dates</string>
     <string name="button_facebook">Login with Facebook</string>
     <string name="button_google">Sign in with Google</string>
+    <string name="activity_profile_type">Profile Type</string>
+    <string name="activity_gender_select">Gender</string>
+    <string name="img_title_male">Male</string>
+    <string name="img_title_female">Female</string>
+    <string name="img_title_public">Public</string>
+    <string name="img_title_incognito">Incognito</string>
 </resources>
