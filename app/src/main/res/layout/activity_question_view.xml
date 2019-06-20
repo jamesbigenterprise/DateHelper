@@ -32,7 +32,7 @@
         android:layout_marginRight="8dp"
         android:src="@android:drawable/arrow_up_float"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/question_view" />
 
     <ImageButton
         android:id="@+id/imageButton4"
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
 
     <TextView
-        android:id="@+id/editText"
+        android:id="@+id/question_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -97,8 +97,8 @@
         android:text="art"
         android:textColor="@color/colorTopBar"
         android:textSize="24dp"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintStart_toStartOf="@+id/question_view"
+        app:layout_constraintTop_toBottomOf="@+id/question_view" />
 
     <!--Comments section -->
     <android.support.v7.widget.CardView
@@ -107,7 +107,7 @@
         android:layout_height="33dp"
         android:layout_marginTop="32dp"
         app:cardCornerRadius="64dp"
-        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="@+id/question_view"
         app:layout_constraintTop_toBottomOf="@+id/tag1">
 
         <ImageView
@@ -162,7 +162,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginTop="32dp"
         app:cardCornerRadius="64dp"
-        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="@+id/question_view"
         app:layout_constraintTop_toBottomOf="@+id/comment1" >
 
         <ImageView
@@ -208,5 +208,4 @@
         android:src="@android:drawable/arrow_down_float"
         app:layout_constraintEnd_toEndOf="@+id/imageButton7"
         app:layout_constraintTop_toBottomOf="@+id/imageButton7" />
-
 </android.support.constraint.ConstraintLayout>

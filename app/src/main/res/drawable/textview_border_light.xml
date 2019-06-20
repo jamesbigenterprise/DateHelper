@@ -3,6 +3,6 @@
     android:shape="rectangle">
     <stroke
         android:width="4dp"
-        android:color="@color/colorTextBoxDark"/>
+        android:color="@color/colorTextBoxLight"/>
 
 </shape>

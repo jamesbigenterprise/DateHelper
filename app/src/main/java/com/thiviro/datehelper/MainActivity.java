@@ -19,4 +19,12 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
+  public void helpMeOnaDate(View view) {
+    Intent intent = new Intent(this, ShowResults.class);
+    startActivity(intent);
+  }
+  public void askaQuestion(View view) {
+    Intent intent = new Intent(this, NewQuestion.class);
+    startActivity(intent);
+  }
 }

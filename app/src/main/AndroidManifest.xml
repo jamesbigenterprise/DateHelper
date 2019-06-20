@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.thiviro.datehelper">
 
     <application
@@ -8,13 +9,24 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/date_helper_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".GenderSelector"
-                  android:parentActivityName=".ProfileSelector">
-
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ShowResults"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".NewQuestion"
+            android:parentActivityName=".MainActivity"  />
+        <activity
+            android:name=".GenderSelector"
+            android:parentActivityName=".ProfileSelector">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ProfileSelector"/>
+                android:value=".ProfileSelector" />
         </activity>
         <activity
             android:name=".ProfileSelector"
@@ -23,14 +35,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".QuestionView"></activity>
+        <activity android:name=".QuestionView"
+            android:parentActivityName=".NewQuestion"/>
     </application>
 
 </manifest>
