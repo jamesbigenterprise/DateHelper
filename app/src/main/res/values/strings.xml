@@ -1,24 +1,48 @@
 <resources>
     <string name="app_name">DateHelper</string>
     <string name="ask_question_hint">Ask Your Question</string>
-
     <string name="image_app_icon">Date Helper Icon</string>
-    <string name="text_app_mission">Advice for successful dates</string>
+
+
+
+    <!--Buttons strings-->
+
     <string name="button_facebook">Login with Facebook</string>
     <string name="button_google">Sign in with Google</string>
+    <string name="button_next">Next</string>
+    <string name="button_add_more">Add More</string>
+
+    <!--Activity names / labels-->
+    <string name="text_app_mission">Advice for successful dates</string>
     <string name="activity_profile_type">Profile Type</string>
     <string name="activity_gender_select">Gender</string>
+    <string name="activity_interests">Top Interests</string>
+    <string name="activity_study_area">Top Interests</string>
+    <string name="title_activity_new_question">NewQuestion</string>
+
+    <!--Image titles-->
     <string name="img_title_male">Male</string>
     <string name="img_title_female">Female</string>
     <string name="img_title_public">Public</string>
     <string name="img_title_incognito">Incognito</string>
-    <string name="title_activity_new_question">NewQuestion</string>
     <string name="ask_new_question">Ask New Question</string>
     <string name="tags_label">Tags</string>
     <string name="name_activity_hint">Name the Activity</string>
     <string name="add_tag_button">+</string>
     <string name="results_suggest_new_question">Or you can ask a new question.</string>
     <string name="hom_help_button">Help me on a date</string>
-    <string name="home_ask_button" >Ask A Question</string>
+    <string name="home_ask_button">Ask A Question</string>
     <string name="results_header">Our Suggestions</string>
+
+    <string-array name="interests">
+        <item>Movies</item>
+        <item>Sports</item>
+        <item>Games</item>
+        <item>Books</item>
+    </string-array>
+
+    <string-array name="study_area">
+        <item>Exact Science</item>
+        <item>Bio Science</item>
+    </string-array>
 </resources>

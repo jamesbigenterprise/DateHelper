@@ -11,16 +11,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".StudyArea"></activity>
+        <activity android:name=".Home" />
+        <activity
+            android:name=".InterestSelector"
+            android:parentActivityName=".GenderSelector">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".GenderSelector" />
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowResults"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".NewQuestion"
-            android:parentActivityName=".MainActivity"  />
+        <activity
+            android:name=".ShowResults"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".NewQuestion"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".GenderSelector"
             android:parentActivityName=".ProfileSelector">
@@ -35,8 +47,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".QuestionView"
-            android:parentActivityName=".NewQuestion"/>
+        <activity
+            android:name=".QuestionView"
+            android:parentActivityName=".NewQuestion" />
     </application>
 
 </manifest>

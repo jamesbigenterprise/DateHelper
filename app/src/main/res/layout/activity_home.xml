@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:minWidth="@android:dimen/thumbnail_width"
     android:minHeight="@android:dimen/thumbnail_height"
-    tools:context=".MainActivity">
+    tools:context=".Home">
 
     <Button
         android:id="@+id/button"

@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main_other);
   }
 
 
@@ -19,12 +19,5 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
-  public void helpMeOnaDate(View view) {
-    Intent intent = new Intent(this, ShowResults.class);
-    startActivity(intent);
-  }
-  public void askaQuestion(View view) {
-    Intent intent = new Intent(this, NewQuestion.class);
-    startActivity(intent);
-  }
+
 }
