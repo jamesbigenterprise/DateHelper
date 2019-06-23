@@ -4,23 +4,26 @@
     <string name="image_app_icon">Date Helper Icon</string>
 
 
-
     <!--Buttons strings-->
 
     <string name="button_facebook">Login with Facebook</string>
     <string name="button_google">Sign in with Google</string>
     <string name="button_next">Next</string>
     <string name="button_add_more">Add More</string>
+    <string name="button_select_crop">Crop and Save</string>
 
     <!--Activity names / labels-->
+
     <string name="text_app_mission">Advice for successful dates</string>
     <string name="activity_profile_type">Profile Type</string>
     <string name="activity_gender_select">Gender</string>
     <string name="activity_interests">Top Interests</string>
-    <string name="activity_study_area">Top Interests</string>
+    <string name="activity_study_area">Study Area</string>
+    <string name="activity_picture">Profile Picture</string>
     <string name="title_activity_new_question">NewQuestion</string>
 
     <!--Image titles-->
+
     <string name="img_title_male">Male</string>
     <string name="img_title_female">Female</string>
     <string name="img_title_public">Public</string>
@@ -33,6 +36,8 @@
     <string name="hom_help_button">Help me on a date</string>
     <string name="home_ask_button">Ask A Question</string>
     <string name="results_header">Our Suggestions</string>
+
+    <!--String Arrays-->
 
     <string-array name="interests">
         <item>Movies</item>

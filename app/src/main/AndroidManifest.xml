@@ -11,45 +11,78 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".StudyArea"></activity>
-        <activity android:name=".Home" />
-        <activity
-            android:name=".InterestSelector"
-            android:parentActivityName=".GenderSelector">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GenderSelector" />
-        </activity>
-        <activity android:name=".MainActivity">
+
+        <!--01-->
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ShowResults"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".NewQuestion"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".GenderSelector"
-            android:parentActivityName=".ProfileSelector">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ProfileSelector" />
-        </activity>
+        <!--02-->
         <activity
             android:name=".ProfileSelector"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <!--03-->
+        <activity android:name=".GenderSelector"
+                  android:parentActivityName=".ProfileSelector"
+                  android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProfileSelector" />
+        </activity>
+        <!--04-->
         <activity
-            android:name=".QuestionView"
-            android:parentActivityName=".NewQuestion" />
+            android:name=".InterestSelector"
+            android:parentActivityName=".GenderSelector"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".GenderSelector" />
+        </activity>
+        <!--05-->
+        <activity
+            android:name=".StudyArea"
+            android:parentActivityName=".InterestSelector"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".InterestSelector" />
+        </activity>
+        <!--06-->
+        <activity android:name=".ProfilePicture"
+            android:parentActivityName=".StudyArea"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StudyArea" />
+        </activity>
+        <!--07-->
+        <activity android:name=".Home"
+                  android:screenOrientation="portrait"/>
+        <!--a08-->
+        <activity android:name=".ShowResults"
+                  android:parentActivityName=".Home"
+                  android:screenOrientation="portrait">
+        </activity>
+        <!--b08-->
+        <activity android:name=".NewQuestion"
+                  android:parentActivityName=".Home"
+                  android:screenOrientation="portrait">
+
+        </activity>
+        <!--b09-->
+        <activity android:name=".QuestionView"
+                  android:parentActivityName=".NewQuestion"
+                  android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
