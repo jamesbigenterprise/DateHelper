@@ -34,6 +34,7 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
     switch (view.getId()){
       case R.id.picture_profile_pic:
         //TODO choose picture
+
         break;
       case R.id.picture_select_button:
         //TODO crop picture and save

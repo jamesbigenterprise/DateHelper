@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +32,14 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   private String areaSelected;
   ArrayAdapter<String> listAdapter;
 
+  public static final String SHARED_PREFS = "sharedPrefs";
   private final static String LOG_DEBUG = "StudyArea()";
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_study_area);
-    areas = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.study_area)));
+    areas = new ArrayList<>(Arrays.asList(getResources().
+            getStringArray(R.array.study_area)));
     next = findViewById(R.id.study_next);
     addMore = findViewById(R.id.study_button_add_more);
     studyArea = findViewById(R.id.studyArea);
@@ -100,7 +103,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         Tag studyAreaTag = new Tag(areaSelected);
         Log.d(LOG_DEBUG, "GETTING THE TAGS");
         //add this Tag to the list of Tags
-        SharedPreferences sharedPref = getSharedPreferences(InterestSelector.SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
         Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
@@ -114,12 +117,43 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.putString(InterestSelector.LIST_TAGS, json);
         editor.apply();
 
+        TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
+        AccountCreatorAsync accountCreatorAsync = new AccountCreatorAsync();
+        Account account  = accountCreatorAsync.doInBackground(tagmaster);
+        editor.putString(MainActivity.ACCOUNT, gson.toJson(account));
         Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
-        startActivity(new Intent(this, ProfilePicture.class));
+
+ 
+        startActivity(new Intent(this, Home.class));
         break;
       case R.id.study_button_add_more:
         createDialog();
         break;
     }
   }
+
+  private class AccountCreatorAsync extends AsyncTask<TagMaster, Void, Account> {
+
+
+    @Override
+    protected Account doInBackground(TagMaster... tagMasters) {
+      //Gather the information to create the person
+      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+      String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
+      String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
+      boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
+      SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+      Gson gson = new Gson();
+      String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
+      Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+      List<Tag> listofTags = new ArrayList<Tag>();
+      listofTags = gson.fromJson(json, type);
+      Person newProfile = new Person(firstName,lastName,gender,listofTags,tagMasters[0]);
+      //Now create the account
+      Account newAccount = new Account(newProfile);
+
+      return newAccount;
+    }
+  }
 }
+
