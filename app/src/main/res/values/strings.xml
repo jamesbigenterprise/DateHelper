@@ -51,4 +51,9 @@
         <item>Bio Sciences</item>
         <item>Human Sciences</item>
     </string-array>
+
+    <string-array name="incognito_names">
+        <item>A Boy</item>
+        <item>A Girl</item>
+    </string-array>
 </resources>

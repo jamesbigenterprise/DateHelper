@@ -5,7 +5,7 @@ import java.util.List;
 public class Account {
   private Person user;
   private List<Question> questions;
-  //private List<Comment> comments;
+  private List<Comment> comments;
   //Validation data goes here
   /*************************/
 

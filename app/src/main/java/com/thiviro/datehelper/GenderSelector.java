@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 public class GenderSelector extends AppCompatActivity implements View.OnClickListener {
 
+  public static final String SHARED_PREFS = "sharedPrefs";
   public static final String GENDER_BOOLEAN = "gender_boolean";
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
 
   @Override
   public void onClick(View view) {
-      SharedPreferences sharedPreferences = getSharedPreferences(InterestSelector.SHARED_PREFS, MODE_PRIVATE);
+      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
       SharedPreferences.Editor editor = sharedPreferences.edit();
       switch (view.getId()){
       case R.id.male:
