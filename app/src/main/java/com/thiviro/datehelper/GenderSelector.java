@@ -6,8 +6,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * GenderSelector class:
+ * The gender activity class present the options to the user
+ * for him / her to select their gender.
+ *
+ * Implements the OnClickListener interface to control
+ * the behavior when views are clicked
+ *
+ * @author Rolando, Thiago, Vitalii
+ * @version 1.0
+ */
 public class GenderSelector extends AppCompatActivity implements View.OnClickListener {
 
+  /**
+   * The onCreate method sets the content view and creates references
+   * to the objects in the screen for later interaction. The objects
+   * onclick listeners a defined to be this same class.
+   *
+   * @param savedInstanceState Instance saved used to restore the app status when
+   *                           a change occurs
+   */
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -20,6 +39,13 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
 
   }
 
+  /**
+   * The onclick method includes the actions to be
+   * executed when the items are clicked. For this class
+   * the next activities in the workflow are called.
+   *
+   * @param view view clicked used to call the next activity
+   */
   @Override
   public void onClick(View view) {
     switch (view.getId()){
