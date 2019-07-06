@@ -47,7 +47,8 @@
     </string-array>
 
     <string-array name="study_area">
-        <item>Exact Science</item>
-        <item>Bio Science</item>
+        <item>Exact Sciences</item>
+        <item>Bio Sciences</item>
+        <item>Human Sciences</item>
     </string-array>
 </resources>

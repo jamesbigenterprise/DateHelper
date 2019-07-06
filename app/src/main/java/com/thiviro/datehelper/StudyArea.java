@@ -3,8 +3,10 @@ package com.thiviro.datehelper;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +31,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   private String areaSelected;
   ArrayAdapter<String> listAdapter;
 
+  private final static String LOG_DEBUG = "StudyArea()";
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -90,6 +97,24 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
       case R.id.study_next:
         areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
         System.out.println("Selection: " + areaSelected);
+        Tag studyAreaTag = new Tag(areaSelected);
+        Log.d(LOG_DEBUG, "GETTING THE TAGS");
+        //add this Tag to the list of Tags
+        SharedPreferences sharedPref = getSharedPreferences(InterestSelector.SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
+        Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+        List<Tag> listofTags = new ArrayList<Tag>();
+        listofTags = gson.fromJson(json, type);
+        listofTags.add(studyAreaTag);
+        Log.d(LOG_DEBUG, "ADDED THE NEW TAG");
+        //put it back to shared prefs
+        SharedPreferences.Editor editor = sharedPref.edit();
+        json = gson.toJson(listofTags);
+        editor.putString(InterestSelector.LIST_TAGS, json);
+        editor.apply();
+
+        Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
         startActivity(new Intent(this, ProfilePicture.class));
         break;
       case R.id.study_button_add_more:
