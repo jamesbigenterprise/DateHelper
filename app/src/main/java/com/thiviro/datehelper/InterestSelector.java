@@ -3,6 +3,7 @@ package com.thiviro.datehelper;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -12,7 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +27,9 @@ public class InterestSelector extends AppCompatActivity implements View.OnClickL
   private ArrayAdapter<String> listAdapter;
   private Button next;
   private Button addMore;
+
+  public static final String SHARED_PREFS = "sharedPrefs";
+  public static final String LIST_TAGS = "listTags";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,7 @@ public class InterestSelector extends AppCompatActivity implements View.OnClickL
             if (entry != null){
               interests.add(entry.getText().toString());
               listAdapter.notifyDataSetChanged();
-              // TODO add list to sharefprefs
+              // TODO add list to shared prefs
             }
             dialogInterface.dismiss();
 
@@ -96,7 +102,21 @@ public class InterestSelector extends AppCompatActivity implements View.OnClickL
     switch (view.getId()){
       case R.id.interest_next:
         System.out.println(getSelection());
+        //The selections were made, so lets turn them into tags
+        // turn each string into a Tag
+        List<Tag> listofTags = new ArrayList<Tag>();
+        for (String tag : interests) {
+            listofTags.add(new Tag(tag));
+        }
+        //Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+        Gson gson = new Gson();
+        String json = gson.toJson(listofTags);
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(LIST_TAGS, json);
+        editor.apply();
         startActivity(new Intent(this, StudyArea.class));
+
         break;
       case R.id.interest_button_add_more:
         createDialog();

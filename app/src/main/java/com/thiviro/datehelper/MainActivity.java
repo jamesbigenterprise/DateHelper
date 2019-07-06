@@ -6,7 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * The MainActivity class is the entry point of the application
+ *
+ * This is the first activity called when the application starts.
+ * This class serves as a hub to login into the application.
+ * It implements the OnClickListener, to define the behavior of the
+ * graphical elements of the activity
+ *
+ * @author Rolando, Thiago, Vitalii
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     facebookLogin.setOnClickListener(this);
     googleLogin.setOnClickListener(this);
-
   }
 
   @Override
