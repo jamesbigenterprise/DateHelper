@@ -33,6 +33,11 @@ public class Home extends AppCompatActivity {
    * @param view view clicked used to call the next activity
    */
   public void helpMeOnaDate(View view) {
+    //===== ADDED THIS SECTION TO TEST COMMUNICATING WITH THE BACK END! DONE!
+    APIQuestionWorker test = new APIQuestionWorker(this);
+    Thread thread = new Thread(test, "Test");
+    thread.start();
+    //========================================================================
     Intent intent = new Intent(this, ShowResults.class);
     startActivity(intent);
   }

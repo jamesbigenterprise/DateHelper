@@ -22,109 +22,109 @@ import java.util.List;
 
 public class DateInterestsSelector extends AppCompatActivity implements View.OnClickListener{
 
-    private List<String> interests;
-    private ListView interestList;
-    private ArrayAdapter<String> listAdapter;
-    private Button next;
-    private Button addMore;
+  private List<String> interests;
+  private ListView interestList;
+  private ArrayAdapter<String> listAdapter;
+  private Button next;
+  private Button addMore;
 
 
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String LIST_DATE_TAGS = "listTags";
+  public static final String SHARED_PREFS = "sharedPrefs";
+  public static final String LIST_DATE_TAGS = "listTags";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interest_selector);
-        interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
-        next = findViewById(R.id.interest_next);
-        addMore = findViewById(R.id.interest_button_add_more);
-        interestList = findViewById(R.id.interestList);
-        createList();
-        next.setOnClickListener(this);
-        addMore.setOnClickListener(this);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_interest_selector);
+    interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
+    next = findViewById(R.id.interest_next);
+    addMore = findViewById(R.id.interest_button_add_more);
+    interestList = findViewById(R.id.interestList);
+    createList();
+    next.setOnClickListener(this);
+    addMore.setOnClickListener(this);
 
 
 
+  }
+
+  private void createList(){
+    listAdapter = new ArrayAdapter<>(this,
+        android.R.layout.simple_list_item_multiple_choice, interests);
+    interestList.setAdapter(listAdapter);
+    interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+  }
+
+  private ArrayList<String> getSelection(){
+    SparseBooleanArray checked = interestList.getCheckedItemPositions();
+    ArrayList<String> selection = new ArrayList<>();
+    for (int i = 0;i < checked.size();i++){
+      selection.add(listAdapter.getItem(checked.keyAt(i)));
     }
 
-    private void createList(){
-        listAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, interests);
-        interestList.setAdapter(listAdapter);
-        interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+    return selection;
+  }
 
-    }
+  private void createDialog(){
+    LayoutInflater inflater = LayoutInflater.from(this);
+    final View mView = inflater.inflate(R.layout.text_input_dialog, null);
+    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+    dialog.setView(mView);
 
-    private ArrayList<String> getSelection(){
-        SparseBooleanArray checked = interestList.getCheckedItemPositions();
-        ArrayList<String> selection = new ArrayList<>();
-        for (int i = 0;i < checked.size();i++){
-            selection.add(listAdapter.getItem(checked.keyAt(i)));
+    dialog.setCancelable(false)
+        .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+
+
+            final EditText entry = mView.findViewById(R.id.dialog_edit_text);
+            if (entry != null){
+              interests.add(entry.getText().toString());
+              listAdapter.notifyDataSetChanged();
+              // TODO add list to shared prefs
+            }
+            dialogInterface.dismiss();
+
+          }
+
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.cancel();
+          }
+        });
+
+
+    AlertDialog alertDialog = dialog.create();
+    alertDialog.show();
+  }
+
+  @Override
+  public void onClick(View view) {
+    switch (view.getId()){
+      case R.id.interest_next:
+        System.out.println(getSelection());
+        //The selections were made, so lets turn them into tags
+        // turn each string into a Tag
+        List<Tag> listofTags = new ArrayList<Tag>();
+        for (String tag : interests) {
+          listofTags.add(new Tag(tag));
         }
 
-        return selection;
+        Gson gson = new Gson();
+        String json = gson.toJson(listofTags);
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(LIST_DATE_TAGS, json);
+        editor.apply();
+        startActivity(new Intent(this, StudyArea.class));
+
+        break;
+      case R.id.interest_button_add_more:
+        createDialog();
+        break;
     }
-
-    private void createDialog(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        final View mView = inflater.inflate(R.layout.text_input_dialog, null);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setView(mView);
-
-        dialog.setCancelable(false)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                        final EditText entry = mView.findViewById(R.id.dialog_edit_text);
-                        if (entry != null){
-                            interests.add(entry.getText().toString());
-                            listAdapter.notifyDataSetChanged();
-                            // TODO add list to shared prefs
-                        }
-                        dialogInterface.dismiss();
-
-                    }
-
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-
-        AlertDialog alertDialog = dialog.create();
-        alertDialog.show();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.interest_next:
-                System.out.println(getSelection());
-                //The selections were made, so lets turn them into tags
-                // turn each string into a Tag
-                List<Tag> listofTags = new ArrayList<Tag>();
-                for (String tag : interests) {
-                    listofTags.add(new Tag(tag));
-                }
-
-                Gson gson = new Gson();
-                String json = gson.toJson(listofTags);
-                SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(LIST_DATE_TAGS, json);
-                editor.apply();
-                startActivity(new Intent(this, StudyArea.class));
-
-                break;
-            case R.id.interest_button_add_more:
-                createDialog();
-                break;
-        }
-    }
+  }
 }
