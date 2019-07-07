@@ -11,17 +11,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <!--01-->
-        <activity android:name=".MainActivity"
-                  android:screenOrientation="portrait">
+        <activity android:name=".DateStudyAreaSelector"></activity>
+        <activity
+            android:name=".DateInterestsSelector"
+            android:parentActivityName=".Home" /> <!-- 01 -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!--02-->
+        </activity> <!-- 02 -->
         <activity
             android:name=".ProfileSelector"
             android:parentActivityName=".MainActivity"
@@ -29,16 +31,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <!--03-->
-        <activity android:name=".GenderSelector"
-                  android:parentActivityName=".ProfileSelector"
-                  android:screenOrientation="portrait">
+        </activity> <!-- 03 -->
+        <activity
+            android:name=".GenderSelector"
+            android:parentActivityName=".ProfileSelector"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ProfileSelector" />
-        </activity>
-        <!--04-->
+        </activity> <!-- 04 -->
         <activity
             android:name=".InterestSelector"
             android:parentActivityName=".GenderSelector"
@@ -46,8 +47,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".GenderSelector" />
-        </activity>
-        <!--05-->
+        </activity> <!-- 05 -->
         <activity
             android:name=".StudyArea"
             android:parentActivityName=".InterestSelector"
@@ -55,34 +55,30 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".InterestSelector" />
-        </activity>
-        <!--06-->
-        <activity android:name=".ProfilePicture"
+        </activity> <!-- 06 -->
+        <activity
+            android:name=".ProfilePicture"
             android:parentActivityName=".StudyArea"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StudyArea" />
-        </activity>
-        <!--07-->
-        <activity android:name=".Home"
-                  android:screenOrientation="portrait"/>
-        <!--a08-->
-        <activity android:name=".ShowResults"
-                  android:parentActivityName=".Home"
-                  android:screenOrientation="portrait">
-        </activity>
-        <!--b08-->
-        <activity android:name=".NewQuestion"
-                  android:parentActivityName=".Home"
-                  android:screenOrientation="portrait">
-
-        </activity>
-        <!--b09-->
-        <activity android:name=".QuestionView"
-                  android:parentActivityName=".NewQuestion"
-                  android:screenOrientation="portrait">
-        </activity>
+        </activity> <!-- 07 -->
+        <activity
+            android:name=".Home"
+            android:screenOrientation="portrait" /> <!-- a08 -->
+        <activity
+            android:name=".ShowResults"
+            android:parentActivityName=".Home"
+            android:screenOrientation="portrait" /> <!-- b08 -->
+        <activity
+            android:name=".NewQuestion"
+            android:parentActivityName=".Home"
+            android:screenOrientation="portrait" /> <!-- b09 -->
+        <activity
+            android:name=".QuestionView"
+            android:parentActivityName=".NewQuestion"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

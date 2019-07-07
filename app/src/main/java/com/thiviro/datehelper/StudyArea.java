@@ -123,7 +123,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.putString(MainActivity.ACCOUNT, gson.toJson(account));
         Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
 
- 
+
         startActivity(new Intent(this, Home.class));
         break;
       case R.id.study_button_add_more:
@@ -142,9 +142,8 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
       String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
       String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
       boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
-      SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
       Gson gson = new Gson();
-      String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
+      String json = sharedPreferences.getString(InterestSelector.LIST_TAGS, null);
       Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
       List<Tag> listofTags = new ArrayList<Tag>();
       listofTags = gson.fromJson(json, type);
