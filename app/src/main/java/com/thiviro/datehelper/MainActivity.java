@@ -9,7 +9,14 @@ import android.widget.Button;
 
 import com.google.gson.Gson;
 
-
+/**
+ * The MainActivity class as the name implies is the main entry point for the application
+ * it implements the OnClickListener interface to provide different behavior
+ * to the interactive view components
+ *
+ * @author Rolando, Thiago, Vitalii
+ * @version 2.0
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
   public static final String SHARED_PREFS = "sharedPrefs";
@@ -19,6 +26,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public static final String QUESTION_MASTER = "question_master";
   public static final String ACCOUNT = "account";
 
+  /**
+   * The onCreate method sets the content view and creates references
+   * to the objects in the screen for later interaction. The objects
+   * onclick listeners a defined to be this same class.
+   *
+   * @param savedInstanceState Instance saved used to restore the app status when
+   *                           a change occurs
+   */
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,6 +48,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   }
 
+  /**
+   * The onclick method includes the actions to be
+   * executed when the items are clicked. This method
+   * executes the code that allows logging to the application
+   * through Facebook or Google.
+   *
+   * Details about the login are saved to shared preferences
+   * to consult later. The tags from the user are added as JSON
+   * to be retrieved in other activities.
+   *
+   * @param view view clicked used to call the next activity
+   */
   @Override
   public void onClick(View view) {
     switch (view.getId()){
