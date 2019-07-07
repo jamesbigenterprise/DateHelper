@@ -3,7 +3,7 @@ package com.thiviro.datehelper;
 import java.util.*;
 
 /**
- * Store all the existing questuions and the logic to manipulate them
+ * Store all the existing questions and the logic to manipulate them
  *
  * @author Thiago
  * @version 1

@@ -36,7 +36,7 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     ArrayAdapter<String> listAdapter;
 
     public static final String SHARED_PREFS = "sharedPrefs";
-    private final static String HELP_RESULTS = "help_results";
+    public final static String HELP_RESULTS = "help_results";
     private final static String LOG_DEBUG = "StudyArea()";
 
     @Override
@@ -138,6 +138,9 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
                 String qmjson = sharedPref.getString(MainActivity.QUESTION_MASTER, "");
                 QuestionsMaster qm = gson.fromJson(qmjson, QuestionsMaster.class);
                 Map<Question, Question> results = qm.helpOnDate(profile);
+                String resultsJson = gson.toJson(results);
+                editor.putString(HELP_RESULTS, resultsJson);
+                editor.apply();
 
                 Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
 
