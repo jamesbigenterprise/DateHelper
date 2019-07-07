@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public static final String FIRST_NAME = "first_name";
   public static final String LAST_NAME = "last_name";
   public static final String TAG_MASTER = "tag_master";
-  public static final String QUESTION_NAME = "question_master";
+  public static final String QUESTION_MASTER = "question_master";
   public static final String ACCOUNT = "account";
 
   @Override
@@ -46,11 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putString(FIRST_NAME, firstName);
         editor.putString(LAST_NAME, lastName);
 
-        //get the tag master from the server
+        //get the tag and questions master from the server
         TagMaster tagmaster = new TagMaster();
         Gson gson = new Gson();
-        String json =gson.toJson(tagmaster);
+        String json = gson.toJson(tagmaster);
         editor.putString(TAG_MASTER, json);
+
+        QuestionsMaster questionsMaster = new QuestionsMaster(tagmaster);
+        String qmJson = gson.toJson(questionsMaster);
+        editor.putString(QUESTION_MASTER, qmJson);
 
         editor.apply();
         startActivity(new Intent(this, ProfileSelector.class));
