@@ -1,5 +1,7 @@
 package com.thiviro.datehelper;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,9 @@ import java.util.List;
  */
 public class Question {
   private Account author;
+  @SerializedName("title")
   private String question;
+  @SerializedName("text")
   private String summary;//The question summarized in an action like: "Go to the movies;"
 
 
