@@ -60,7 +60,7 @@ public class APIQuestionWorker implements Runnable {
   public void run() {
     System.out.println("Running in the background");
     final Activity activityRef = activity.get();
-    String response = getAPIResponse("http://192.168.0.12:8080/api/questions");
+    String response = getAPIResponse("http://localhost:8080/api/questions");
     Gson JSON = new Gson();
     Type questionList = new TypeToken<ArrayList<Question>>(){}.getType();
     final List<Question> questionList1 = JSON.fromJson(response, questionList);
