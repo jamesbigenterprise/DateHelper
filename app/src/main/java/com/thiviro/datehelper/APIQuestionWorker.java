@@ -22,7 +22,6 @@ import java.util.List;
  */
 public class APIQuestionWorker implements Runnable {
   private WeakReference<Activity> activity ;
-  public static final String DEBUG_APIQuestionWorker =  "APIQuestionWorker";
   public APIQuestionWorker(Activity activity){
     this.activity = new WeakReference<>(activity);
   }
@@ -37,14 +36,11 @@ public class APIQuestionWorker implements Runnable {
   public String getAPIResponse(String endpoint){
     String JSON = "";
     InputStream response;
-    Log.d(DEBUG_APIQuestionWorker,"getAPIResponse() Starting...");
 
     try{
       URLConnection webConnection = new URL(endpoint).openConnection();
       webConnection.setRequestProperty("Accept-Charset", "UTF-8");
-      Log.d(DEBUG_APIQuestionWorker,"getAPIResponse() Variables set");
       response = webConnection.getInputStream();
-      Log.d(DEBUG_APIQuestionWorker,"getAPIResponse() Connection established");
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response));
       StringBuilder stringBuilder = new StringBuilder();
       String line;
@@ -62,12 +58,9 @@ public class APIQuestionWorker implements Runnable {
 
   @Override
   public void run() {
-    Log.d(DEBUG_APIQuestionWorker, "Starting runnable");
     System.out.println("Running in the background");
     final Activity activityRef = activity.get();
-      Log.d(DEBUG_APIQuestionWorker, "Weak reference set, let us get a API Response");
-    String response = getAPIResponse("http://192.168.0.12:8080/api/questions");
-      Log.d(DEBUG_APIQuestionWorker, "Response received");
+    String response = getAPIResponse("http://localhost:8080/api/questions");
     Gson JSON = new Gson();
     Type questionList = new TypeToken<ArrayList<Question>>(){}.getType();
     final List<Question> questionList1 = JSON.fromJson(response, questionList);
