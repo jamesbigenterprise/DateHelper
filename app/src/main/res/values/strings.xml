@@ -57,4 +57,10 @@
         <item>A Boy</item>
         <item>A Girl</item>
     </string-array>
+
+    <!--Facebook -->
+
+    <string name="facebook_app_id">1294427687348201</string>
+    <string name="fb_login_protocol_scheme">fb1294427687348201</string>
+
 </resources>

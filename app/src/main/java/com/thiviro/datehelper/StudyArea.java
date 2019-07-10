@@ -142,14 +142,16 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
       String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
       String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
       boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
+      String id = sharedPreferences.getString(MainActivity.ID, "");
       Gson gson = new Gson();
       String json = sharedPreferences.getString(InterestSelector.LIST_TAGS, null);
       Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
       List<Tag> listofTags = new ArrayList<Tag>();
       listofTags = gson.fromJson(json, type);
       Person newProfile = new Person(firstName,lastName,gender,listofTags,tagMasters[0]);
+
       //Now create the account
-      Account newAccount = new Account(newProfile);
+      Account newAccount = new Account(newProfile, id);
 
       return newAccount;
     }
