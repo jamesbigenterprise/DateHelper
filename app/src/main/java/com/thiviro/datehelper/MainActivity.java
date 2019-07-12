@@ -54,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
     public static final String QUESTION_MASTER = "question_master";
     public static final String ACCOUNT = "account";
 
+    private AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+                Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_LONG).show();
+            } else {
+                loadAccount(currentAccessToken);
+            }
+        }
+    };
+
     /**
      * The onCreate method sets the content view and creates references
      * to the objects in the screen for later interaction. The objects
@@ -67,11 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_other);
 
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        //circleImage = (CircleImageView) findViewById(R.id.profile_image);
-        //nameDisplay = (TextView) findViewById(R.id.nameTV);
-
         callbackManager = CallbackManager.Factory.create();
         loginButton.setPermissions(Arrays.asList("email", "public_profile"));
         checkLoginStatus();
@@ -81,38 +88,36 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
 
             }
-
             @Override
             public void onCancel() {
-
             }
-
             @Override
             public void onError(FacebookException error) {
-
             }
         });
     }
 
+    /**
+     * after
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-            if (currentAccessToken == null) {
-                nameDisplay.setText("No user");
-                circleImage.setImageResource(0);
-                Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_LONG).show();
-            } else {
-                loadAccount(currentAccessToken);
-            }
-        }
-    };
-
+    /**
+     * After receiving the access token from the login button use it to retrieve
+     * information from facebook and the server
+     *
+     * If the account already exists, find it on the server using the id, download it and
+     * save on shared preferences, then go to the home page
+     * Otherwise, save the name and id in shared preferences and start the new account workflow
+     * @param newAccessToken toke to access facebook information
+     */
     private void loadAccount(AccessToken newAccessToken) {
         GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -131,24 +136,29 @@ public class MainActivity extends AppCompatActivity {
                     //Glide.with(MainActivity.this).load(image_url).into(circleImage);
 
                     //from the former button
-                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(FIRST_NAME, firstName);
-                    editor.putString(LAST_NAME, lastName);
-                    editor.putString(ID, id);
 
-                    //get the tag and questions master from the server
-                    TagMaster tagmaster = new TagMaster();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(tagmaster);
-                    editor.putString(TAG_MASTER, json);
+                    if (true /*the account already exists*/){
+                        startActivity(new Intent(MainActivity.this, Home.class));
+                    }else {
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(FIRST_NAME, firstName);
+                        editor.putString(LAST_NAME, lastName);
+                        editor.putString(ID, id);
 
-                    QuestionsMaster questionsMaster = new QuestionsMaster(tagmaster);
-                    String qmJson = gson.toJson(questionsMaster);
-                    editor.putString(QUESTION_MASTER, qmJson);
+                        //get the tag and questions master from the server
+                        TagMaster tagmaster = new TagMaster();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(tagmaster);
+                        editor.putString(TAG_MASTER, json);
 
-                    editor.apply();
-                    startActivity(new Intent(MainActivity.this, ProfileSelector.class));
+                        QuestionsMaster questionsMaster = new QuestionsMaster(tagmaster);
+                        String qmJson = gson.toJson(questionsMaster);
+                        editor.putString(QUESTION_MASTER, qmJson);
+
+                        editor.apply();
+                        startActivity(new Intent(MainActivity.this, ProfileSelector.class));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -163,14 +173,6 @@ public class MainActivity extends AppCompatActivity {
         request.executeAsync();
     }
 
-    private void checkLoginStatus() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            loadAccount(AccessToken.getCurrentAccessToken());
-        }
-    }
-
-}
-
     /**
      * The onclick method includes the actions to be
      * executed when the items are clicked. This method
@@ -180,6 +182,16 @@ public class MainActivity extends AppCompatActivity {
      * Details about the login are saved to shared preferences
      * to consult later. The tags from the user are added as JSON
      * to be retrieved in other activities.
-     *
-     * @param view view clicked used to call the next activity
      */
+
+    /**
+     * If the user is already logged in we can go ahead
+     * and load the information.
+     */
+    private void checkLoginStatus() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            loadAccount(AccessToken.getCurrentAccessToken());
+        }
+    }
+
+}
