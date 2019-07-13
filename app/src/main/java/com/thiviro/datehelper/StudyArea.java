@@ -118,10 +118,28 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.apply();
 
         TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
-        AccountCreatorAsync accountCreatorAsync = new AccountCreatorAsync();
-        Account account  = accountCreatorAsync.doInBackground(tagmaster);
-        editor.putString(MainActivity.ACCOUNT, gson.toJson(account));
+
+
+        //Gather the information to create the person
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
+        String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
+        boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
+        String id = sharedPreferences.getString(MainActivity.ID, "");
+
+        Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
+
+        //Now create the account
+        Account newAccount = new Account(newProfile, id);
+        editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
+        editor.apply();
+
+        newAccount = null;
+        String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
+        newAccount = gson.fromJson(testJson, Account.class);
         Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
+          String idTest = sharedPref.getString(MainActivity.ID, "");
+          Log.d(LOG_DEBUG, "The Json of the account we just created coming from shared pref == " + newAccount.getId());
 
 
         startActivity(new Intent(this, Home.class));
@@ -132,29 +150,5 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
     }
   }
 
-  private class AccountCreatorAsync extends AsyncTask<TagMaster, Void, Account> {
-
-
-    @Override
-    protected Account doInBackground(TagMaster... tagMasters) {
-      //Gather the information to create the person
-      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-      String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
-      String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
-      boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
-      String id = sharedPreferences.getString(MainActivity.ID, "");
-      Gson gson = new Gson();
-      String json = sharedPreferences.getString(InterestSelector.LIST_TAGS, null);
-      Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
-      List<Tag> listofTags = new ArrayList<Tag>();
-      listofTags = gson.fromJson(json, type);
-      Person newProfile = new Person(firstName,lastName,gender,listofTags,tagMasters[0]);
-
-      //Now create the account
-      Account newAccount = new Account(newProfile, id);
-
-      return newAccount;
-    }
-  }
 }
 

@@ -27,7 +27,7 @@ public class ShowResults extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_results);
         //get the 3 buttons
-        result1 = (Button) findViewById(R.id.result_1);
+        result1 = (Button) findViewById(R.id.write_new_question);
         result2 = (Button) findViewById(R.id.result_2);
         result3 = (Button) findViewById(R.id.result_3);
         List<Button> resultButtons = new ArrayList<>();

@@ -49,7 +49,6 @@ public class InterestSelector extends AppCompatActivity implements View.OnClickL
         android.R.layout.simple_list_item_multiple_choice, interests);
     interestList.setAdapter(listAdapter);
     interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
   }
 
   private ArrayList<String> getSelection(){

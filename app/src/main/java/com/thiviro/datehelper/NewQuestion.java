@@ -1,16 +1,167 @@
 package com.thiviro.datehelper;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class NewQuestion extends AppCompatActivity {
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class NewQuestion extends AppCompatActivity implements View.OnClickListener {
+
+    private List<String> interests;
+    private ListView interestList;
+    List<Tag> listofTags;
+    private ArrayAdapter<String> listAdapter;
+    private Button addMore;
+    private Button newQuestion;
+    private CircleImageView profilePhoto;
+    private String question;
+    private String summary;
+    private Account account;
+    private TagMaster tagMaster;
+    private QuestionsMaster questionsMaster;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String NEW_QUESTION_TOAST = "new_question_toast";
+    public static final String NEW_QUESTION_EXTRA = "new_question_extra";
+    public static final String DEBUG_LOG = "NewQuestion()";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_question);
+
+        interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
+        newQuestion = findViewById(R.id.ask_new_question);
+        addMore = findViewById(R.id.interest_button_add_more);
+        interestList = findViewById(R.id.interestList);
+        profilePhoto = findViewById(R.id.profile_photo);
+        createList();
+
+        newQuestion.setOnClickListener(this);
+        addMore.setOnClickListener(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String accountJson;
+        accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
+        account =  gson.fromJson(accountJson, Account.class);
+        tagMaster = gson.fromJson(sharedPreferences.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
+        questionsMaster = gson.fromJson(sharedPreferences.getString(MainActivity.QUESTION_MASTER, ""), QuestionsMaster.class);
+        String image_url = "https://graph.facebook.com/" + account.getId() + "/picture?type=normal";
+        Glide.with(this).load(image_url).into(profilePhoto);
+    }
+
+    private ArrayList<String> getSelection(){
+        SparseBooleanArray checked = interestList.getCheckedItemPositions();
+        ArrayList<String> selection = new ArrayList<>();
+        for (int i = 0;i < checked.size();i++){
+            selection.add(listAdapter.getItem(checked.keyAt(i)));
+        }
+        return selection;
+    }
+
+    private void createList(){
+        listAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_multiple_choice, interests);
+        interestList.setAdapter(listAdapter);
+        interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+    }
+
+    private void createDialog(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View mView = inflater.inflate(R.layout.text_input_dialog, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setView(mView);
+
+        dialog.setCancelable(false)
+                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        final EditText entry = mView.findViewById(R.id.dialog_edit_text);
+                        if (entry != null){
+                            interests.add(entry.getText().toString());
+                            listAdapter.notifyDataSetChanged();
+                            // TODO add list to shared prefs
+                        }
+                        dialogInterface.dismiss();
+
+                    }
+
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+
+        AlertDialog alertDialog = dialog.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ask_new_question:
+                System.out.println(getSelection());
+                //The selections were made, so lets turn them into tags
+                // turn each string into a Tag
+                listofTags = new ArrayList<Tag>();
+                for (String tag : interests) {
+                    listofTags.add(new Tag(tag));
+                }
+                boolean savedQuestion = askNewQuestion();
+                if(savedQuestion) {
+                  Intent intent = new Intent(this, QuestionView.class);
+                  intent.putExtra(NEW_QUESTION_EXTRA, summary);
+                  startActivity(intent);
+                }
+                break;
+            case R.id.interest_button_add_more:
+                createDialog();
+                break;
+        }
+    }
+    public boolean askNewQuestion () {
+      EditText writeQuestion = findViewById(R.id.write_new_question);
+      EditText writeSummary = findViewById(R.id.write_summary);
+      question = writeQuestion.getText().toString();
+      summary = writeSummary.getText().toString();
+
+      if (question.isEmpty() || summary.isEmpty() || listofTags.isEmpty()) {
+          Toast.makeText(NewQuestion.this, "Please write the question, the Summary and select at Least one Tag", Toast.LENGTH_LONG).show();
+          return false;
+      }else {
+        Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
+        questionsMaster.addQuestion(newQuestion);
+          /**
+           * Save the questions Master in the server
+           */
+        return true;
+      }
+
     }
 
     public void askQuestion(View view){

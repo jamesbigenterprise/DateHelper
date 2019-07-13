@@ -127,17 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     String lastName = object.getString("last_name");
                     String id = object.getString("id");
 
-                    //put everything in the view
 
-                    //String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
-                    //RequestOptions requestOptions = new RequestOptions();
-                    //requestOptions.dontAnimate();
-
-                    //Glide.with(MainActivity.this).load(image_url).into(circleImage);
-
-                    //from the former button
-
-                    if (true /*the account already exists*/){
+                    if (false /*the account already exists*/){
                         startActivity(new Intent(MainActivity.this, Home.class));
                     }else {
                         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
