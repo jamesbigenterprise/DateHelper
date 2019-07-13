@@ -137,9 +137,8 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         newAccount = null;
         String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
         newAccount = gson.fromJson(testJson, Account.class);
-        Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
           String idTest = sharedPref.getString(MainActivity.ID, "");
-          Log.d(LOG_DEBUG, "The Json of the account we just created coming from shared pref == " + newAccount.getId());
+
 
 
         startActivity(new Intent(this, Home.class));

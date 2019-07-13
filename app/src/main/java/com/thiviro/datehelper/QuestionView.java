@@ -26,6 +26,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       String accountJson;
       accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
       account =  gson.fromJson(accountJson, Account.class);
+
       upVote = findViewById(R.id.up_button);
       downVote = findViewById(R.id.down_button);
   }

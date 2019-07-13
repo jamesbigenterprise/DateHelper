@@ -122,7 +122,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:drawablePadding="@dimen/fab_margin"
-        android:onClick="askQuestion"
         android:text="@string/ask_new_question"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

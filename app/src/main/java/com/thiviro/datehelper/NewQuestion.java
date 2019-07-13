@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +26,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +45,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private Account account;
     private TagMaster tagMaster;
     private QuestionsMaster questionsMaster;
+    private TextView question_sugestion;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NEW_QUESTION_TOAST = "new_question_toast";
     public static final String NEW_QUESTION_EXTRA = "new_question_extra";
@@ -51,9 +57,11 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
         interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
         newQuestion = findViewById(R.id.ask_new_question);
+        newQuestion.addTextChangedListener(watcher);
         addMore = findViewById(R.id.interest_button_add_more);
         interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
+        question_sugestion = findViewById(R.id.question_sugestion);
         createList();
 
         newQuestion.setOnClickListener(this);
@@ -142,8 +150,11 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             case R.id.interest_button_add_more:
                 createDialog();
                 break;
+            case R.id.question_sugestion:
+                break;
         }
     }
+
     public boolean askNewQuestion () {
       EditText writeQuestion = findViewById(R.id.write_new_question);
       EditText writeSummary = findViewById(R.id.write_summary);
@@ -161,11 +172,37 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
            */
         return true;
       }
-
     }
 
-    public void askQuestion(View view){
-        Intent intent = new Intent(this, QuestionView.class);
-        startActivity(intent);
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            sugestion();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public void sugestion() {
+        EditText writeQuestion = findViewById(R.id.write_new_question);
+        String currentText = writeQuestion.getText().toString();
+        for (Map.Entry<String, Question> entry : questionsMaster.getQuestionsMasterMap().entrySet()){
+            String question = entry.getValue().getQuestion();
+            boolean hasQuestion = question.contains(currentText);
+            if(hasQuestion) {
+              //set the text view
+                question_sugestion.setText(question);
+              //create intent to the question
+              break;
+            }
+        }
     }
 }
