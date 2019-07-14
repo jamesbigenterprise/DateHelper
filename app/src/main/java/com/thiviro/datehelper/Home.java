@@ -1,7 +1,7 @@
 package com.thiviro.datehelper;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -38,8 +38,8 @@ public class Home extends AppCompatActivity {
     Thread thread = new Thread(test, "Test");
     thread.start();
     //========================================================================
-    Intent intent = new Intent(this, ShowResults.class);
-    startActivity(intent);
+    //Intent intent = new Intent(this, ShowResults.class);
+    //startActivity(intent);
   }
 
   /**

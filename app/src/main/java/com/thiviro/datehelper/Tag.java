@@ -3,7 +3,7 @@ package com.thiviro.datehelper;
 import java.util.*;
 
 /**
- * A tag represents a caracteristic that can be added to a person and to a Question
+ * A tag represents a characteristic that can be added to a person and to a Question
  *
  * The description will be a string and it can be voted, storing the vote information in the cote tracker
  * The Tag will keep track or all the questions that it is being used in
