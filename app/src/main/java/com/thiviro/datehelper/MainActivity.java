@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private CircleImageView circleImage;
   private GoogleSignInClient mGoogleSignInClient;
   private SignInButton signInButton;
+  private Button signOutButton;
   private TextView nameDisplay;
 
   private CallbackManager callbackManager;
@@ -67,11 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public static final String TAG_MASTER = "tag_master";
   public static final String QUESTION_MASTER = "question_master";
   public static final String ACCOUNT = "account";
+  public static final String LOGIN = "login";
+  public static final String PHOTO_URL= "Photo_URL";
+
 
   private AccessTokenTracker tokenTracker = new AccessTokenTracker() {
     @Override
     protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
       if (currentAccessToken == null) {
+        signInButton.setVisibility(View.VISIBLE);
         Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_LONG).show();
       } else {
         loadAccount(currentAccessToken);
@@ -98,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         .build();
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     signInButton = findViewById(R.id.google_sign_in);
+    signOutButton = findViewById(R.id.google_sign_out);
     signInButton.setOnClickListener(this);
+    signOutButton.setOnClickListener(this);
     //===========================================================
 
 
@@ -110,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
       @Override
       public void onSuccess(LoginResult loginResult) {
-
+        signInButton.setVisibility(View.GONE);
       }
       @Override
       public void onCancel() {
@@ -128,12 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
     if (account != null){
-//      String personName = account.getDisplayName();
-//      String personGivenName = account.getGivenName();
-//      String personFamilyName = account.getFamilyName();
-//      String personEmail = account.getEmail();
-//      String personId = account.getId();
-//      Uri personPhoto = account.getPhotoUrl();
       startActivity(new Intent(MainActivity.this, Home.class));
     }
 
@@ -149,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     callbackManager.onActivityResult(requestCode, resultCode, data);
     super.onActivityResult(requestCode, resultCode, data);
-    System.out.println("Request Code:" + requestCode);
     if (requestCode == RC_SIGN_IN){
       Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
       handleSignInResult(task);
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putString(FIRST_NAME, firstName);
             editor.putString(LAST_NAME, lastName);
             editor.putString(ID, id);
+            editor.putString(LOGIN, "FACEBOOK");
 
             //get the tag and questions master from the server
             TagMaster tagmaster = new TagMaster();
@@ -227,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       case R.id.google_sign_in:
         googleSignIn();
         break;
+      case R.id.google_sign_out:
+        googleSignOut();
+        break;
     }
   }
 
@@ -235,12 +241,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     startActivityForResult(signInIntent, RC_SIGN_IN);
   }
 
+  private void googleSignOut(){
+    mGoogleSignInClient.signOut()
+        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+          @Override
+          public void onComplete(@NonNull Task<Void> task) {
+            signInButton.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
+            signOutButton.setVisibility(View.GONE);
+          }
+        });
+
+  }
+
   private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
     try {
       GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
       // Signed in successfully, show authenticated UI.
+      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      editor.putString(FIRST_NAME, account.getGivenName());
+      editor.putString(LAST_NAME, account.getFamilyName());
+      editor.putString(ID, account.getId());
+      editor.putString(PHOTO_URL, account.getPhotoUrl().toString());
+      editor.putString(LOGIN, "GOOGLE");
+      editor.apply();
       startActivity(new Intent(MainActivity.this, Home.class));
+      signInButton.setVisibility(View.GONE);
+      loginButton.setVisibility(View.GONE);
+      signOutButton.setVisibility(View.VISIBLE);
+
     } catch (ApiException e) {
       // The ApiException status code indicates the detailed failure reason.
       // Please refer to the GoogleSignInStatusCodes class reference for more information.
