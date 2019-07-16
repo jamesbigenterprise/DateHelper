@@ -70,11 +70,24 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         Gson gson = new Gson();
         String accountJson;
+        String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
         accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
         account =  gson.fromJson(accountJson, Account.class);
         tagMaster = gson.fromJson(sharedPreferences.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
         questionsMaster = gson.fromJson(sharedPreferences.getString(MainActivity.QUESTION_MASTER, ""), QuestionsMaster.class);
-        String image_url = "https://graph.facebook.com/" + account.getId() + "/picture?type=normal";
+        String image_url = "";
+
+        switch (login){
+            case "FACEBOOK":
+                image_url = "https://graph.facebook.com/" + account.getId() + "/picture?type=normal";
+                break;
+
+            case "GOOGLE":
+                image_url = sharedPreferences.getString(MainActivity.PHOTO_URL,"error shared pref");
+                break;
+
+        }
+
         Glide.with(this).load(image_url).into(profilePhoto);
     }
 

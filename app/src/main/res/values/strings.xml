@@ -7,7 +7,7 @@
     <!--Buttons strings-->
 
     <string name="button_facebook">Login with Facebook</string>
-    <string name="button_google">Sign in with Google</string>
+    <string name="button_google_sign_out">Sign out from Google</string>
     <string name="button_next">Next</string>
     <string name="button_add_more">Add More</string>
     <string name="button_select_crop">Crop and Save</string>
@@ -62,5 +62,6 @@
 
     <string name="facebook_app_id">1294427687348201</string>
     <string name="fb_login_protocol_scheme">fb1294427687348201</string>
+
 
 </resources>
