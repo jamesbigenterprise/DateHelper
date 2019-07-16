@@ -20,14 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +38,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private Button addMore;
     private Button newQuestion;
     private CircleImageView profilePhoto;
+    private EditText writeQuestion;
     private String question;
     private String summary;
     private Account account;
@@ -57,11 +56,12 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
         interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
         newQuestion = findViewById(R.id.ask_new_question);
-        newQuestion.addTextChangedListener(watcher);
         addMore = findViewById(R.id.interest_button_add_more);
         interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
         question_sugestion = findViewById(R.id.question_sugestion);
+        writeQuestion = findViewById(R.id.write_new_question);
+        writeQuestion.addTextChangedListener(watcher);
         createList();
 
         newQuestion.setOnClickListener(this);
@@ -182,7 +182,9 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            sugestion();
+            suggestion();
+            Toast.makeText(NewQuestion.this, NEW_QUESTION_TOAST + "onTextChanged()", Toast.LENGTH_LONG).show();
+            Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "onTextChanged()");
         }
 
         @Override
@@ -191,11 +193,15 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         }
     };
 
-    public void sugestion() {
+    public void suggestion() {
+        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Starting");
         EditText writeQuestion = findViewById(R.id.write_new_question);
         String currentText = writeQuestion.getText().toString();
+        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Retrieved the current text that is == " + currentText);
+        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() - Number of questions saved == " + questionsMaster.getQuestionsMasterMap().size());
         for (Map.Entry<String, Question> entry : questionsMaster.getQuestionsMasterMap().entrySet()){
             String question = entry.getValue().getQuestion();
+            Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Loop comparing this question ==  " + question +" With the text == " + currentText);
             boolean hasQuestion = question.contains(currentText);
             if(hasQuestion) {
               //set the text view
