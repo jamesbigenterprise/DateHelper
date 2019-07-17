@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 public class QuestionView extends AppCompatActivity implements View.OnClickListener {
 
   private Account account;
+  private TagMaster tagMaster;
   private Question question;
   private ImageButton upVote;
   private ImageButton downVote;
@@ -26,27 +27,28 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       String accountJson;
       accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
       account =  gson.fromJson(accountJson, Account.class);
-
+      String tmJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "");
+      tagMaster = gson.fromJson(tmJson, TagMaster.class);
       upVote = findViewById(R.id.up_button);
       downVote = findViewById(R.id.down_button);
   }
 
   void upVote(View view) {
-      question.upVote(account);
+      question.upVote(account, tagMaster);
   }
 
   void downVote (View view) {
-    question.downVote(account);
+    question.downVote(account, tagMaster);
   }
 
     @Override
     public void onClick(View v) {
       switch (v.getId()){
           case R.id.up_button:
-            question.upVote(account);
+            question.upVote(account, tagMaster);
             break;
           case R.id.down_button:
-            question.downVote(account);
+            question.downVote(account, tagMaster);
             break;
       }
     }

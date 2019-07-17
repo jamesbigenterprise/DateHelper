@@ -8,10 +8,12 @@
     android:layout_height="match_parent"
     android:minWidth="@android:dimen/thumbnail_width"
     android:minHeight="@android:dimen/thumbnail_height"
-    tools:context=".Home">
+    tools:context=".Home"
+
+    >
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/ask_question_button"
         android:layout_width="0dp"
         android:layout_height="68dp"
         android:layout_marginStart="8dp"
@@ -26,10 +28,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:visibility="invisible"
+        tools:visibility="visible"
+        />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/help_date_button"
         android:layout_width="0dp"
         android:layout_height="69dp"
         android:layout_marginStart="8dp"
@@ -41,10 +47,14 @@
         android:onClick="helpMeOnaDate"
         android:text="@string/hom_help_button"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/ask_question_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:visibility = "invisible"
+        tools:visibility="visible"
+        />
 
     <ImageView
         android:id="@+id/imageView"
@@ -60,5 +70,21 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/help_date_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

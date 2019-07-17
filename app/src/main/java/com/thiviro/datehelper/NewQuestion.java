@@ -73,8 +73,18 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
         accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
         account =  gson.fromJson(accountJson, Account.class);
-        tagMaster = gson.fromJson(sharedPreferences.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
-        questionsMaster = gson.fromJson(sharedPreferences.getString(MainActivity.QUESTION_MASTER, ""), QuestionsMaster.class);
+        String tmJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "tm error shared pref");
+        String qmJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "qm error shared pref");
+        tagMaster = gson.fromJson(tmJson, TagMaster.class);
+        questionsMaster = gson.fromJson(qmJson, QuestionsMaster.class);
+        Log.d(DEBUG_LOG, "Retrieved everything from shared pref");
+        Log.d(DEBUG_LOG, "Json of the questionsMaster == " + qmJson + " And TagMaster " + tmJson);
+        boolean tm = tagMaster == null;
+        boolean qm = questionsMaster == null;
+        Map<String, Question> qmMap= questionsMaster.getQuestionsMasterMap();
+        Log.d(DEBUG_LOG, "Is the questionsMaster null? == " + qm + " And TagMaster " + tm);
+        qm = qmMap == null;
+        Log.d(DEBUG_LOG, "questionsMaster size == " + qm + " And TagMaster " + tagMaster.getAllTags().size());
         String image_url = "";
 
         switch (login){

@@ -3,6 +3,7 @@ package com.thiviro.datehelper;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class TestData implements Runnable {
     public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String TAG = "TestDada";
     private WeakReference<Home> activityWeakReference;
 
     public TestData(Home home)
@@ -21,9 +23,11 @@ public class TestData implements Runnable {
 
     public void run() {
 
-        //MainActivity home = activityWeakReference.get();
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(home);
-        //Gson gson = new Gson();
+        Home home = activityWeakReference.get();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(home);
+        Gson gson = new Gson();
+
+        Log.d(TAG, "Starting..");
         TagMaster tagMaster = new TagMaster();
         QuestionsMaster questionsMaster = new QuestionsMaster(tagMaster);
 
@@ -52,6 +56,7 @@ public class TestData implements Runnable {
         Tag myTag19 = new Tag("Church");
         Tag myTag20 = new Tag("Ice Cream");
 
+        Log.d(TAG, "Created 20 Tags");
         tagMaster.addTag(myTag1);
         tagMaster.addTag(myTag2);
         tagMaster.addTag(myTag3);
@@ -73,30 +78,31 @@ public class TestData implements Runnable {
         tagMaster.addTag(myTag19);
         tagMaster.addTag(myTag20);
 
+        Log.d(TAG, "Added to the Tag Master");
         //5 batches of related tags
         List<Tag> animalTags = new ArrayList<Tag>();
-        animalTags.add(myTag1);
-        animalTags.add(myTag2);
-        animalTags.add(myTag3);
+        animalTags.add(tagMaster.getAllTags().get(0));
+        animalTags.add(tagMaster.getAllTags().get(1));
+        animalTags.add(tagMaster.getAllTags().get(2));
         List <Tag> sportTags = new ArrayList<Tag>();
-        sportTags.add(myTag6);
-        sportTags.add(myTag7);
-        sportTags.add(myTag8);
-        sportTags.add(myTag8);
-        sportTags.add(myTag9);
-        sportTags.add(myTag10);
-        sportTags.add(myTag13);
+        sportTags.add(tagMaster.getAllTags().get(3));
+        sportTags.add(tagMaster.getAllTags().get(4));
+        sportTags.add(tagMaster.getAllTags().get(5));
+        sportTags.add(tagMaster.getAllTags().get(6));
+        sportTags.add(tagMaster.getAllTags().get(7));
+        sportTags.add(tagMaster.getAllTags().get(8));
+        sportTags.add(tagMaster.getAllTags().get(9));
         List <Tag> churchTags = new ArrayList<Tag>();
-        churchTags.add(myTag15);
-        churchTags.add(myTag16);
-        churchTags.add(myTag17);
-        churchTags.add(myTag18);
-        churchTags.add(myTag19);
+        churchTags.add(tagMaster.getAllTags().get(10));
+        churchTags.add(tagMaster.getAllTags().get(11));
+        churchTags.add(tagMaster.getAllTags().get(12));
+        churchTags.add(tagMaster.getAllTags().get(13));
+        churchTags.add(tagMaster.getAllTags().get(14));
         List <Tag> otherTags = new ArrayList<Tag>();
-        otherTags.add(myTag20);
-        otherTags.add(myTag11);
-        otherTags.add(myTag12);
-        otherTags.add(myTag14);
+        otherTags.add(tagMaster.getAllTags().get(15));
+        otherTags.add(tagMaster.getAllTags().get(16));
+        otherTags.add(tagMaster.getAllTags().get(17));
+        otherTags.add(tagMaster.getAllTags().get(18));
 
         Person firstUser = new Person("Thiago", "Alves da Silva", true, churchTags, tagMaster);
         Account firstAccount = new Account(firstUser, "01");
@@ -123,6 +129,7 @@ public class TestData implements Runnable {
         Question myQ10 = new Question(firstAccount,"Institute is a Date?", "Go to institute",churchTags , tagMaster);
         questionsMaster.addQuestion(myQ10);
 
+        Log.d(TAG, "Added 10 questions to the Questions master");
         //check question master
         for (Question question : questionsMaster.getQuestionsMasterMap().values()){
             System.out.println(question.getQuestion());
@@ -131,27 +138,28 @@ public class TestData implements Runnable {
         Person secondUser = new Person("Maiane", "Sampaio", false, otherTags, tagMaster);
         Account secondAccount = new Account(secondUser, "02");
         for (Question question : questionsMaster.getQuestionsMasterMap().values()){
-            question.upVote(secondAccount);
+            question.upVote(secondAccount, tagMaster);
         }
         for (Question question : questionsMaster.getQuestionsMasterMap().values()){
-            question.upVote(secondAccount);
+            question.upVote(secondAccount, tagMaster);
         }
         //create a second girl to do some voting
         Person thirdUser = new Person("Tcharla", "Marques", false, otherTags, tagMaster);
         Account thirdAccount = new Account(thirdUser, "03");
 
         for (Question question : questionsMaster.getQuestionsMasterMap().values()){
-            question.upVote(thirdAccount);
+            question.upVote(thirdAccount, tagMaster);
         }
 
-        /*/put everything back in the shared prefs
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String questionsJson = gson.toJson(questionsMaster);
+        Log.d(TAG, "Voting Done");
+        //put everything back in the shared prefs
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        //String questionsJson = gson.toJson(questionsMaster);
         String tagsJson = gson.toJson(tagMaster);
-        editor.putString(MainActivity.QUESTION_MASTER, questionsJson);
-        editor.putString(MainActivity.TAG_MASTER, tagsJson);
-        editor.apply();
-        */
+        //editor.putString(MainActivity.QUESTION_MASTER, questionsJson);
+        //editor.putString(MainActivity.TAG_MASTER, tagsJson);
+        //editor.apply();
+        //*/
 
 
     }

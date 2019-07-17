@@ -26,7 +26,7 @@ public class Question {
   private List<String> tagKeys;
   private List<Comment> comments;
   //use this to avoid duplicate questions and have them in a single place
-  TagMaster tagMaster;
+
 
   //Constructor
 
@@ -46,7 +46,7 @@ public class Question {
     this.voteTracker = new VoteTracker();
     //this tag master is to make sure we are using unique tags
     this.tagKeys = new ArrayList<>();
-    this.tagMaster = tagMaster;
+
     for (Tag tag: tags){
       //make sure the tag is listed in the tag master before adding to this person
       tag.addQuestion(this);
@@ -87,7 +87,7 @@ public class Question {
    * Up vote all the tags
    * @param user account to use in the vote
    */
-  void upVote(Account user) {
+  void upVote(Account user, TagMaster tagMaster) {
       voteTracker.upVote(user);
       List<Tag> tags = tagMaster.getTagsPack(tagKeys);
       for (Tag tag : tags) {//apply the same vote to all the children tags
@@ -103,7 +103,7 @@ public class Question {
    * down vote all the tags
    * @param user account to use in the vote
    */
-  void downVote(Account user) {
+  void downVote(Account user, TagMaster tagMaster) {
     voteTracker.downVote(user);
     List<Tag> tags = new ArrayList<>(tagMaster.getTagsPack(tagKeys));
     for (Tag tag : tags) {//apply the same vote to all the children tags
