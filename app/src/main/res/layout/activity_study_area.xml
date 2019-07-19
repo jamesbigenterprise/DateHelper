@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/label_study_area" />
 
     <Button
-        android:id="@+id/help_date_button"
+        android:id="@+id/study_next_bt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -77,9 +77,9 @@
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/button_add_more"
-        app:layout_constraintBottom_toTopOf="@+id/next_button"
+        app:layout_constraintBottom_toTopOf="@+id/next_bt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />

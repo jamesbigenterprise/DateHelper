@@ -40,7 +40,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
     setContentView(R.layout.activity_study_area);
     areas = new ArrayList<>(Arrays.asList(getResources().
             getStringArray(R.array.study_area)));
-    next = findViewById(R.id.next_button);
+    next = findViewById(R.id.study_next_bt);
     addMore = findViewById(R.id.study_button_add_more);
     studyArea = findViewById(R.id.studyArea);
     createList();
@@ -97,7 +97,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   @Override
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.next_button:
+      case R.id.study_next_bt:
         areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
         System.out.println("Selection: " + areaSelected);
         Tag studyAreaTag = new Tag(areaSelected);

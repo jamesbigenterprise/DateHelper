@@ -44,6 +44,9 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       commentEditText = findViewById(R.id.write_comment_edit);
       addCommentButton = findViewById(R.id.add_comment);
 
+      DownloadTagMasterAsyncTask task1 = new DownloadTagMasterAsyncTask(this);
+      task1.execute();
+
       SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
       Gson gson = new Gson();
 
@@ -59,10 +62,9 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       markVote();
   }
 
-    private class UpdateTagMasterAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private class UploadTagMasterAsyncTask extends AsyncTask<TagMaster, Integer, Void> {
         private WeakReference<QuestionView> weakReference;
-        private TagMaster downloadedTagMaster;
-        public UpdateTagMasterAsyncTask (QuestionView context){
+        public UploadTagMasterAsyncTask(QuestionView context){
             weakReference = new WeakReference<QuestionView>(context);
         }
 
@@ -77,20 +79,18 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
             commentEditText.setVisibility(View.INVISIBLE);
             addCommentButton.setVisibility(View.INVISIBLE);
         }
+
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-        @Override
-        protected Void doInBackground(Void ...voids) {
-          publishProgress(10);
+        protected Void doInBackground(TagMaster ...tagMasters) {
           Gson gson = new Gson();
-          TagMaster tagMaster = null;//
-          publishProgress(20);
+          //tagMasters[0]
+          //this one will be uploaded
+
           /**
            * BACKEND
            * //Todo Upload the TagMaster with the changes
            */
+
           return null;
         }
 
@@ -98,6 +98,51 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(Void  v) {
             super.onPostExecute(v);
             markVote();
+            upVote.setVisibility(View.VISIBLE);
+            downVote.setVisibility(View.VISIBLE);
+            questionTextView.setVisibility(View.VISIBLE);
+            commentEditText.setVisibility(View.VISIBLE);
+            addCommentButton.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private class DownloadTagMasterAsyncTask extends AsyncTask<Void, Integer, Void> {
+        private WeakReference<QuestionView> weakReference;
+        private TagMaster downloadedTagMaster;
+        public DownloadTagMasterAsyncTask(QuestionView context){
+            weakReference = new WeakReference<QuestionView>(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            upVote.setVisibility(View.INVISIBLE);
+            downVote.setVisibility(View.INVISIBLE);
+            questionTextView.setVisibility(View.INVISIBLE);
+            commentEditText.setVisibility(View.INVISIBLE);
+            addCommentButton.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void ...voids) {
+            Gson gson = new Gson();
+            TagMaster tagMaster = null; //the tagmaster that will be downloaded
+            /**
+             * BACKEND
+             * //Todo Download the TagMaster with the changes
+             */
+            downloadedTagMaster = tagMaster;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void  v) {
+            super.onPostExecute(v);
+            markVote();
+            tagMaster = downloadedTagMaster; //set the new tagmaster
             upVote.setVisibility(View.VISIBLE);
             downVote.setVisibility(View.VISIBLE);
             questionTextView.setVisibility(View.VISIBLE);
@@ -218,14 +263,14 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       switch (v.getId()){
           case R.id.up_button:
             question.upVote(account, tagMaster);
-            UpdateTagMasterAsyncTask task1 = new UpdateTagMasterAsyncTask(QuestionView.this);
+            UploadTagMasterAsyncTask task1 = new UploadTagMasterAsyncTask(QuestionView.this);
             task1.execute();
             UploadQuestionAsyncTask task2 = new UploadQuestionAsyncTask(QuestionView.this);
             task2.execute();
             break;
           case R.id.down_button:
             question.downVote(account, tagMaster);
-            UpdateTagMasterAsyncTask task1case2 = new UpdateTagMasterAsyncTask(QuestionView.this);
+            UploadTagMasterAsyncTask task1case2 = new UploadTagMasterAsyncTask(QuestionView.this);
             task1case2.execute();
             UploadQuestionAsyncTask task2case2 = new UploadQuestionAsyncTask(QuestionView.this);
             task2case2.execute();

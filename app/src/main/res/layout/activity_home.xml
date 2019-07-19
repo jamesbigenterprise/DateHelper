@@ -35,7 +35,7 @@
         />
 
     <Button
-        android:id="@+id/help_date_button"
+        android:id="@+id/study_next_bt"
         android:layout_width="0dp"
         android:layout_height="69dp"
         android:layout_marginStart="8dp"
