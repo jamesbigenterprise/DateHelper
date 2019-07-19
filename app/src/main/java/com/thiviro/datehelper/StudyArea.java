@@ -100,44 +100,44 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
       case R.id.study_next:
         areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
         System.out.println("Selection: " + areaSelected);
-        Tag studyAreaTag = new Tag(areaSelected);
-        Log.d(LOG_DEBUG, "GETTING THE TAGS");
-        //add this Tag to the list of Tags
-        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
-        Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
-        List<Tag> listofTags = new ArrayList<Tag>();
-        listofTags = gson.fromJson(json, type);
-        listofTags.add(studyAreaTag);
-        Log.d(LOG_DEBUG, "ADDED THE NEW TAG");
-        //put it back to shared prefs
-        SharedPreferences.Editor editor = sharedPref.edit();
-        json = gson.toJson(listofTags);
-        editor.putString(InterestSelector.LIST_TAGS, json);
-        editor.apply();
-
-        TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
-
-
-        //Gather the information to create the person
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
-        String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
-        boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
-        String id = sharedPreferences.getString(MainActivity.ID, "");
-
-        Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
-
-        //Now create the account
-        Account newAccount = new Account(newProfile, id);
-        editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
-        editor.apply();
-
-        newAccount = null;
-        String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
-        newAccount = gson.fromJson(testJson, Account.class);
-          String idTest = sharedPref.getString(MainActivity.ID, "");
+//        Tag studyAreaTag = new Tag(areaSelected);
+//        Log.d(LOG_DEBUG, "GETTING THE TAGS");
+//        //add this Tag to the list of Tags
+//        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+//        Gson gson = new Gson();
+//        String json = sharedPref.getString(InterestSelector.LIST_TAGS, null);
+//        Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
+//        List<Tag> listofTags = new ArrayList<Tag>();
+//        listofTags = gson.fromJson(json, type);
+//        listofTags.add(studyAreaTag);
+//        Log.d(LOG_DEBUG, "ADDED THE NEW TAG");
+//        //put it back to shared prefs
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        json = gson.toJson(listofTags);
+//        editor.putString(InterestSelector.LIST_TAGS, json);
+//        editor.apply();
+//
+//        TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
+//
+//
+//        //Gather the information to create the person
+//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+//        String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
+//        String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
+//        boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
+//        String id = sharedPreferences.getString(MainActivity.ID, "");
+//
+//        Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
+//
+//        //Now create the account
+//        Account newAccount = new Account(newProfile, id);
+//        editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
+//        editor.apply();
+//
+//        newAccount = null;
+//        String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
+//        newAccount = gson.fromJson(testJson, Account.class);
+//          String idTest = sharedPref.getString(MainActivity.ID, "");
 
 
 

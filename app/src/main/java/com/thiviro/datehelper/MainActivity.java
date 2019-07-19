@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
     if (account != null){
-      startActivity(new Intent(MainActivity.this, Home.class));
+      startActivity(new Intent(MainActivity.this, ProfileSelector.class));
     }
 
   }
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       editor.putString(PHOTO_URL, account.getPhotoUrl().toString());
       editor.putString(LOGIN, "GOOGLE");
       editor.apply();
-      startActivity(new Intent(MainActivity.this, Home.class));
+      startActivity(new Intent(MainActivity.this, ProfileSelector.class));
       signInButton.setVisibility(View.GONE);
       loginButton.setVisibility(View.GONE);
       signOutButton.setVisibility(View.VISIBLE);

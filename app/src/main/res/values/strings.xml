@@ -10,7 +10,7 @@
     <string name="button_google_sign_out">Sign out from Google</string>
     <string name="button_next">Next</string>
     <string name="button_add_more">Add More</string>
-    <string name="button_select_crop">Crop and Save</string>
+    <string name="button_view_profile">View Your Profile</string>
 
     <!--Activity names / labels-->
 
@@ -20,7 +20,7 @@
     <string name="activity_interests">Top Interests</string>
     <string name="activity_date_interests">Select or create Interests that describes your Date</string>
     <string name="activity_study_area">Study Area</string>
-    <string name="activity_picture">Profile Picture</string>
+    <string name="activity_profile">My Profile</string>
     <string name="title_activity_new_question">NewQuestion</string>
 
     <!--Image titles-->

@@ -64,18 +64,18 @@ public class Home extends AppCompatActivity {
     askQuestion = findViewById(R.id.ask_question_button);
 
     sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-
-    gson = new Gson();
-    String tagMasterJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "");
-    tagMaster = gson.fromJson(tagMasterJson, TagMaster.class);
-    String questionMasterJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "");
-    questionsMaster = gson.fromJson(questionMasterJson, QuestionsMaster.class);
-    CreateTagMasterAsyncTask task = new CreateTagMasterAsyncTask(Home.this);
-
-    Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
-    synchronized (this){
-      task.execute(tagMaster);
-    }
+//
+//    gson = new Gson();
+//    String tagMasterJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "");
+//    tagMaster = gson.fromJson(tagMasterJson, TagMaster.class);
+//    String questionMasterJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "");
+//    questionsMaster = gson.fromJson(questionMasterJson, QuestionsMaster.class);
+//    CreateTagMasterAsyncTask task = new CreateTagMasterAsyncTask(Home.this);
+//
+//    Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
+//    synchronized (this){
+//      task.execute(tagMaster);
+//    }
 
 
   }
@@ -289,9 +289,9 @@ public class Home extends AppCompatActivity {
       home.questionsMaster = questionsMaster;
       home.updateSharedP();
 
-      progressBar.setVisibility(View.INVISIBLE);
-      helpOnDate.setVisibility(View.VISIBLE);
-      askQuestion.setVisibility(View.VISIBLE);
+//      progressBar.setVisibility(View.INVISIBLE);
+//      helpOnDate.setVisibility(View.VISIBLE);
+//      askQuestion.setVisibility(View.VISIBLE);
     }
   }
 
@@ -360,12 +360,12 @@ public class Home extends AppCompatActivity {
 
 
     //===== ADDED THIS SECTION TO TEST COMMUNICATING WITH THE BACK END! DONE!
-    APIQuestionWorker test = new APIQuestionWorker(this);
-    Thread thread = new Thread(test, "Test");
-    thread.start();
+//    APIQuestionWorker test = new APIQuestionWorker(this);
+//    Thread thread = new Thread(test, "Test");
+//    thread.start();
     //========================================================================
-    //Intent intent = new Intent(this, ShowResults.class);
-    //startActivity(intent);
+    Intent intent = new Intent(this, ShowResults.class);
+    startActivity(intent);
   }
 
   /**
@@ -379,5 +379,10 @@ public class Home extends AppCompatActivity {
 
     Intent intent = new Intent(this, NewQuestion.class);
     startActivity(intent);
+  }
+
+
+  public void visitProfile(View view){
+    startActivity(new Intent(this, ProfilePicture.class));
   }
 }

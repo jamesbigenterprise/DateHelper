@@ -7,6 +7,17 @@
     tools:context=".ProfilePicture">
 
 
+    <EditText
+        android:id="@+id/profile_first_name"
+        android:layout_width="177dp"
+        android:layout_height="23dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="@+id/profile_last_name"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
+
     <ImageView
         android:id="@+id/picture_logo"
         android:layout_width="132dp"
@@ -22,6 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/date_helper" />
 
+
     <TextView
         android:id="@+id/label_picture"
         android:layout_width="wrap_content"
@@ -31,7 +43,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/activity_picture"
+        android:text="@string/activity_profile"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -39,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/picture_logo" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/picture_profile_pic"
         android:layout_width="133dp"
         android:layout_height="142dp"
@@ -48,10 +60,14 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
+        app:cardCornerRadius="64dp"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_picture"
         app:srcCompat="@mipmap/add_user_pic" />
+
 
     <Button
         android:id="@+id/picture_next"
@@ -68,19 +84,146 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/picture_select_button"
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="24dp"
+        android:text="First Name"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintEnd_toStartOf="@+id/profile_first_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
         android:layout_width="0dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/button_select_crop"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Last Name"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Gender"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="@+id/textView8" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="Study Areas"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintStart_toStartOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginBottom="50dp"
+        android:text="Interest"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/picture_next"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/profile_last_name"
+        android:layout_width="177dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_gender"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/profile_study_area"
+        android:layout_width="176dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+    <EditText
+        android:id="@+id/profile_interest"
+        android:layout_width="176dp"
+        android:layout_height="58dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/picture_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/profile_study_area"
+        app:layout_constraintTop_toTopOf="@+id/textView9"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/edit_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Edit Profile"
+        app:layout_constraintBottom_toTopOf="@+id/label_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toEndOf="@+id/picture_logo"
+        app:layout_constraintTop_toTopOf="@+id/picture_logo"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner_gender"
+        android:layout_width="181dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:background="@android:color/transparent"
+        android:focusable="false"
+        android:spinnerMode="dropdown"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="@+id/profile_study_area"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        app:layout_constraintVertical_bias="0.55" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
