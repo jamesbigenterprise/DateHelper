@@ -146,12 +146,6 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
         editor.apply();
 
-        newAccount = null;
-        String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
-        newAccount = gson.fromJson(testJson, Account.class);
-          String idTest = sharedPref.getString(MainActivity.ID, "");
-
-
 
         startActivity(new Intent(this, Home.class));
         break;
