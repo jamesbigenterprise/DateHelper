@@ -62,7 +62,7 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
         R.layout.spinner_gender, GENDER));
 
     // Populate fields with current values
-    genderSpinner.setSelection(account.getGender() ? 1 : 0);
+    genderSpinner.setSelection(account.getGender() ? 0 : 1);
 
     profileViews = new ArrayList<>();
     profileViews.add(firstName);

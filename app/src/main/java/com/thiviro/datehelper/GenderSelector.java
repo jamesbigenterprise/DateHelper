@@ -63,7 +63,7 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
         startActivity(new Intent(this, InterestSelector.class));
         break;
       case R.id.female:
-        editor.putBoolean(GENDER_BOOLEAN, true);
+        editor.putBoolean(GENDER_BOOLEAN, false);
         editor.apply();
         startActivity(new Intent(this, InterestSelector.class));
         break;
