@@ -35,7 +35,7 @@ public class DateInterestsSelector extends AppCompatActivity implements View.OnC
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_interest_selector);
+    setContentView(R.layout.activity_date_interests_selector);
     interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
     next = findViewById(R.id.interest_next);
     addMore = findViewById(R.id.interest_button_add_more);

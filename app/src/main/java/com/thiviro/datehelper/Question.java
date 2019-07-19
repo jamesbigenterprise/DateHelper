@@ -13,7 +13,9 @@ import java.util.List;
  * @since 1
  */
 public class Question {
-  private Account author;
+  @SerializedName("id")
+  private String id;
+  private String author;
   @SerializedName("title")
   private String question;
   @SerializedName("text")
@@ -33,14 +35,14 @@ public class Question {
   /**
    * Build the Question
    *
-   * @param author The account that created the question
+   * @param author The ID of the account that created the question
    * @param question a string containing the question
    * @param summary a string containing the summary of hte question
    * @param tags A list of Tags describing this question
    * @param tagMaster The way to keep all the tags in one place
    */
   public Question(Account author, String question, String summary, List<Tag> tags, TagMaster tagMaster) {
-    this.author = author;
+    this.author = author.getId();
     this.question = question;
     this.summary = summary;
     this.voteTracker = new VoteTracker();
@@ -114,4 +116,32 @@ public class Question {
   public List<Comment> getComments(){
     return comments;
   }
+
+  /**
+   * Check if the user has voted
+   * @param user the user that will be checked
+   * @return true if has voted(Account is on the Collection), false if it has not (Account is not the Collection)
+   */
+  public boolean hasVoted(Account user) {
+    return voteTracker.hasVoted(user);
+  }
+
+  /**
+   * Return a Integer to show the vote
+   * @param user the user that will be checked
+   * @return 1 if has upVoted, false if it has downVoted
+   */
+  public Integer getVote(Account user) {
+    return voteTracker.getVote(user);
+  }
+
+  /**
+   * Add new comment to the question
+   * @param newComment the comment to be added
+   */
+  public void addComment(Comment newComment){
+    comments.add(newComment);
+  }
+
 }
+

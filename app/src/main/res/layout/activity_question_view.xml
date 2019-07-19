@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".QuestionView">
 
+    <Button
+        android:id="@+id/add_comment"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:drawablePadding="@dimen/fab_margin"
+        android:text="@string/add_comment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"
@@ -26,9 +42,10 @@
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:onClick="onClick"
         android:src="@android:drawable/arrow_up_float"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/question_view" />
+        app:layout_constraintTop_toTopOf="@+id/question_text_view" />
 
     <ImageButton
         android:id="@+id/down_button"
@@ -41,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/up_button" />
 
     <TextView
-        android:id="@+id/question_view"
+        android:id="@+id/question_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -58,142 +75,60 @@
         app:layout_constraintStart_toEndOf="@+id/profile_photo"
         app:layout_constraintTop_toTopOf="@+id/profile_photo" />
 
-    <TextView
-        android:id="@+id/tag1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:background="@color/colorPrimary"
-        android:text="Movies"
-        android:textColor="@color/colorTopBar"
-        android:textSize="24dp"
-        app:layout_constraintStart_toEndOf="@+id/tag2"
-        app:layout_constraintTop_toTopOf="@+id/tag" />
-
-    <TextView
-        android:id="@+id/tag2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:background="@color/colorPrimary"
-        android:text="Movies"
-        android:textColor="@color/colorTopBar"
-        android:textSize="24dp"
-        app:layout_constraintStart_toEndOf="@+id/tag"
-        app:layout_constraintTop_toTopOf="@+id/tag" />
-
-    <TextView
-        android:id="@+id/tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"
-        android:text="art"
-        android:textColor="@color/colorTopBar"
-        android:textSize="24dp"
-        app:layout_constraintStart_toStartOf="@+id/question_view"
-        app:layout_constraintTop_toBottomOf="@+id/question_view" />
-
     <!--Comments section -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
-        android:id="@+id/cardView2"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="32dp"
-        app:cardCornerRadius="64dp"
-        app:layout_constraintStart_toStartOf="@+id/question_view"
-        app:layout_constraintTop_toBottomOf="@+id/tag1"/>
-
-
-
-    <TextView
-        android:id="@+id/comment1"
+    <ListView
+        android:id="@+id/commentsList"
         android:layout_width="0dp"
-        android:layout_height="34dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/textview_border"
-        android:ems="10"
-        android:minLines="2"
-        android:scrollHorizontally="false"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@android:dimen/app_icon_size"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-        app:layout_constraintStart_toEndOf="@+id/cardView2"
-        app:layout_constraintTop_toTopOf="@+id/cardView2" />
-
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:src="@android:drawable/arrow_up_float"
+        android:divider="?attr/dividerHorizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/comment1" />
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@android:drawable/arrow_down_float"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton5"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
-
-    <!-- comment 2-->
-    <de.hdodenhof.circleimageview.CircleImageView
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
-        android:id="@+id/cardView3"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="32dp"
-        app:cardCornerRadius="64dp"
-        app:layout_constraintStart_toStartOf="@+id/question_view"
-        app:layout_constraintTop_toBottomOf="@+id/comment1" />
-
-    <TextView
-        android:id="@+id/comment3"
-        android:layout_width="0dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/textview_border"
-        android:ems="10"
-        android:minLines="2"
-        android:scrollHorizontally="false"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@android:dimen/app_icon_size"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton7"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cardView2"
-        app:layout_constraintTop_toTopOf="@+id/cardView3" />
+        app:layout_constraintStart_toEndOf="@+id/profile_photo"
+        app:layout_constraintTop_toBottomOf="@+id/question_text_view" />
 
-    <ImageButton
-        android:id="@+id/imageButton7"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <EditText
+        android:id="@+id/write_comment_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:src="@android:drawable/arrow_up_float"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/textview_border"
+        android:ems="10"
+        android:hint="@string/write_comment_hint"
+        android:maxLines="1"
+        android:scrollHorizontally="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/add_comment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/comment3" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton8"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@android:drawable/arrow_down_float"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton7"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton7" />
+    <ProgressBar
+        android:id="@+id/progressCircle"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="138dp"
+        android:layout_height="118dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/add_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <!-- comment 2-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

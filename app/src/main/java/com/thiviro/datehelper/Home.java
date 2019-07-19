@@ -72,7 +72,7 @@ public class Home extends AppCompatActivity {
 //    questionsMaster = gson.fromJson(questionMasterJson, QuestionsMaster.class);
 //    CreateTagMasterAsyncTask task = new CreateTagMasterAsyncTask(Home.this);
 //
-//    Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
+//    //Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
 //    synchronized (this){
 //      task.execute(tagMaster);
 //    }
@@ -81,7 +81,7 @@ public class Home extends AppCompatActivity {
   }
 
   void updateSharedP(){
-    Log.d(TAG, "updateSharedP() -> the changes were made, we have questions after async inside synchronized == " + questionsMaster.getQuestionsMasterMap().size());
+    //Log.d(TAG, "updateSharedP() -> the changes were made, we have questions after async inside synchronized == " + questionsMaster.getQuestionsMasterMap().size());
 
     SharedPreferences.Editor editor = sharedPreferences.edit();
     String tmJson = gson.toJson(tagMaster);
@@ -89,8 +89,9 @@ public class Home extends AppCompatActivity {
     editor.putString(MainActivity.TAG_MASTER, qmJason);
     editor.putString(MainActivity.QUESTION_MASTER, tmJson);
     editor.apply();
-
-    Toast.makeText(Home.this, " updateSharedP() -> AsyncTask Done, updated data is now in shared preferences, number of questions == " + questionsMaster.getQuestionsMasterMap().size() + " And number of Tags == " + tagMaster.getAllTags().size() , Toast.LENGTH_LONG).show();
+    //Log.d(TAG, "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
+    System.out.println(TAG +  "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
+    //Toast.makeText(Home.this, " updateSharedP() -> AsyncTask Done, updated data is now in shared preferences, number of questions == " + questionsMaster.getQuestionsMasterMap().size() + " And number of Tags == " + tagMaster.getAllTags().size() , Toast.LENGTH_LONG).show();
   }
   private class CreateTagMasterAsyncTask extends AsyncTask<TagMaster, Integer, TagMaster>{
     private WeakReference<Home> weakReference;
@@ -114,7 +115,7 @@ public class Home extends AppCompatActivity {
     protected TagMaster doInBackground(TagMaster... tagMasters) {
       Gson gson = new Gson();
 
-      QuestionsMaster questionsMaster = new QuestionsMaster(tagMaster);
+      QuestionsMaster questionsMaster = new QuestionsMaster();
       publishProgress((1 * 100) / 10);
       Tag myTag1 = new Tag("Pets");
       Tag myTag2 = new Tag("Dogs");
@@ -169,7 +170,7 @@ public class Home extends AppCompatActivity {
       super.onPostExecute(s);
       Home home = weakReference.get();
       home.tagMaster = s;
-      home.questionsMaster = new QuestionsMaster(s);
+      home.questionsMaster = new QuestionsMaster();
       CreateQuestionsMasterAsyncTask task2 = new CreateQuestionsMasterAsyncTask(Home.this);
       task2.execute(home.questionsMaster);
     }
@@ -193,7 +194,7 @@ public class Home extends AppCompatActivity {
     protected QuestionsMaster doInBackground(QuestionsMaster... questionsMasters) {
       publishProgress(40);
 
-      Log.d(TAG, "TASK2 doInBackground -> the QM SIZE IN THE BEGINING is == " + questionsMasters[0].getQuestionsMasterMap().size());
+      //Log.d(TAG, "TASK2 doInBackground -> the QM SIZE IN THE BEGINING is == " + questionsMasters[0].getQuestionsMasterMap().size());
       String qmJason = gson.toJson(questionsMasters[0]);
       Log.d(TAG, "TASK2 doInBackground -> the resulting json is == " + qmJason);
       List<Tag> animalTags = new ArrayList<Tag>();
@@ -221,7 +222,7 @@ public class Home extends AppCompatActivity {
       otherTags.add(tagMaster.getAllTags().get(18));
 
       Person firstUser = new Person("Thiago", "Alves da Silva", true, churchTags, tagMaster);
-      Account firstAccount = new Account(firstUser, "01");
+      Account firstAccount = new Account(firstUser, "01","noURL");
 
       publishProgress(50);
 
@@ -254,23 +255,18 @@ public class Home extends AppCompatActivity {
 
       //create a girl to do some voting
       Person secondUser = new Person("Maiane", "Sampaio", false, otherTags, tagMaster);
-      Account secondAccount = new Account(secondUser, "02");
-      for (Question question : questionsMaster.getQuestionsMasterMap().values()){
-        question.upVote(secondAccount,tagMaster);
-      }
+      Account secondAccount = new Account(secondUser, "02", "nourl");
+
 
       publishProgress(70);
       //create a second girl to do some voting
       Person thirdUser = new Person("Tcharla", "Marques", false, otherTags, tagMaster);
-      Account thirdAccount = new Account(thirdUser, "03");
+      Account thirdAccount = new Account(thirdUser, "03", "noURL");
 
       publishProgress(80);
-      for (Question question : questionsMaster.getQuestionsMasterMap().values()){
-        question.upVote(thirdAccount, tagMaster);
-      }
       publishProgress(100);
 
-      Log.d(TAG, "2TASK - this is the question master created == " +  questionsMaster.getQuestionsMasterMap().size());
+      //Log.d(TAG, "2TASK - this is the question master created == " +  questionsMaster.getQuestionsMasterMap().size());
 
       return questionsMaster;
 

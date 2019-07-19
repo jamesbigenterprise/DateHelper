@@ -62,6 +62,8 @@
 
     <string name="facebook_app_id">1294427687348201</string>
     <string name="fb_login_protocol_scheme">fb1294427687348201</string>
+    <string name="add_comment">Comment</string>
+    <string name="write_comment_hint">Write your comment</string>
 
 
 </resources>

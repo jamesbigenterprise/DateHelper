@@ -20,6 +20,7 @@ public class ShowResults extends AppCompatActivity {
     Button result1;
     Button result2;
     Button result3;
+    List<Question> resultQuestions;
     public static final String SHARED_PREFS = "sharedPrefs";
 
     @Override
