@@ -13,6 +13,8 @@ import java.util.List;
  * @since 1
  */
 public class Question {
+  @SerializedName("id")
+  private String id;
   private String author;
   @SerializedName("title")
   private String question;
