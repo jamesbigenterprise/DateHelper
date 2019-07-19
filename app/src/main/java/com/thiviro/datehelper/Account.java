@@ -5,12 +5,15 @@ import java.util.List;
 public class Account {
   private Person user;
   private String id;
+  private String imageURL;
+
   private List<Question> questions;
   private List<Comment> comments;
 
-  public Account (Person person, String id) {
+  public Account (Person person, String id, String imageURL) {
     this.user = person;
     this.id = id;
+    this.imageURL = imageURL;
   }
   public boolean getGender() {
     return user.getGender();
@@ -18,5 +21,11 @@ public class Account {
 
   public String getId() {
     return id;
+  }
+  public String getName() {
+    return user.getFullName();
+  }
+  public String getImageURL() {
+    return imageURL;
   }
 }

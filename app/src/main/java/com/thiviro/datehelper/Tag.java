@@ -18,7 +18,7 @@ public class Tag {
   private String tagName;
   private VoteTracker voteTracker;
   //usage, track all the questions that use this tag
-  private List<Question> questionsInUse;
+  private List<String> questionsInUse;
 
   //constructor
 
@@ -40,7 +40,7 @@ public class Tag {
    * @param question the question that will use this tag
    */
   void addQuestion(Question question) {
-    questionsInUse.add(question);
+    questionsInUse.add(question.getQuestion());
   }
 
   /**
@@ -48,7 +48,7 @@ public class Tag {
    * @param question the question that is not using this tag anymore
    */
   void removeQuestion(Question question) {
-    if (questionsInUse.contains(question)) {
+    if (questionsInUse.contains(question.getQuestion())) {
       questionsInUse.remove(question);
     }
   }
@@ -64,7 +64,14 @@ public class Tag {
    */
   public Question getTopQuestion(Person person) {
     Map<Float, Question> questionsMap = new HashMap<>();
-    for (Question question : questionsInUse) {
+    List<Question> questionsInUseDownloaded = new ArrayList<>();
+    /**
+     * BACKEND
+     *
+     * Download all the questions in use
+     * and save in questionsInUseDownloaded
+     */
+    for (Question question : questionsInUseDownloaded) {
       questionsMap.put(question.getPercentOfUpVotes(person), question);
       }
     TreeMap<Float, Question> treeOfQuestions = new TreeMap<>(questionsMap);

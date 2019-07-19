@@ -10,23 +10,19 @@ import java.util.*;
  * @since 1
  */
 public class QuestionsMaster {
-  private Map<String, Question> questionsMasterMap;
-  TagMaster tagMaster;
 
   private static final int MAX_DISPLAY_RESULTS = 3;
 
-  public Map<String, Question> getQuestionsMasterMap() {
-    return questionsMasterMap;
-  }
+
   //constructor
 
   /**
    * Initialize the Map and the reference to the tag master
-   * @param tagMaster reference to all the existing tags
+
    */
-  public  QuestionsMaster (TagMaster tagMaster) {
-    questionsMasterMap = new HashMap<String, Question>();
-    this.tagMaster = tagMaster;
+  public  QuestionsMaster () {
+
+
   }
 
   //add Tag
@@ -41,12 +37,18 @@ public class QuestionsMaster {
    * @return key to retrieve this question later
    */
   public String addQuestion (Question question) {
+    /**
+     * Try to download the ques
+     */
+    /*
     if(questionsMasterMap.containsValue(question)){
       return question.getSummary();
     }else {
       questionsMasterMap.put(question.getSummary(), question);
       return question.getSummary();
     }
+    */
+    return null;
   }
 
   //Help on a date
@@ -67,7 +69,7 @@ public class QuestionsMaster {
    * @param dateProfile a simple profile with tags that describe your date
    * @return A map containing the top questions
    */
-  public Map<Question, Question> helpOnDate(Person dateProfile) {
+  public List <Question>  helpOnDate(Person dateProfile, TagMaster tagMaster) {
     //get the date tags
     List<String> dateKeys = dateProfile.getTags();
     List<Tag> dateTags = new ArrayList<>(tagMaster.getTagsPack(dateKeys));
@@ -106,6 +108,10 @@ public class QuestionsMaster {
     for (Tag tag : topTags) {
       topQuestions.put(tag.getTopQuestion(dateProfile), tag.getTopQuestion(dateProfile));
     }
-    return topQuestions;
+    ArrayList<Question> resultsList = new ArrayList<Question>();
+    for (Map.Entry<Question, Question> entry: topQuestions.entrySet()){
+      resultsList.add(entry.getValue());
+    }
+    return resultsList;
   }
 }

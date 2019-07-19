@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +40,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
     setContentView(R.layout.activity_study_area);
     areas = new ArrayList<>(Arrays.asList(getResources().
             getStringArray(R.array.study_area)));
-    next = findViewById(R.id.study_next);
+    next = findViewById(R.id.next_button);
     addMore = findViewById(R.id.study_button_add_more);
     studyArea = findViewById(R.id.studyArea);
     createList();
@@ -97,7 +97,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   @Override
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.study_next:
+      case R.id.next_button:
         areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
         System.out.println("Selection: " + areaSelected);
         Tag studyAreaTag = new Tag(areaSelected);
@@ -129,8 +129,21 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
 
         Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
 
+        String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
+        String image_url = "";
+
+        switch (login){
+          case "FACEBOOK":
+            image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+            break;
+
+          case "GOOGLE":
+            image_url = sharedPreferences.getString(MainActivity.PHOTO_URL,"error shared pref");
+            break;
+
+        }
         //Now create the account
-        Account newAccount = new Account(newProfile, id);
+        Account newAccount = new Account(newProfile, id, image_url);
         editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
         editor.apply();
 

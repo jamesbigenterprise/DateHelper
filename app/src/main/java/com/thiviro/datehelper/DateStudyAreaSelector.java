@@ -1,34 +1,49 @@
 package com.thiviro.datehelper;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * This is the last page in the helponDate Workflow
+ *
+ * Here we will get the user Account from shared preferences and the tags selected in the previous
+ * activity (DateInterestSelector).
+ * The user will select another Tag and will click on Help on Date
+ * it will start the CreateProfileAsyncTask, this task will download the TagMaster
+ * create a Person profile for the date (that makes changes in the TagMasterthen)
+ * upload the changed TagMaster to the server and return the Person object
+ * On post execute it will call it will call helpOnDateTask()
+ * This class will start a second Task: HelpOnDateAsyncTask
+ * It will download the TagMaster again, create a questionMaster and call helpOnDate
+ * The result will be a list of questions
+ * on post execute of the second task call the method showResults
+ * This method will create an intent with the list of results and start the
+ * intent for the ShowResults Class
+ */
 public class DateStudyAreaSelector extends AppCompatActivity implements View.OnClickListener {
 
     private List<String> areas;
     private ListView studyArea;
-    private Button next;
-    private Button addMore;
+    private Button helpOnDate;
+    private ProgressBar progressBar;
     private String areaSelected;
     private Person profile;
     private Account userAccount;
@@ -41,22 +56,19 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_study_area);
+        setContentView(R.layout.activity_date_study_area_selector);
         areas = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.study_area)));
-        next = findViewById(R.id.study_next);
-        addMore = findViewById(R.id.study_button_add_more);
+        helpOnDate = findViewById(R.id.help_date_button);
         studyArea = findViewById(R.id.studyArea);
+        progressBar = findViewById(R.id.progress_bar);
         createList();
 
-        //get the user profile
+        //get the user account
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String jsonAccount = sharedPreferences.getString(MainActivity.ACCOUNT, "");
         userAccount = gson.fromJson(jsonAccount, Account.class);
-
-
-
     }
 
     private void createList(){
@@ -68,92 +80,138 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
         studyArea.setItemChecked(0, true);
     }
 
-    private void createDialog(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        final View mView = inflater.inflate(R.layout.text_input_dialog, null);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setView(mView);
-
-        dialog.setCancelable(false)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                        final EditText entry = mView.findViewById(R.id.dialog_edit_text);
-                        if (entry != null){
-                            areas.add(entry.getText().toString());
-                            listAdapter.notifyDataSetChanged();
-                            // TODO add list to sharefprefs
-                        }
-                        dialogInterface.dismiss();
-
-                    }
-
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-
-        AlertDialog alertDialog = dialog.create();
-        alertDialog.show();
-    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.study_next:
-                areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
-                System.out.println("Selection: " + areaSelected);
-                Tag studyAreaTag = new Tag(areaSelected);
-                Log.d(LOG_DEBUG, "GETTING THE TAGS");
-                //add this Tag to the list of Tags
+            case R.id.help_date_button:
+                helpOnDate.setOnClickListener(this);
                 SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                 Gson gson = new Gson();
+                areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
+                Tag studyAreaTag = new Tag(areaSelected);
+                //add this Tag to the list of Tags
                 String json = sharedPref.getString(DateInterestsSelector.LIST_DATE_TAGS, null);
                 Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
                 List<Tag> listofTags = new ArrayList<Tag>();
                 listofTags = gson.fromJson(json, type);
                 listofTags.add(studyAreaTag);
-                Log.d(LOG_DEBUG, "ADDED THE NEW TAG");
-                //put it back to shared prefs
-                SharedPreferences.Editor editor = sharedPref.edit();
-                json = gson.toJson(listofTags);
-                editor.putString(InterestSelector.LIST_TAGS, json);
-                editor.apply();
-
-                TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
-
-                //create the date profile
-                profile =  new Person(userAccount, listofTags,tagmaster);
-                next.setOnClickListener(this);
-                addMore.setOnClickListener(this);
-
-                //help on date
-                String qmjson = sharedPref.getString(MainActivity.QUESTION_MASTER, "");
-                QuestionsMaster qm = gson.fromJson(qmjson, QuestionsMaster.class);
-                Map<Question, Question> results = qm.helpOnDate(profile);
-                String resultsJson = gson.toJson(results);
-                editor.putString(HELP_RESULTS, resultsJson);
-                editor.apply();
-
-                Log.d(LOG_DEBUG, "SAVED BACK TO SHARED PREF");
-
-
-                startActivity(new Intent(this, ShowResults.class));
-                break;
-            case R.id.study_button_add_more:
-                createDialog();
+                CreateProfileAsyncTask task1 = new CreateProfileAsyncTask(DateStudyAreaSelector.this);
+                task1.execute(listofTags);
                 break;
         }
     }
 
+    private class CreateProfileAsyncTask extends AsyncTask<List<Tag>, Integer, Person> {
+        private WeakReference<DateStudyAreaSelector> weakReference;
+        private Account askerAccount;
+        private TagMaster downloadedTagMaster;
+        public CreateProfileAsyncTask (DateStudyAreaSelector context){
+            weakReference = new WeakReference<DateStudyAreaSelector>(context);
+            askerAccount = weakReference.get().userAccount;
+        }
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            helpOnDate.setVisibility(View.INVISIBLE);
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+        @Override
+        protected Person doInBackground(List<Tag>... tags) {
+            publishProgress(10);
+            Gson gson = new Gson();
+            TagMaster tagMaster = null;//
+            publishProgress(20);
+            /**
+             * BACKEND
+             * TODO download the tagmaster
+             * Download the TagMaster
+             */
+            downloadedTagMaster = tagMaster;
+            publishProgress(50);
+            Person person = new Person(askerAccount, tags[0], downloadedTagMaster);
+            publishProgress(100);
+
+            /**
+             * BACKEND
+             * //Todo Upload the TagMaster with the changes
+             */
+            return person;
+        }
+
+        @Override
+        protected void onPostExecute(Person p) {
+            super.onPostExecute(p);
+            DateStudyAreaSelector context = weakReference.get();
+            context.profile = p;
+            context.helpOnDateTask();
+        }
+
+    }
+    private void helpOnDateTask () {
+      HelpOnDateAsyncTask task = new HelpOnDateAsyncTask(this);
+      task.execute(profile);
+    }
+
+    private class HelpOnDateAsyncTask extends AsyncTask<Person, Integer, List<Question>> {
+        private WeakReference<DateStudyAreaSelector> weakReference;
+
+        public HelpOnDateAsyncTask(DateStudyAreaSelector weakReference) {
+            this.weakReference = new WeakReference<>(weakReference);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+        @Override
+        protected List<Question> doInBackground(Person... persons) {
+            publishProgress(10);
+            List<Question> results = new ArrayList<Question>();
+            QuestionsMaster questionsMaster = new QuestionsMaster();
+            Gson gson = new Gson();
+            TagMaster tagMaster = null;
+            publishProgress(20);
+            /**
+             * BACKEND
+             * TODO download the tagmaster
+             * Download the TagMaster
+             */
+            publishProgress(50);
+            results = questionsMaster.helpOnDate(persons[0], tagMaster);
+            publishProgress(100);
+            /**
+             * BACKEND
+             * //Todo Upload the TagMaster with the changes
+             */
+            return results;
+        }
+
+        @Override
+        protected void onPostExecute(List<Question> q) {
+            super.onPostExecute(q);
+            DateStudyAreaSelector context = weakReference.get();
+            context.showResults(q);
+        }
+    }
+
+    public void showResults(List<Question> results) {
+        Gson gson = new Gson();
+        String resultsJson = gson.toJson(results);
+        Intent intent = new Intent(this,  ShowResults.class);
+        intent.putExtra(HELP_RESULTS, resultsJson);
+        startActivity(intent);
+    }
 }
-
-
-

@@ -35,11 +35,28 @@ public class VoteTracker {
    * @param user the user that will be checked
    * @return true if has voted(Account is on the Collection), false if it has not (Account is not the Collection)
    */
-  private boolean hasVoted (Account user) { //the user is the key, check if it is in the list
+  public boolean hasVoted (Account user) { //the user is the key, check if it is in the list
     if (user.getGender()) {
       return maleVotes.containsKey(user);
     } else {
       return femaleVotes.containsKey(user);
+    }
+  }
+
+  /**
+   * Return a Integer to show the vote
+   * @param account the user that will be checked
+   * @return 1 if has upVoted, false if it has downVoted
+   */
+  public Integer getVote (Account account) {
+    if (hasVoted(account)){
+      if (account.getGender()) {
+        return maleVotes.get(account);
+      } else {
+        return femaleVotes.get(account);
+      }
+    }else{
+      return null;
     }
   }
 

@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,6 +43,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private Account account;
     private TagMaster tagMaster;
     private QuestionsMaster questionsMaster;
+    private TextView authorTextVew;
     private TextView question_sugestion;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NEW_QUESTION_TOAST = "new_question_toast";
@@ -53,6 +53,8 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_question);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
 
         interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
         newQuestion = findViewById(R.id.ask_new_question);
@@ -60,31 +62,23 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
         question_sugestion = findViewById(R.id.question_sugestion);
+        authorTextVew =  findViewById(R.id.author_name_textView);
         writeQuestion = findViewById(R.id.write_new_question);
         writeQuestion.addTextChangedListener(watcher);
         createList();
-
         newQuestion.setOnClickListener(this);
         addMore.setOnClickListener(this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        Gson gson = new Gson();
         String accountJson;
         String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
         accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
-        account =  gson.fromJson(accountJson, Account.class);
         String tmJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "tm error shared pref");
         String qmJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "qm error shared pref");
+        account =  gson.fromJson(accountJson, Account.class);
         tagMaster = gson.fromJson(tmJson, TagMaster.class);
         questionsMaster = gson.fromJson(qmJson, QuestionsMaster.class);
-        Log.d(DEBUG_LOG, "Retrieved everything from shared pref");
-        Log.d(DEBUG_LOG, "Json of the questionsMaster == " + qmJson + " And TagMaster " + tmJson);
-        boolean tm = tagMaster == null;
-        boolean qm = questionsMaster == null;
-        Map<String, Question> qmMap= questionsMaster.getQuestionsMasterMap();
-        Log.d(DEBUG_LOG, "Is the questionsMaster null? == " + qm + " And TagMaster " + tm);
-        qm = qmMap == null;
-        Log.d(DEBUG_LOG, "questionsMaster size == " + qm + " And TagMaster " + tagMaster.getAllTags().size());
+
+
         String image_url = "";
 
         switch (login){
@@ -95,11 +89,12 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             case "GOOGLE":
                 image_url = sharedPreferences.getString(MainActivity.PHOTO_URL,"error shared pref");
                 break;
-
         }
 
         Glide.with(this).load(image_url).into(profilePhoto);
+        authorTextVew.setText(account.getName());
     }
+
 
     private ArrayList<String> getSelection(){
         SparseBooleanArray checked = interestList.getCheckedItemPositions();
@@ -128,7 +123,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-
                         final EditText entry = mView.findViewById(R.id.dialog_edit_text);
                         if (entry != null){
                             interests.add(entry.getText().toString());
@@ -136,7 +130,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                             // TODO add list to shared prefs
                         }
                         dialogInterface.dismiss();
-
                     }
 
                 })
@@ -165,9 +158,9 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                 }
                 boolean savedQuestion = askNewQuestion();
                 if(savedQuestion) {
-                  Intent intent = new Intent(this, QuestionView.class);
-                  intent.putExtra(NEW_QUESTION_EXTRA, summary);
-                  startActivity(intent);
+                    Intent intent = new Intent(this, QuestionView.class);
+                    intent.putExtra(NEW_QUESTION_EXTRA, summary);
+                    startActivity(intent);
                 }
                 break;
             case R.id.interest_button_add_more:
@@ -179,44 +172,43 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     }
 
     public boolean askNewQuestion () {
-      EditText writeQuestion = findViewById(R.id.write_new_question);
-      EditText writeSummary = findViewById(R.id.write_summary);
-      question = writeQuestion.getText().toString();
-      summary = writeSummary.getText().toString();
+        EditText writeQuestion = findViewById(R.id.write_new_question);
+        EditText writeSummary = findViewById(R.id.write_comment_edit);
+        question = writeQuestion.getText().toString();
+        summary = writeSummary.getText().toString();
 
-      if (question.isEmpty() || summary.isEmpty() || listofTags.isEmpty()) {
-          Toast.makeText(NewQuestion.this, "Please write the question, the Summary and select at Least one Tag", Toast.LENGTH_LONG).show();
-          return false;
-      }else {
-        Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
-        questionsMaster.addQuestion(newQuestion);
-          /**
-           * Save the questions Master in the server
-           */
-        return true;
-      }
+        if (question.isEmpty() || summary.isEmpty() || listofTags.isEmpty()) {
+            Toast.makeText(NewQuestion.this, "Please write the question, the Summary and select at Least one Tag", Toast.LENGTH_LONG).show();
+            return false;
+        }else {
+            Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
+            questionsMaster.addQuestion(newQuestion);
+            /**
+             * BACKEND
+             *
+             * Save the questions Master in the server
+             */
+            return true;
+        }
     }
 
     TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
-
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             suggestion();
             Toast.makeText(NewQuestion.this, NEW_QUESTION_TOAST + "onTextChanged()", Toast.LENGTH_LONG).show();
             Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "onTextChanged()");
         }
-
         @Override
         public void afterTextChanged(Editable s) {
-
         }
     };
 
     public void suggestion() {
+        /*
         Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Starting");
         EditText writeQuestion = findViewById(R.id.write_new_question);
         String currentText = writeQuestion.getText().toString();
@@ -233,5 +225,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
               break;
             }
         }
+        */
     }
 }
