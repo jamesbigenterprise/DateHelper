@@ -29,6 +29,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   private Button next;
   private Button addMore;
   private String areaSelected;
+  private PreferenceHandler prefHandler = new PreferenceHandler(this);
   ArrayAdapter<String> listAdapter;
 
   public static final String SHARED_PREFS = "sharedPrefs";
@@ -74,7 +75,6 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
             if (entry != null){
               areas.add(entry.getText().toString());
               listAdapter.notifyDataSetChanged();
-              // TODO add list to sharefprefs
             }
             dialogInterface.dismiss();
 
@@ -116,19 +116,19 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.putString(InterestSelector.LIST_TAGS, json);
         editor.apply();
 
-        TagMaster tagmaster = gson.fromJson(sharedPref.getString(MainActivity.TAG_MASTER, ""), TagMaster.class);
+        TagMaster tagmaster = prefHandler.getTagMaster();
 
 
         //Gather the information to create the person
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String firstName = sharedPreferences.getString(MainActivity.FIRST_NAME, "");
-        String lastName = sharedPreferences.getString(MainActivity.LAST_NAME, "");
-        boolean gender = sharedPreferences.getBoolean(GenderSelector.GENDER_BOOLEAN, true);
-        String id = sharedPreferences.getString(MainActivity.ID, "");
+
+        String firstName = prefHandler.getFirstName();
+        String lastName = prefHandler.getLastName();
+        boolean gender = prefHandler.getGender();
+        String id = prefHandler.getId();
 
         Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
 
-        String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
+        String login = prefHandler.getLogin();
         String image_url = "";
 
         switch (login){
@@ -137,19 +137,18 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
             break;
 
           case "GOOGLE":
-            image_url = sharedPreferences.getString(MainActivity.PHOTO_URL,"error shared pref");
+            image_url = prefHandler.getPhotoURL();
             break;
 
         }
         //Now create the account
         Account newAccount = new Account(newProfile, id, image_url);
-        editor.putString(MainActivity.ACCOUNT, gson.toJson(newAccount));
-        editor.apply();
+        prefHandler.setAccount(newAccount);
 
         newAccount = null;
-        String testJson = sharedPref.getString(MainActivity.ACCOUNT, "shared pref error");
-        newAccount = gson.fromJson(testJson, Account.class);
-          String idTest = sharedPref.getString(MainActivity.ID, "");
+
+        newAccount = prefHandler.getAccount();
+          String idTest = prefHandler.getId();
 
 
 

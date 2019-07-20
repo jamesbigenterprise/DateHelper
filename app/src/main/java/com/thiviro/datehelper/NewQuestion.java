@@ -32,7 +32,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
     private List<String> interests;
     private ListView interestList;
-    List<Tag> listofTags;
+    private List<Tag> listofTags;
     private ArrayAdapter<String> listAdapter;
     private Button addMore;
     private Button newQuestion;
@@ -45,6 +45,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private QuestionsMaster questionsMaster;
     private TextView authorTextVew;
     private TextView question_sugestion;
+    private PreferenceHandler prefHandler = new PreferenceHandler(this);
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NEW_QUESTION_TOAST = "new_question_toast";
     public static final String NEW_QUESTION_EXTRA = "new_question_extra";
@@ -69,27 +70,14 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         newQuestion.setOnClickListener(this);
         addMore.setOnClickListener(this);
 
-        String accountJson;
-        String login = sharedPreferences.getString(MainActivity.LOGIN,"error shared pref");
-        accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
-        String tmJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "tm error shared pref");
-        String qmJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "qm error shared pref");
-        account =  gson.fromJson(accountJson, Account.class);
-        tagMaster = gson.fromJson(tmJson, TagMaster.class);
-        questionsMaster = gson.fromJson(qmJson, QuestionsMaster.class);
+
+        String login = prefHandler.getLogin();
+        account =  prefHandler.getAccount();
+        tagMaster = prefHandler.getTagMaster();
+        questionsMaster = prefHandler.getQuestionMaster();
 
 
-        String image_url = "";
-
-        switch (login){
-            case "FACEBOOK":
-                image_url = "https://graph.facebook.com/" + account.getId() + "/picture?type=normal";
-                break;
-
-            case "GOOGLE":
-                image_url = sharedPreferences.getString(MainActivity.PHOTO_URL,"error shared pref");
-                break;
-        }
+        String image_url = prefHandler.getPhotoURL();
 
         Glide.with(this).load(image_url).into(profilePhoto);
         authorTextVew.setText(account.getName());

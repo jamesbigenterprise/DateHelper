@@ -32,6 +32,7 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
 
   public static final String SHARED_PREFS = "sharedPrefs";
   public static final String GENDER_BOOLEAN = "gender_boolean";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

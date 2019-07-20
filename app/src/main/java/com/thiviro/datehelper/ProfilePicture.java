@@ -34,6 +34,7 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
   private EditText interests;
   private Spinner genderSpinner;
   private List<View> profileViews;
+  private PreferenceHandler prefHandler = new PreferenceHandler(this);
   private final String[] GENDER = {"Male", "Female"};
 
   @Override
@@ -41,14 +42,8 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_profile_picture);
 
-    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFS, MODE_PRIVATE);
-    String login = sharedPreferences.getString(MainActivity.LOGIN, "error");
-    String imageURL = "";
-    Gson gson = new Gson();
-    String accountJson;
-    accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
-    account =  gson.fromJson(accountJson, Account.class);
-
+    String imageURL = prefHandler.getPhotoURL();
+    account =  prefHandler.getAccount();
 
     next = findViewById(R.id.picture_next);
     editProfile = findViewById(R.id.edit_switch);
@@ -61,7 +56,10 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
     genderSpinner.setAdapter(new ArrayAdapter<>(this,
         R.layout.spinner_gender, GENDER));
 
+
     // Populate fields with current values
+    firstName.setText(prefHandler.getFirstName());
+    lastName.setText(prefHandler.getLastName());
     genderSpinner.setSelection(account.getGender() ? 0 : 1);
 
     profileViews = new ArrayList<>();
@@ -76,17 +74,6 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
       et.setClickable(false);
       et.setEnabled(false);
     }
-
-    switch (login){
-
-      case "FACEBOOK":
-      imageURL = "https://graph.facebook.com/" + account.getId() + "/picture?type=normal";
-      break;
-      case "GOOGLE":
-      imageURL = sharedPreferences.getString(MainActivity.PHOTO_URL, "error");
-      break;
-    }
-
 
     editProfile.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override

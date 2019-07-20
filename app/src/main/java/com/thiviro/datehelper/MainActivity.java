@@ -1,21 +1,14 @@
 package com.thiviro.datehelper;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -33,7 +26,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,16 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final int RC_SIGN_IN= 9000;
     public static final String TAG = "com.thiviro.datehelper";
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String FIRST_NAME = "first_name";
-    public static final String LAST_NAME = "last_name";
-    public static final String ID = "id";
-    public static final String TAG_MASTER = "tag_master";
-    public static final String QUESTION_MASTER = "question_master";
-    public static final String ACCOUNT = "account";
-    public static final String LOGIN = "login";
-    public static final String PHOTO_URL= "Photo_URL";
-
+    private PreferenceHandler prefHandler = new PreferenceHandler(this);
 
     private AccessTokenTracker tokenTracker = new AccessTokenTracker() {
         @Override
@@ -179,24 +162,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (false /*the account already exists*/){
                         startActivity(new Intent(MainActivity.this, Home.class));
                     }else {
-                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(FIRST_NAME, firstName);
-                        editor.putString(LAST_NAME, lastName);
-                        editor.putString(ID, id);
-                        editor.putString(LOGIN, "FACEBOOK");
+                        prefHandler.setFirstName(firstName);
+                        prefHandler.setLastName(lastName);
+                        prefHandler.setID(id);
+                        prefHandler.setPhotoURL("https://graph.facebook.com/" + id + "/picture?type=normal");
+                        prefHandler.setLogin("FACEBOOK");
 
                         //get the tag and questions master from the server
                         TagMaster tagmaster = new TagMaster();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(tagmaster);
-                        editor.putString(TAG_MASTER, json);
+                        prefHandler.setTagMaster(tagmaster);
 
                         QuestionsMaster questionsMaster = new QuestionsMaster();
-                        String qmJson = gson.toJson(questionsMaster);
-                        editor.putString(QUESTION_MASTER, qmJson);
-
-                        editor.apply();
+                        prefHandler.setQuestionMaster(questionsMaster);
                         startActivity(new Intent(MainActivity.this, ProfileSelector.class));
                     }
 
@@ -256,14 +233,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(FIRST_NAME, account.getGivenName());
-            editor.putString(LAST_NAME, account.getFamilyName());
-            editor.putString(ID, account.getId());
-            editor.putString(PHOTO_URL, account.getPhotoUrl().toString());
-            editor.putString(LOGIN, "GOOGLE");
-            editor.apply();
+
+            prefHandler.setFirstName(account.getGivenName());
+            prefHandler.setLastName(account.getFamilyName());
+            prefHandler.setID(account.getId());
+            prefHandler.setPhotoURL(account.getPhotoUrl().toString());
+            prefHandler.setLogin("GOOGLE");
             startActivity(new Intent(MainActivity.this, Home.class));
             signInButton.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
@@ -271,8 +246,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "Google login failed", Toast.LENGTH_SHORT).show();
         }
     }
