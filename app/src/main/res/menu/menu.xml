@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_interests"
+        android:title="Select Interests"
+        app:showAsAction= "never" />
+    <item
+        android:id="@+id/menu_areas"
+        android:title="Select Study Areas"
+        app:showAsAction= "never" />
+    <item
         android:id="@+id/logout"
         android:title="Logout"
         app:showAsAction= "never" />

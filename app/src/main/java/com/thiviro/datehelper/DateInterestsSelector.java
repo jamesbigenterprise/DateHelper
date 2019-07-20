@@ -43,9 +43,6 @@ public class DateInterestsSelector extends AppCompatActivity implements View.OnC
     createList();
     next.setOnClickListener(this);
     addMore.setOnClickListener(this);
-
-
-
   }
 
   private void createList(){
@@ -111,15 +108,10 @@ public class DateInterestsSelector extends AppCompatActivity implements View.OnC
         for (String tag : interests) {
           listofTags.add(new Tag(tag));
         }
-
         Gson gson = new Gson();
-        String json = gson.toJson(listofTags);
-        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(LIST_DATE_TAGS, json);
-        editor.apply();
-        startActivity(new Intent(this, StudyArea.class));
-
+        Intent intent = new Intent(this, DateStudyAreaSelector.class);
+        intent.putExtra(LIST_DATE_TAGS, gson.toJson(listofTags));
+        startActivity(intent);
         break;
       case R.id.interest_button_add_more:
         createDialog();

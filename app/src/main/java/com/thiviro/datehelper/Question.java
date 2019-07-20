@@ -16,9 +16,9 @@ public class Question {
   @SerializedName("id")
   private String id;
   private String author;
-  @SerializedName("title")
-  private String question;
   @SerializedName("text")
+  private String question;
+  @SerializedName("title")
   private String summary;//The question summarized in an action like: "Go to the movies;"
 
 

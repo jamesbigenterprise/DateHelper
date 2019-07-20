@@ -77,7 +77,7 @@
                 android:value=".InterestSelector" />
         </activity> <!-- 06 -->
         <activity
-            android:name=".ProfilePicture"
+            android:name=".ProfileViewer"
             android:parentActivityName=".StudyArea"
             android:screenOrientation="portrait">
             <meta-data
