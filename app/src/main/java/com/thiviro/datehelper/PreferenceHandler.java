@@ -18,6 +18,7 @@ public class PreferenceHandler{
   public static final String ACCOUNT = "account";
   public static final String LOGIN = "login";
   public static final String PHOTO_URL= "Photo_URL";
+  public static final String PROFILE_TYPE= "PROFILE";
   public static final String ERROR = "ERROR";
   public static final String ERROR_OBJECT = "{}";
   public static final String GENDER = "gender";
@@ -126,6 +127,15 @@ public class PreferenceHandler{
   public QuestionsMaster getQuestionMaster(){
     String questionMaster = activitySP.getString(QUESTION_MASTER, ERROR_OBJECT);
     return gson.fromJson(questionMaster, QuestionsMaster.class);
+  }
+
+  public void setProfileType(String profileType){
+    editor.putString(PROFILE_TYPE, profileType);
+    editor.apply();
+  }
+
+  public String getProfileType(){
+    return activitySP.getString(PROFILE_TYPE, ERROR);
   }
 
   public void deleteAll(){
