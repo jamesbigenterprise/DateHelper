@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class QuestionView extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,9 +37,10 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
   private Button addCommentButton;
   private ListView commentList;
   private ProgressBar progressBar;
+  private CircleImageView profilePictureView;
   private PreferenceHandler prefHandler;
   public static final String SHARED_PREFS = "sharedPrefs";
-
+  public static final String DEBUG_LOG = "QuestionView()";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +54,31 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       questionTextView = findViewById(R.id.question_text_view);
       commentEditText = findViewById(R.id.write_comment_edit);
       addCommentButton = findViewById(R.id.add_comment);
+      profilePictureView = findViewById(R.id.profile_photo);
 
-      DownloadTagMasterAsyncTask task1 = new DownloadTagMasterAsyncTask(this);
-      task1.execute();
+      //DownloadTagMasterAsyncTask task1 = new DownloadTagMasterAsyncTask(this);
+      //task1.execute();
 
-      //SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
       Gson gson = new Gson();
 
       //String accountJson;
-      String questionJson = getIntent().getDataString();
+      String questionJson = getIntent().getStringExtra(NewQuestion.NEW_QUESTION_EXTRA);
       account =  prefHandler.getAccount();
       question = gson.fromJson(questionJson, Question.class);
+      Glide.with(this).load(account.getImageURL()).into(profilePictureView);
+
+      boolean isNull = question == null;
+    Log.d(DEBUG_LOG, "Json for the question retrieved from the previous activity == " + questionJson + " is Null == " + isNull);
       commentList = findViewById(R.id.interestList);
-      comments = question.getComments();
+      if(question.getComments() != null){
+        comments = question.getComments();
+        createList();
+      }else{
+        comments = new ArrayList<Comment>();
+      }
+
       questionTextView.setText(question.getQuestion());
-      createList();
+
       markVote();
   }
 

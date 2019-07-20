@@ -2,7 +2,6 @@ package com.thiviro.datehelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-
+import com.google.gson.Gson;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,15 +43,15 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
     private List<Tag> listofTags;
     private Button addMore;
-    private Button newQuestion;
+    private Button newQuestionButton;
     private CircleImageView profilePhoto;
     private EditText writeQuestion;
     private String question;
     private String summary;
+    private Question newQuestion;
     private String image_url;
     private Account account;
     private TagMaster tagMaster;
-    private QuestionsMaster questionsMaster;
     private TextView authorTextVew;
 
     private PreferenceHandler prefHandler;
@@ -75,7 +74,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         createSuggestionList(this);
 
         // UI references
-        newQuestion = findViewById(R.id.ask_new_question);
+        newQuestionButton = findViewById(R.id.ask_new_question);
         addMore = findViewById(R.id.interest_button_add_more);
         profilePhoto = findViewById(R.id.profile_photo);
 
@@ -86,7 +85,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
 
         // Set onclick listeners
-        newQuestion.setOnClickListener(this);
+        newQuestionButton.setOnClickListener(this);
         addMore.setOnClickListener(this);
 
 
@@ -96,7 +95,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             public void run() {
                 account =  prefHandler.getAccount();
                 tagMaster = prefHandler.getTagMaster();
-                questionsMaster = prefHandler.getQuestionMaster();
                 image_url = prefHandler.getPhotoURL();
                 runOnUiThread(new Runnable() {
                     @Override
@@ -107,8 +105,9 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             }
         }).start();
 
+        Glide.with(this).load(image_url).into(profilePhoto);
         // item not found:
-        // authorTextVew.setText(account.getName());
+        authorTextVew.setText(account.getName());
     }
 
 
@@ -204,7 +203,8 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                 boolean savedQuestion = askNewQuestion();
                 if(savedQuestion) {
                     Intent intent = new Intent(this, QuestionView.class);
-                    intent.putExtra(NEW_QUESTION_EXTRA, summary);
+                    String questionJson = new Gson().toJson(newQuestion);
+                    intent.putExtra(NEW_QUESTION_EXTRA, questionJson);
                     startActivity(intent);
                 }
                 break;
@@ -226,14 +226,14 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             Toast.makeText(NewQuestion.this, "Please write the question, the Summary and select at Least one Tag", Toast.LENGTH_LONG).show();
             return false;
         }else {
-            Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
-            questionsMaster.addQuestion(newQuestion);
-
+            newQuestion = new Question(account,question,summary,listofTags, tagMaster);
+            Log.d(DEBUG_LOG, "Question text == " + newQuestion.getQuestion());
             /**
              * BACKEND
              *
              * Save the questions Master in the server
              */
+
             return true;
         }
     }
@@ -245,8 +245,8 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             suggestion();
-            //Toast.makeText(NewQuestion.this, NEW_QUESTION_TOAST + "onTextChanged()", Toast.LENGTH_LONG).show();
-            //Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "onTextChanged()");
+            Toast.makeText(NewQuestion.this, NEW_QUESTION_TOAST + "onTextChanged()", Toast.LENGTH_LONG).show();
+            Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "onTextChanged()");
         }
         @Override
         public void afterTextChanged(Editable s) {
@@ -288,7 +288,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
         @Override
         protected void onPostExecute(String response) {
-            final Activity activityRef = activity.get();
+            //final Activity activityRef = activity.get();
             suggestions.clear();
             suggestions.add(response);
 //            TextView questionSuggestion = activityRef.findViewById(R.id.question_suggestion);

@@ -48,6 +48,7 @@ public class Question {
     this.voteTracker = new VoteTracker();
     //this tag master is to make sure we are using unique tags
     this.tagKeys = new ArrayList<>();
+    this.comments = new ArrayList();
 
     for (Tag tag: tags){
       //make sure the tag is listed in the tag master before adding to this person
@@ -114,7 +115,12 @@ public class Question {
   }
 
   public List<Comment> getComments(){
-    return comments;
+    if (!comments.isEmpty()){
+      return comments;
+    }else{
+      return null;
+    }
+
   }
 
   /**
