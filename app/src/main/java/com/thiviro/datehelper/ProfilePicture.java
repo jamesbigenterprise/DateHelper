@@ -90,6 +90,9 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
           else{
             et.setFocusable(false);
             et.setEnabled(false);
+            prefHandler.setFirstName(firstName.getText().toString());
+            prefHandler.setLastName(lastName.getText().toString());
+            prefHandler.setGender(Gender.getEnum(GENDER[genderSpinner.getSelectedItemPosition()]));
           }
         }
 

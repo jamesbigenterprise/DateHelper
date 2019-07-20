@@ -2,6 +2,7 @@ package com.thiviro.datehelper;
 
 import android.accessibilityservice.GestureDescription;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -20,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The APIQuestionWorker class retrieves the questions from
+ * The APIWorker class retrieves the questions from
  * the backend service and populates the objects in the app
  */
-public class APIQuestionWorker implements Runnable {
+public class APIWorker extends AsyncTask<Void, String, String> implements Runnable {
 
   public static final String HOST = "http://35.222.214.134:8080";
   public static final String ENDPOINT_QUESTIONS = HOST + "/api/questions";
@@ -33,27 +34,27 @@ public class APIQuestionWorker implements Runnable {
   public static final String GET = "GET";
   public static final String POST = "POST";
 
-  private WeakReference<Activity> activity;
-  private String method;
-  private String endpoint;
-  private String requestBody;
-  private Object objectToJSON;
-  private String response;
+  protected WeakReference<Activity> activity;
+  protected String method;
+  protected String endpoint;
+  protected String requestBody;
+  protected Object objectToJSON;
+  protected String response;
 
-  public APIQuestionWorker(Activity activity, String endpoint, String method) {
+  public APIWorker(Activity activity, String endpoint, String method) {
     this.activity = new WeakReference<>(activity);
     this.method = method;
     this.endpoint = endpoint;
   }
 
-  public APIQuestionWorker(Activity activity, String endpoint, String method, String requestBody) {
+  public APIWorker(Activity activity, String endpoint, String method, String requestBody) {
     this.activity = new WeakReference<>(activity);
     this.method = method;
     this.endpoint = endpoint;
     this.requestBody = requestBody;
   }
 
-  public APIQuestionWorker(Activity activity, String endpoint, String method, Object object) {
+  public APIWorker(Activity activity, String endpoint, String method, Object object) {
     this.activity = new WeakReference<>(activity);
     this.method = method;
     this.endpoint = endpoint;
@@ -124,8 +125,7 @@ public class APIQuestionWorker implements Runnable {
       }
       rd.close();
       return response.toString();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       System.out.println(e.getMessage());
       return null;
     } finally {
@@ -137,50 +137,78 @@ public class APIQuestionWorker implements Runnable {
     }
   }
 
-    @Override
-    public void run () {
-      System.out.println("Running in the background");
-      final Activity activityRef = activity.get();
-      final String response;
-      Gson gson = new Gson();
-      switch (method){
-        case POST:
-          if (objectToJSON == null){
-            response = postRequestResponse(requestBody, endpoint);
+  @Override
+  protected String doInBackground(Void... voids) {
+    System.out.println("Running in the background");
+    final Activity activityRef = activity.get();
+    response = "";
+    Gson gson = new Gson();
+
+    switch (method) {
+      case POST:
+        if (objectToJSON == null) {
+          response = postRequestResponse(requestBody, endpoint);
+        } else {
+          String request = gson.toJson(objectToJSON);
+          response = postRequestResponse(requestBody, endpoint);
+        }
+        break;
+      case GET:
+        response = getRequestResponse(endpoint);
+        break;
+    }
+    return response;
+  }
+
+  @Override
+  protected void onPostExecute(String response) {
+    final Activity activityRef = activity.get();
+    Toast.makeText(activityRef, response, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void run() {
+    System.out.println("Running in the background");
+    final Activity activityRef = activity.get();
+    final String response;
+    Gson gson = new Gson();
+    switch (method) {
+      case POST:
+        if (objectToJSON == null) {
+          response = postRequestResponse(requestBody, endpoint);
+        } else {
+          String request = gson.toJson(objectToJSON);
+          response = postRequestResponse(requestBody, endpoint);
+        }
+        activityRef.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(activityRef, "Result: " + response, Toast.LENGTH_LONG).show();
           }
-          else{
-            String request = gson.toJson(objectToJSON);
-            response = postRequestResponse(requestBody, endpoint);
+        });
+        break;
+      case GET:
+
+        response = getRequestResponse(endpoint);
+        activityRef.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(activityRef, "Result: " + response, Toast.LENGTH_LONG).show();
+
           }
-          activityRef.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              Toast.makeText(activityRef,"Result: " + response, Toast.LENGTH_LONG).show();
-            }
-          });
-          break;
-        case GET:
+        });
+        break;
+    }
 
-          response = getRequestResponse(endpoint);
-          activityRef.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              Toast.makeText(activityRef,"Result: " + response, Toast.LENGTH_LONG).show();
-
-            }
-          });
-          break;
-      }
-
-      //String response = getRequestResponse(ENDPOINT_GET_QUESTIONS);
-      Person person =
-          new Person("Rolando", "Rodriguez",Gender.MALE, new ArrayList<Tag>(), new TagMaster());
-      Account account = new Account(person, "oijfoijfowef", "Picture.jpg");
-      Question question = new Question(account, "My Question is", "Here comes the long version",
-          new ArrayList<Tag>(), new TagMaster());
-      String body = "{" +
-          "\"id\": 25, \"userId\": 2345123123, \"title\": \"This is a test\", \"text\": \"Complete Question\"" +
-          "}";
+    //String response = getRequestResponse(ENDPOINT_GET_QUESTIONS);
+    Person person =
+        new Person("Rolando", "Rodriguez", Gender.MALE, new ArrayList<Tag>(), new TagMaster());
+    Account account = new Account(person, "oijfoijfowef", "Picture.jpg");
+    Question question = new Question(account, "My Question is", "Here comes the long version",
+        new ArrayList<Tag>(), new TagMaster());
+    String body = "{" +
+        "\"id\": 25, \"userId\": 2345123123, \"title\": \"This is a test\", \"text\": \"Complete Question\"" +
+        "}";
 
 //      Type questionList = new TypeToken<ArrayList<Question>>() {
 //      }.getType();
@@ -188,5 +216,7 @@ public class APIQuestionWorker implements Runnable {
 //      String JSON = gson.toJson(question);
 
 
-    }
   }
+
+
+}

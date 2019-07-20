@@ -82,7 +82,6 @@ public class DateInterestsSelector extends AppCompatActivity implements View.OnC
             if (entry != null){
               interests.add(entry.getText().toString());
               listAdapter.notifyDataSetChanged();
-              // TODO add list to shared prefs
             }
             dialogInterface.dismiss();
 

@@ -1,5 +1,6 @@
 package com.thiviro.datehelper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +64,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         addMore = findViewById(R.id.interest_button_add_more);
         interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
-        question_sugestion = findViewById(R.id.question_sugestion);
+        question_sugestion = findViewById(R.id.question_suggestion);
         //authorTextVew =  findViewById(R.id.author_name_textView);
         writeQuestion = findViewById(R.id.write_new_question);
         writeQuestion.addTextChangedListener(watcher);
@@ -77,8 +77,9 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         account =  prefHandler.getAccount();
         tagMaster = prefHandler.getTagMaster();
         questionsMaster = prefHandler.getQuestionMaster();
-
-
+        APIWorker api =
+            new APINewQuestion(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.GET);
+        api.execute();
         String image_url = prefHandler.getPhotoURL();
 
         Glide.with(this).load(image_url).into(profilePhoto);
@@ -157,7 +158,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             case R.id.interest_button_add_more:
                 createDialog();
                 break;
-            case R.id.question_sugestion:
+            case R.id.question_suggestion:
                 break;
         }
     }
@@ -219,4 +220,19 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         }
         */
     }
+
+    protected class APINewQuestion extends APIWorker {
+
+        protected APINewQuestion(Activity activity, String endpoint, String method){
+            super(activity, endpoint, method);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            final Activity activityRef = activity.get();
+            TextView questionSuggestion = activityRef.findViewById(R.id.question_suggestion);
+            questionSuggestion.setText(response);
+        }
+    }
+
 }

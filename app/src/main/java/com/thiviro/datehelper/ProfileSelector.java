@@ -1,15 +1,13 @@
 package com.thiviro.datehelper;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 public class ProfileSelector extends AppCompatActivity implements View.OnClickListener {
-
-  public static final String SHARED_PREFS = "sharedPrefs";
+  
   private PreferenceHandler prefHandler;
 
   @Override
@@ -29,6 +27,7 @@ public class ProfileSelector extends AppCompatActivity implements View.OnClickLi
   public void onClick(View view) {
     switch (view.getId()){
       case R.id.public_profile:
+        prefHandler.setProfileType("PUBLIC");
         if (prefHandler.getGender() != Gender.ERROR){
           startActivity(new Intent(this, Home.class));
         }
@@ -37,10 +36,7 @@ public class ProfileSelector extends AppCompatActivity implements View.OnClickLi
         }
         break;
       case R.id.incognito_profile:
-        String firstName = "Incognito";
-        String lastName = "";
-        prefHandler.setFirstName(firstName);
-        prefHandler.setLastName(lastName);
+        prefHandler.setProfileType("INCOGNITO");
         startActivity(new Intent(this, Home.class));
         break;
 

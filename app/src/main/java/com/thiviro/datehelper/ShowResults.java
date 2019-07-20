@@ -36,6 +36,8 @@ public class ShowResults extends AppCompatActivity {
         resultButtons.add(result2);
         resultButtons.add(result3);
 
+
+
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String resultsJson = sharedPreferences.getString(DateStudyAreaSelector.HELP_RESULTS, "");
         Gson gson = new Gson();
