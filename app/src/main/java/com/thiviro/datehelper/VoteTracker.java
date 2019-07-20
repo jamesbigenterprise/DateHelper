@@ -36,7 +36,7 @@ public class VoteTracker {
    * @return true if has voted(Account is on the Collection), false if it has not (Account is not the Collection)
    */
   public boolean hasVoted (Account user) { //the user is the key, check if it is in the list
-    if (user.getGender()) {
+    if (user.getGender() == Gender.MALE) {
       return maleVotes.containsKey(user);
     } else {
       return femaleVotes.containsKey(user);
@@ -50,7 +50,7 @@ public class VoteTracker {
    */
   public Integer getVote (Account account) {
     if (hasVoted(account)){
-      if (account.getGender()) {
+      if (account.getGender() == Gender.MALE) {
         return maleVotes.get(account);
       } else {
         return femaleVotes.get(account);
@@ -76,7 +76,7 @@ public class VoteTracker {
    * @return a float with the percentage of votes
    */
   public float getPercentageOfUpVotes (Person person) {
-    if (person.getGender()) {
+    if (person.getGender() == Gender.MALE) {
       //the person is a man, so we will return the female votes
       int tempFemaleUpVotes = 0;
       int tempFemaleDownVotes = 0;
@@ -124,7 +124,7 @@ public class VoteTracker {
    * @param user Account to check if it has voted or not
    */
   public void upVote(Account user) {
-    if (user.getGender()) { //true is male / false is female
+    if (user.getGender() == Gender.MALE) { //true is male / false is female
       //before saving the vote, check if the user has not voted yet
       if(!hasVoted(user)){
         //no votes yet, so let's compute a new vote
@@ -160,7 +160,7 @@ public class VoteTracker {
    * @param user Account to check if it has voted or not
    */
   void downVote(Account user) {
-    if (user.getGender()) { //true is male
+    if (user.getGender() == Gender.MALE) { //true is male
       //before saving the vote, check if the user has not voted yet
       if(!hasVoted(user)){
         //no votes yet, so let's compute a new vote
@@ -195,7 +195,7 @@ public class VoteTracker {
   private void switchVote(Account user) {
     Integer currentVote = null;
     //get the current vote
-    if (user.getGender()) {//it is a man
+    if (user.getGender() == Gender.MALE) {//it is a man
       currentVote = maleVotes.get(user);
       if (currentVote.equals(UP_VOTE) ) {//it is a upvote, switch to downvote
         maleVotes.remove(user);

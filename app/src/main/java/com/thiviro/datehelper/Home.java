@@ -88,7 +88,7 @@ public class Home extends AppCompatActivity {
 
     String tmJson = gson.toJson(tagMaster);
     String qmJason = gson.toJson(questionsMaster);
-
+    tagMaster.addTag(new Tag("Reserved"));
     prefHandler.setTagMaster(tagMaster);
     prefHandler.setQuestionMaster(questionsMaster);
 
@@ -224,7 +224,7 @@ public class Home extends AppCompatActivity {
       otherTags.add(tagMaster.getAllTags().get(17));
       otherTags.add(tagMaster.getAllTags().get(18));
 
-      Person firstUser = new Person("Thiago", "Alves da Silva", true, churchTags, tagMaster);
+      Person firstUser = new Person("Thiago", "Alves da Silva", Gender.MALE, churchTags, tagMaster);
       Account firstAccount = new Account(firstUser, "01","noURL");
 
       publishProgress(50);
@@ -257,13 +257,13 @@ public class Home extends AppCompatActivity {
       Log.d(TAG, "Added 10 questions to the Questions master");
 
       //create a girl to do some voting
-      Person secondUser = new Person("Maiane", "Sampaio", false, otherTags, tagMaster);
+      Person secondUser = new Person("Maiane", "Sampaio", Gender.FEMALE, otherTags, tagMaster);
       Account secondAccount = new Account(secondUser, "02", "nourl");
 
 
       publishProgress(70);
       //create a second girl to do some voting
-      Person thirdUser = new Person("Tcharla", "Marques", false, otherTags, tagMaster);
+      Person thirdUser = new Person("Tcharla", "Marques", Gender.FEMALE, otherTags, tagMaster);
       Account thirdAccount = new Account(thirdUser, "03", "noURL");
 
       publishProgress(80);
@@ -324,7 +324,7 @@ public class Home extends AppCompatActivity {
           googleSignOut();
             break;
         }
-
+        prefHandler.deleteAll();
         startActivity(new Intent(this, MainActivity.class));
         break;
 

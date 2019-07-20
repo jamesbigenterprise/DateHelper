@@ -29,15 +29,19 @@ public class ProfileSelector extends AppCompatActivity implements View.OnClickLi
   public void onClick(View view) {
     switch (view.getId()){
       case R.id.public_profile:
-        startActivity(new Intent(this, GenderSelector.class));
+        if (prefHandler.getGender() != Gender.ERROR){
+          startActivity(new Intent(this, Home.class));
+        }
+        else{
+          startActivity(new Intent(this, GenderSelector.class));
+        }
         break;
       case R.id.incognito_profile:
         String firstName = "Incognito";
         String lastName = "";
-
         prefHandler.setFirstName(firstName);
         prefHandler.setLastName(lastName);
-        startActivity(new Intent(this, GenderSelector.class));
+        startActivity(new Intent(this, Home.class));
         break;
 
     }

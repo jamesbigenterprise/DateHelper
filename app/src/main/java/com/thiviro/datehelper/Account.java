@@ -15,7 +15,7 @@ public class Account {
     this.id = id;
     this.imageURL = imageURL;
   }
-  public boolean getGender() {
+  public Gender getGender() {
     return user.getGender();
   }
 

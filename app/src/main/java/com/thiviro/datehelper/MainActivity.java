@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -160,16 +161,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                     if (false /*the account already exists*/){
-                        startActivity(new Intent(MainActivity.this, Home.class));
+                        startActivity(new Intent(MainActivity.this, ProfileSelector.class));
                     }else {
                         prefHandler.setFirstName(firstName);
                         prefHandler.setLastName(lastName);
                         prefHandler.setID(id);
                         prefHandler.setPhotoURL("https://graph.facebook.com/" + id + "/picture?type=normal");
+                        Person person = new Person(prefHandler.getFirstName(), prefHandler.getLastName(),
+                            prefHandler.getGender(), new ArrayList<Tag>(), new TagMaster());
+                        prefHandler.setAccount(new Account(person, prefHandler.getId(), prefHandler.getPhotoURL()));
                         prefHandler.setLogin("FACEBOOK");
 
                         //get the tag and questions master from the server
                         TagMaster tagmaster = new TagMaster();
+                        tagmaster.addTag(new Tag("Adventurous"));
                         prefHandler.setTagMaster(tagmaster);
 
                         QuestionsMaster questionsMaster = new QuestionsMaster();
@@ -234,12 +239,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // Signed in successfully, show authenticated UI.
 
+
             prefHandler.setFirstName(account.getGivenName());
             prefHandler.setLastName(account.getFamilyName());
             prefHandler.setID(account.getId());
             prefHandler.setPhotoURL(account.getPhotoUrl().toString());
+            Person person = new Person(prefHandler.getFirstName(), prefHandler.getLastName(),
+                prefHandler.getGender(), new ArrayList<Tag>(), new TagMaster());
+            prefHandler.setAccount(new Account(person, account.getId(), account.getPhotoUrl().toString()));
             prefHandler.setLogin("GOOGLE");
-            startActivity(new Intent(MainActivity.this, Home.class));
+            startActivity(new Intent(MainActivity.this, ProfileSelector.class));
             signInButton.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
             signOutButton.setVisibility(View.VISIBLE);

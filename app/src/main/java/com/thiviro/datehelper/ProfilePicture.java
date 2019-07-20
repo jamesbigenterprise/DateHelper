@@ -60,7 +60,7 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
     // Populate fields with current values
     firstName.setText(prefHandler.getFirstName());
     lastName.setText(prefHandler.getLastName());
-    genderSpinner.setSelection(account.getGender() ? 0 : 1);
+    genderSpinner.setSelection(account.getGender() == Gender.MALE ? 0 : 1);
 
     profileViews = new ArrayList<>();
     profileViews.add(firstName);

@@ -52,10 +52,10 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       DownloadTagMasterAsyncTask task1 = new DownloadTagMasterAsyncTask(this);
       task1.execute();
 
-      SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+      //SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
       Gson gson = new Gson();
 
-      String accountJson;
+      //String accountJson;
       String questionJson = getIntent().getDataString();
       account =  prefHandler.getAccount();
       question = gson.fromJson(questionJson, Question.class);

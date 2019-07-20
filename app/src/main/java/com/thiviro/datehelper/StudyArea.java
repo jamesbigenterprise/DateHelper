@@ -117,14 +117,14 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         editor.putString(InterestSelector.LIST_TAGS, json);
         editor.apply();
 
-        TagMaster tagmaster = prefHandler.getTagMaster();
+        TagMaster tagmaster = new TagMaster();
 
 
         //Gather the information to create the person
 
         String firstName = prefHandler.getFirstName();
         String lastName = prefHandler.getLastName();
-        boolean gender = prefHandler.getGender();
+        Gender gender = prefHandler.getGender();
         String id = prefHandler.getId();
 
         Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);

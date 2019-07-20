@@ -13,7 +13,7 @@ import java.util.List;
 public class Person {
   private String firstName;
   private String lastName;
-  private boolean gender;
+  private Gender gender;
   private List<String> tagKeys;
   //constant strings
   private static final String DATE_FIRST_NAME = "Date";
@@ -30,7 +30,7 @@ public class Person {
    * @param tags saves the tags
    * @param tagMaster utilized to put all the tags in one place
    */
-  public Person(String firstName, String lastName, boolean gender, List<Tag> tags, TagMaster tagMaster) {
+  public Person(String firstName, String lastName, Gender gender, List<Tag> tags, TagMaster tagMaster) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.gender = gender;
@@ -62,7 +62,7 @@ public class Person {
     }
   }
 
-  public boolean getGender() {
+  public Gender getGender() {
     return gender;
   }
   public String getFullName() {

@@ -29,14 +29,13 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
    *                           a change occurs
    */
 
-
-  public static final String SHARED_PREFS = "sharedPrefs";
-  public static final String GENDER_BOOLEAN = "gender_boolean";
+  public PreferenceHandler prefHandler;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_gender_selector);
+    prefHandler = new PreferenceHandler(this);
     ImageView male = findViewById(R.id.male);
     ImageView female = findViewById(R.id.female);
 
@@ -55,17 +54,14 @@ public class GenderSelector extends AppCompatActivity implements View.OnClickLis
   @Override
   public void onClick(View view) {
 
-    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-    SharedPreferences.Editor editor = sharedPreferences.edit();
+
     switch (view.getId()){
       case R.id.male:
-        editor.putBoolean(GENDER_BOOLEAN, true);
-        editor.apply();
+        prefHandler.setGender(Gender.MALE);
         startActivity(new Intent(this, InterestSelector.class));
         break;
       case R.id.female:
-        editor.putBoolean(GENDER_BOOLEAN, false);
-        editor.apply();
+        prefHandler.setGender(Gender.FEMALE);
         startActivity(new Intent(this, InterestSelector.class));
         break;
     }

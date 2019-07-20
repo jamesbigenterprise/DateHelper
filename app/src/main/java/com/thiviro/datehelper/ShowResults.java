@@ -42,14 +42,16 @@ public class ShowResults extends AppCompatActivity {
         Type type = new TypeToken<HashMap<Question, Question>>(){}.getType();
         HashMap<Question, Question> results = gson.fromJson(resultsJson, type);
         int i = 0;
-        for(Map.Entry<Question, Question> entryQuestion : results.entrySet()){
-            if(entryQuestion != null & i < 3){
-                resultButtons.get(i).setVisibility(View.VISIBLE);
-                resultButtons.get(i).setText(entryQuestion.getKey().getSummary());
-                //add onclick to view this question
-            }
-          i++;
-        }
+//        NOT RUNNING
+//
+//        for(Map.Entry<Question, Question> entryQuestion : results.entrySet()){
+//            if(entryQuestion != null & i < 3){
+//                resultButtons.get(i).setVisibility(View.VISIBLE);
+//                resultButtons.get(i).setText(entryQuestion.getKey().getSummary());
+//                //add onclick to view this question
+//            }
+//          i++;
+//        }
 
     }
 }

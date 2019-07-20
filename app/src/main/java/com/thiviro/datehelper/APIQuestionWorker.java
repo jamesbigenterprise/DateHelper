@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -38,8 +39,10 @@ public class APIQuestionWorker implements Runnable {
     InputStream response;
 
     try{
-      URLConnection webConnection = new URL(endpoint).openConnection();
+      HttpURLConnection webConnection = (HttpURLConnection) new URL(endpoint).openConnection();
+      webConnection.setRequestMethod("GET");
       webConnection.setRequestProperty("Accept-Charset", "UTF-8");
+
       response = webConnection.getInputStream();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response));
       StringBuilder stringBuilder = new StringBuilder();
@@ -56,6 +59,7 @@ public class APIQuestionWorker implements Runnable {
     return JSON;
   }
 
+
   @Override
   public void run() {
     System.out.println("Running in the background");
@@ -64,7 +68,6 @@ public class APIQuestionWorker implements Runnable {
     Gson JSON = new Gson();
     Type questionList = new TypeToken<ArrayList<Question>>(){}.getType();
     final List<Question> questionList1 = JSON.fromJson(response, questionList);
-    // TODO need class to contain all questions as a list of questions
     activityRef.runOnUiThread(new Runnable(){
       @Override
       public void run() {

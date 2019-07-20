@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 
 
@@ -20,7 +22,8 @@ public class PreferenceHandler{
   public static final String LOGIN = "login";
   public static final String PHOTO_URL= "Photo_URL";
   public static final String ERROR = "ERROR";
-  public static final String GENDER_BOOLEAN = "gender_boolean";
+  public static final String ERROR_OBJECT = "{}";
+  public static final String GENDER = "gender";
 
   private Activity activity;
   private SharedPreferences activitySP;
@@ -43,7 +46,7 @@ public class PreferenceHandler{
   }
 
   public Account getAccount(){
-    String account = activitySP.getString(ACCOUNT, ERROR);
+    String account = activitySP.getString(ACCOUNT, ERROR_OBJECT);
     Account myAccount = gson.fromJson(account, Account.class);
     return myAccount;
   }
@@ -76,16 +79,16 @@ public class PreferenceHandler{
   }
 
   public String getId(){
-    return getAccount().getId();
+    return activitySP.getString(ID, ERROR);
   }
 
-  public void setGender(boolean genderBoolean){
-    editor.putBoolean(GENDER_BOOLEAN, genderBoolean);
+  public void setGender(Gender gender){
+    editor.putString(GENDER, gender.toString().toUpperCase());
     editor.apply();
   }
 
-  public boolean getGender(){
-    return activitySP.getBoolean(GENDER_BOOLEAN, false);
+  public Gender getGender(){
+    return Gender.getEnum(activitySP.getString(GENDER, Gender.ERROR.toString()));
   }
 
   public void setLogin(String login){
@@ -113,7 +116,7 @@ public class PreferenceHandler{
   }
 
   public TagMaster getTagMaster(){
-    String tagMaster = activitySP.getString(TAG_MASTER, ERROR);
+    String tagMaster = activitySP.getString(TAG_MASTER, ERROR_OBJECT);
     return gson.fromJson(tagMaster, TagMaster.class);
   }
 
@@ -124,9 +127,13 @@ public class PreferenceHandler{
   }
 
   public QuestionsMaster getQuestionMaster(){
-    String questionMaster = activitySP.getString(QUESTION_MASTER, ERROR);
+    String questionMaster = activitySP.getString(QUESTION_MASTER, ERROR_OBJECT);
     return gson.fromJson(questionMaster, QuestionsMaster.class);
   }
 
+  public void deleteAll(){
+    editor.clear();
+    editor.apply();
+  }
 }
 
