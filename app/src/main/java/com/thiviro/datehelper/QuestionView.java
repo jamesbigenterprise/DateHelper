@@ -31,6 +31,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
   private Question question;
   private List<Comment> comments;
   private TextView questionTextView;
+  private TextView author_name_textView;
   private EditText commentEditText;
   private ImageButton upVote;
   private ImageButton downVote;
@@ -54,6 +55,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       questionTextView = findViewById(R.id.question_text_view);
       commentEditText = findViewById(R.id.write_comment_edit);
       addCommentButton = findViewById(R.id.add_comment);
+      author_name_textView =  findViewById(R.id.name_text_vew);
       profilePictureView = findViewById(R.id.profile_photo);
 
       //DownloadTagMasterAsyncTask task1 = new DownloadTagMasterAsyncTask(this);
@@ -67,8 +69,6 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       question = gson.fromJson(questionJson, Question.class);
       Glide.with(this).load(account.getImageURL()).into(profilePictureView);
 
-      boolean isNull = question == null;
-    Log.d(DEBUG_LOG, "Json for the question retrieved from the previous activity == " + questionJson + " is Null == " + isNull);
       commentList = findViewById(R.id.interestList);
       if(question.getComments() != null){
         comments = question.getComments();
@@ -78,7 +78,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       }
 
       questionTextView.setText(question.getQuestion());
-
+      author_name_textView.setText(account.getName());
       markVote();
   }
 

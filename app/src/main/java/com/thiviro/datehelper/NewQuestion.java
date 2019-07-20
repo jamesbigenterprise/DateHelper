@@ -78,7 +78,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         addMore = findViewById(R.id.interest_button_add_more);
         profilePhoto = findViewById(R.id.profile_photo);
 
-        //authorTextVew =  findViewById(R.id.author_name_textView);
+        authorTextVew =  findViewById(R.id.author_name_textView);
         writeQuestion = findViewById(R.id.write_new_question);
         writeQuestion.addTextChangedListener(watcher);
 
@@ -96,6 +96,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                 account =  prefHandler.getAccount();
                 tagMaster = prefHandler.getTagMaster();
                 image_url = prefHandler.getPhotoURL();
+                authorTextVew.setText(account.getName());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -105,9 +106,9 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             }
         }).start();
 
-        Glide.with(this).load(image_url).into(profilePhoto);
+
         // item not found:
-        authorTextVew.setText(account.getName());
+
     }
 
 
