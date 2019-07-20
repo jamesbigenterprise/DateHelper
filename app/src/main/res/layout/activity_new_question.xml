@@ -40,16 +40,16 @@
         app:layout_constraintStart_toEndOf="@+id/profile_photo"
         app:layout_constraintTop_toTopOf="@+id/profile_photo" />
 
-    <TextView
+    <ListView
         android:id="@+id/question_suggestion"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_width="321dp"
+        android:layout_height="190dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/textview_border_light"
+        android:divider="?attr/dividerHorizontal"
         android:ems="10"
         android:minLines="2"
         android:scrollHorizontally="false"
@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toTopOf="@+id/interest_button_add_more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_photo"
-        app:layout_constraintTop_toBottomOf="@+id/question_sugestion" />
+        app:layout_constraintTop_toBottomOf="@+id/question_suggestion" />
 
     <Button
         android:id="@+id/interest_button_add_more"
