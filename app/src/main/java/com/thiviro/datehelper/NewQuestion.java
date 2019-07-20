@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -171,6 +172,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         }else {
             Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
             questionsMaster.addQuestion(newQuestion);
+
             /**
              * BACKEND
              *
