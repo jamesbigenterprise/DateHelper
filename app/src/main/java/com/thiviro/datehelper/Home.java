@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -293,16 +293,6 @@ public class Home extends AppCompatActivity {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
@@ -326,7 +316,12 @@ public class Home extends AppCompatActivity {
         prefHandler.deleteAll();
         startActivity(new Intent(this, MainActivity.class));
         break;
-
+      case R.id.menu_interests:
+        startActivity(new Intent(this, InterestSelector.class));
+        break;
+      case R.id.menu_areas:
+        startActivity(new Intent(this, StudyArea.class));
+        break;
 
       default:
         break;
@@ -382,6 +377,6 @@ public class Home extends AppCompatActivity {
 
   public void visitProfile(View view) throws JSONException {
 
-    startActivity(new Intent(this, ProfilePicture.class));
+    startActivity(new Intent(this, ProfileViewer.class));
   }
 }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProfilePicture extends AppCompatActivity implements View.OnClickListener {
+public class ProfileViewer extends AppCompatActivity implements View.OnClickListener {
 
   private ImageView profilePhoto;
 
