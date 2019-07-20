@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,14 +35,14 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private List<Tag> listofTags;
     private ArrayAdapter<String> listAdapter;
     private Button addMore;
-    private Button newQuestion;
+    private Button newQuestionButton;
     private CircleImageView profilePhoto;
     private EditText writeQuestion;
     private String question;
     private String summary;
+    private Question newQuestion;
     private Account account;
     private TagMaster tagMaster;
-    private QuestionsMaster questionsMaster;
     private TextView authorTextVew;
     private TextView question_sugestion;
     private PreferenceHandler prefHandler;
@@ -60,30 +59,28 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         Gson gson = new Gson();
 
         interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
-        newQuestion = findViewById(R.id.ask_new_question);
+        newQuestionButton = findViewById(R.id.ask_new_question);
         addMore = findViewById(R.id.interest_button_add_more);
         interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
         question_sugestion = findViewById(R.id.question_sugestion);
-        //authorTextVew =  findViewById(R.id.author_name_textView);
+        authorTextVew =  findViewById(R.id.author_name_textView);
         writeQuestion = findViewById(R.id.write_new_question);
         writeQuestion.addTextChangedListener(watcher);
         createList();
-        newQuestion.setOnClickListener(this);
+        newQuestionButton.setOnClickListener(this);
         addMore.setOnClickListener(this);
 
 
         String login = prefHandler.getLogin();
         account =  prefHandler.getAccount();
         tagMaster = prefHandler.getTagMaster();
-        questionsMaster = prefHandler.getQuestionMaster();
-
 
         String image_url = prefHandler.getPhotoURL();
 
         Glide.with(this).load(image_url).into(profilePhoto);
         // item not found:
-        // authorTextVew.setText(account.getName());
+        authorTextVew.setText(account.getName());
     }
 
 
@@ -150,7 +147,8 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
                 boolean savedQuestion = askNewQuestion();
                 if(savedQuestion) {
                     Intent intent = new Intent(this, QuestionView.class);
-                    intent.putExtra(NEW_QUESTION_EXTRA, summary);
+                    String questionJson = new Gson().toJson(newQuestion);
+                    intent.putExtra(NEW_QUESTION_EXTRA, questionJson);
                     startActivity(intent);
                 }
                 break;
@@ -172,14 +170,14 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
             Toast.makeText(NewQuestion.this, "Please write the question, the Summary and select at Least one Tag", Toast.LENGTH_LONG).show();
             return false;
         }else {
-            Question newQuestion = new Question(account,question,summary,listofTags, tagMaster);
-            questionsMaster.addQuestion(newQuestion);
-
+            newQuestion = new Question(account,question,summary,listofTags, tagMaster);
+            Log.d(DEBUG_LOG, "Question text == " + newQuestion.getQuestion());
             /**
              * BACKEND
              *
              * Save the questions Master in the server
              */
+
             return true;
         }
     }
