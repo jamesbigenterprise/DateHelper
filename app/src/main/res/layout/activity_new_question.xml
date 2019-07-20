@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toTopOf="@+id/interest_button_add_more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_photo"
-        app:layout_constraintTop_toBottomOf="@+id/question_sugestion" />
+        app:layout_constraintTop_toBottomOf="@+id/question_suggestion" />
 
     <Button
         android:id="@+id/interest_button_add_more"
