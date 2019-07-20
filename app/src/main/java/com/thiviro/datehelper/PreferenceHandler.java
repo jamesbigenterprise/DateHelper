@@ -4,9 +4,6 @@ package com.thiviro.datehelper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import androidx.annotation.Nullable;
-
 import com.google.gson.Gson;
 
 

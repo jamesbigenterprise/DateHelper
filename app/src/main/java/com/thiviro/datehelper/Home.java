@@ -26,9 +26,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The home activity loads the view of the main screen of the app after login
@@ -381,10 +385,24 @@ public class Home extends AppCompatActivity {
   }
 
 
-  public void visitProfile(View view){
-    APIQuestionWorker api = new APIQuestionWorker(this);
-    Thread thread = new Thread(api);
-    thread.start();
+  public void visitProfile(View view) throws JSONException {
+    // Testing
+    PreferenceHandler prefHandler = new PreferenceHandler(this);
+    JSONObject json = new JSONObject();
+    json.put("id", UUID.randomUUID().toString());
+    json.put("userId", prefHandler.getId());
+    json.put("title", "Question Title");
+    json.put("text", "Where should be we go for dinner?");
+//    APIQuestionWorker api =
+//        new APIQuestionWorker(this, APIQuestionWorker.ENDPOINT_QUESTIONS,
+//            APIQuestionWorker.POST, json.toString());
+//    Thread thread = new Thread(api, "Thread1");
+//    thread.start();
+
+    APIQuestionWorker api2 =
+        new APIQuestionWorker(this, APIQuestionWorker.ENDPOINT_QUESTIONS,APIQuestionWorker.GET);
+    Thread thread2 = new Thread(api2, "Thread2");
+    thread2.start();
     //startActivity(new Intent(this, ProfilePicture.class));
   }
 }

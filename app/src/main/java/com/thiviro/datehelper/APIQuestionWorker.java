@@ -1,5 +1,6 @@
 package com.thiviro.datehelper;
 
+import android.accessibilityservice.GestureDescription;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,14 +25,40 @@ import java.util.List;
  */
 public class APIQuestionWorker implements Runnable {
 
-  public final static String HOST = "http://35.222.214.134:8080";
-  public final static String ENDPOINT_QUESTIONS = HOST + "/api/questions";
-  public final static String ENDPOINT_USERS = HOST + "/api/users";
+  public static final String HOST = "http://35.222.214.134:8080";
+  public static final String ENDPOINT_QUESTIONS = HOST + "/api/questions";
+  public static final String ENDPOINT_USERS = HOST + "/api/users";
+  public static final String ENDPOINT_COMMENTS = HOST + "/api/comments";
+  public static final String ENDPOINT_COMMENTS_BY_QUESTION = HOST + "/api/comments/question/";
+  public static final String GET = "GET";
+  public static final String POST = "POST";
 
   private WeakReference<Activity> activity;
+  private String method;
+  private String endpoint;
+  private String requestBody;
+  private Object objectToJSON;
+  private String response;
 
-  public APIQuestionWorker(Activity activity) {
+  public APIQuestionWorker(Activity activity, String endpoint, String method) {
     this.activity = new WeakReference<>(activity);
+    this.method = method;
+    this.endpoint = endpoint;
+  }
+
+  public APIQuestionWorker(Activity activity, String endpoint, String method, String requestBody) {
+    this.activity = new WeakReference<>(activity);
+    this.method = method;
+    this.endpoint = endpoint;
+    this.requestBody = requestBody;
+  }
+
+  public APIQuestionWorker(Activity activity, String endpoint, String method, Object object) {
+    this.activity = new WeakReference<>(activity);
+    this.method = method;
+    this.endpoint = endpoint;
+    this.requestBody = null;
+    this.objectToJSON = object;
   }
 
   /**
@@ -114,6 +141,37 @@ public class APIQuestionWorker implements Runnable {
     public void run () {
       System.out.println("Running in the background");
       final Activity activityRef = activity.get();
+      final String response;
+      Gson gson = new Gson();
+      switch (method){
+        case POST:
+          if (objectToJSON == null){
+            response = postRequestResponse(requestBody, endpoint);
+          }
+          else{
+            String request = gson.toJson(objectToJSON);
+            response = postRequestResponse(requestBody, endpoint);
+          }
+          activityRef.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              Toast.makeText(activityRef,"Result: " + response, Toast.LENGTH_LONG).show();
+            }
+          });
+          break;
+        case GET:
+
+          response = getRequestResponse(endpoint);
+          activityRef.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              Toast.makeText(activityRef,"Result: " + response, Toast.LENGTH_LONG).show();
+
+            }
+          });
+          break;
+      }
+
       //String response = getRequestResponse(ENDPOINT_GET_QUESTIONS);
       Person person =
           new Person("Rolando", "Rodriguez",Gender.MALE, new ArrayList<Tag>(), new TagMaster());
@@ -123,24 +181,12 @@ public class APIQuestionWorker implements Runnable {
       String body = "{" +
           "\"id\": 25, \"userId\": 2345123123, \"title\": \"This is a test\", \"text\": \"Complete Question\"" +
           "}";
-//      Gson gson = new Gson();
+
 //      Type questionList = new TypeToken<ArrayList<Question>>() {
 //      }.getType();
 //      final List<Question> questionList1 = JSON.fromJson(response, questionList);
 //      String JSON = gson.toJson(question);
-      System.out.println(body);
-      final String response = postRequestResponse(body, ENDPOINT_QUESTIONS);
-      System.out.println("Response: " + response);
-      activityRef.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
 
-            //System.out.println(response);
-//          for (Question q : questionList1) {
-//            System.out.println(q.getSummary());
-//          }
-//          Toast.makeText(activityRef, "TEST", Toast.LENGTH_SHORT).show();
-        }
-      });
+
     }
   }
