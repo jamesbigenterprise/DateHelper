@@ -382,6 +382,9 @@ public class Home extends AppCompatActivity {
 
 
   public void visitProfile(View view){
-    startActivity(new Intent(this, ProfilePicture.class));
+    APIQuestionWorker api = new APIQuestionWorker(this);
+    Thread thread = new Thread(api);
+    thread.start();
+    //startActivity(new Intent(this, ProfilePicture.class));
   }
 }

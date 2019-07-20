@@ -15,6 +15,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
+        android:textColor="#585858"
         app:layout_constraintEnd_toEndOf="@+id/profile_last_name"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
 
@@ -93,6 +94,7 @@
         android:layout_marginBottom="24dp"
         android:text="First Name"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toStartOf="@+id/profile_first_name"
         app:layout_constraintHorizontal_bias="0.0"
@@ -105,6 +107,7 @@
         android:layout_marginBottom="24dp"
         android:text="Last Name"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/textView7"
         app:layout_constraintStart_toStartOf="@+id/textView7" />
 
@@ -115,6 +118,7 @@
         android:layout_marginBottom="24dp"
         android:text="Gender"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/textView8"
         app:layout_constraintStart_toStartOf="@+id/textView8" />
 
@@ -125,6 +129,7 @@
         android:layout_marginBottom="50dp"
         android:text="Study Areas"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintStart_toStartOf="@+id/textView9" />
 
@@ -137,6 +142,7 @@
         android:layout_marginBottom="50dp"
         android:text="Interest"
         android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/picture_next"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -150,6 +156,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
+        android:textColor="#585858"
         app:layout_constraintEnd_toEndOf="@+id/spinner_gender"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="@+id/textView6" />
@@ -167,6 +174,7 @@
         android:gravity="top"
         android:inputType="textMultiLine"
         android:text="Name"
+        android:textColor="#585858"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView8"
@@ -184,6 +192,7 @@
         android:gravity="top"
         android:inputType="textMultiLine"
         android:text="Name"
+        android:textColor="#585858"
         app:layout_constraintBottom_toTopOf="@+id/picture_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -218,6 +227,7 @@
         android:focusable="false"
         android:spinnerMode="dropdown"
         android:textSize="18sp"
+        android:textColor="#585858"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="@+id/profile_study_area"
         app:layout_constraintHorizontal_bias="1.0"

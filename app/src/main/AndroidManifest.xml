@@ -82,7 +82,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".StudyArea" />
+                android:value=".Home" />
         </activity> <!-- 07 -->
         <activity
             android:name=".Home"

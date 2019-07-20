@@ -1,5 +1,7 @@
 package com.thiviro.datehelper;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.*;
 
 /**
@@ -15,6 +17,7 @@ import java.util.*;
 public class Tag {
 
   //raw data
+  @SerializedName("name")
   private String tagName;
   private VoteTracker voteTracker;
   //usage, track all the questions that use this tag
