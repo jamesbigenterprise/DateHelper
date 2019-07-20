@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,10 +31,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewQuestion extends AppCompatActivity implements View.OnClickListener {
 
+    //Interests
     private List<String> interests;
     private ListView interestList;
-    private List<Tag> listofTags;
     private ArrayAdapter<String> listAdapter;
+
+    //Suggestions
+    private List<String> suggestions;
+    private ArrayAdapter<String> suggestionsAdapter;
+    private ListView question_suggestion;
+
+    private List<Tag> listofTags;
     private Button addMore;
     private Button newQuestionButton;
     private CircleImageView profilePhoto;
@@ -42,10 +49,11 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private String question;
     private String summary;
     private Question newQuestion;
+    private String image_url;
     private Account account;
     private TagMaster tagMaster;
     private TextView authorTextVew;
-    private TextView question_sugestion;
+
     private PreferenceHandler prefHandler;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NEW_QUESTION_TOAST = "new_question_toast";
@@ -55,34 +63,47 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_question);
-        prefHandler = new PreferenceHandler(this);
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        Gson gson = new Gson();
 
-        interests = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.interests)));
+        prefHandler = new PreferenceHandler(this);
+        //SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+
+        interestList = findViewById(R.id.interestList);
+        question_suggestion = findViewById(R.id.question_suggestion);
+        createInterestsList(this);
+        createSuggestionList(this);
+
+        // UI references
         newQuestionButton = findViewById(R.id.ask_new_question);
         addMore = findViewById(R.id.interest_button_add_more);
-        interestList = findViewById(R.id.interestList);
         profilePhoto = findViewById(R.id.profile_photo);
 
-        question_sugestion = findViewById(R.id.question_suggestion);
-        authorTextVew =  findViewById(R.id.author_name_textView);
-
+        //authorTextVew =  findViewById(R.id.author_name_textView);
         writeQuestion = findViewById(R.id.write_new_question);
         writeQuestion.addTextChangedListener(watcher);
-        createList();
+
+
+
+        // Set onclick listeners
         newQuestionButton.setOnClickListener(this);
         addMore.setOnClickListener(this);
 
 
-        String login = prefHandler.getLogin();
-        account =  prefHandler.getAccount();
-        tagMaster = prefHandler.getTagMaster();
-        APIWorker api =
-            new APINewQuestion(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.GET);
-        api.execute();
-
-        String image_url = prefHandler.getPhotoURL();
+        // get from Shared Preferences
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                account =  prefHandler.getAccount();
+                tagMaster = prefHandler.getTagMaster();
+                image_url = prefHandler.getPhotoURL();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext()).load(image_url).into(profilePhoto);
+                    }
+                });
+            }
+        }).start();
 
         Glide.with(this).load(image_url).into(profilePhoto);
         // item not found:
@@ -99,11 +120,41 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         return selection;
     }
 
-    private void createList(){
-        listAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, interests);
-        interestList.setAdapter(listAdapter);
-        interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+    private void createInterestsList(final Activity activity){
+        final WeakReference<Activity> activityRef = new WeakReference<>(activity);
+        final Activity mActivity = activityRef.get();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                interests = new ArrayList<>(Arrays.asList(getResources()
+                    .getStringArray(R.array.interests)));
+                listAdapter = new ArrayAdapter<>(mActivity,
+                    android.R.layout.simple_list_item_multiple_choice, interests);
+                interestList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                interestList.setAdapter(listAdapter);
+            }
+        }).start();
+
+
+    }
+
+    private void createSuggestionList(Activity activity){
+        final WeakReference<Activity> activityRef = new WeakReference<>(activity);
+        final Activity mActivity = activityRef.get();
+        suggestions = new ArrayList<>();
+        suggestionsAdapter = new ArrayAdapter<>(this,
+            android.R.layout.simple_list_item_1, suggestions);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                suggestions = new ArrayList<>();
+                suggestionsAdapter = new ArrayAdapter<>(mActivity,
+                    android.R.layout.simple_list_item_1, suggestions);
+                question_suggestion.setAdapter(suggestionsAdapter);
+            }
+        }).start();
+
     }
 
     private void createDialog(){
@@ -113,26 +164,25 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         dialog.setView(mView);
 
         dialog.setCancelable(false)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+            .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-                        final EditText entry = mView.findViewById(R.id.dialog_edit_text);
-                        if (entry != null){
-                            interests.add(entry.getText().toString());
-                            listAdapter.notifyDataSetChanged();
-                            // TODO add list to shared prefs
-                        }
-                        dialogInterface.dismiss();
+                    final EditText entry = mView.findViewById(R.id.dialog_edit_text);
+                    if (entry != null){
+                        interests.add(entry.getText().toString());
+                        listAdapter.notifyDataSetChanged();
                     }
+                    dialogInterface.dismiss();
+                }
 
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
 
 
         AlertDialog alertDialog = dialog.create();
@@ -204,6 +254,12 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     };
 
     public void suggestion() {
+
+        APIWorker api =
+            new APINewQuestion(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.GET);
+        api.execute();
+        suggestionsAdapter.notifyDataSetChanged();
+
         /*
         Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Starting");
         EditText writeQuestion = findViewById(R.id.write_new_question);
@@ -232,9 +288,11 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
 
         @Override
         protected void onPostExecute(String response) {
-            final Activity activityRef = activity.get();
-            TextView questionSuggestion = activityRef.findViewById(R.id.question_suggestion);
-            questionSuggestion.setText(response);
+            //final Activity activityRef = activity.get();
+            suggestions.clear();
+            suggestions.add(response);
+//            TextView questionSuggestion = activityRef.findViewById(R.id.question_suggestion);
+//            questionSuggestion.setText(response);
         }
     }
 
