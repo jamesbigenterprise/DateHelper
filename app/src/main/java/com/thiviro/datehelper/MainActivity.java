@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final int RC_SIGN_IN= 9000;
     public static final String TAG = "com.thiviro.datehelper";
-    private PreferenceHandler prefHandler = new PreferenceHandler(this);
+    private PreferenceHandler prefHandler;
 
     private AccessTokenTracker tokenTracker = new AccessTokenTracker() {
         @Override
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_other);
-
+        prefHandler = new PreferenceHandler(this);
         //===========Google Sign In Session initializing==============
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestProfile()

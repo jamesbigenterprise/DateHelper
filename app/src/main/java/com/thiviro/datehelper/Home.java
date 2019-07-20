@@ -46,6 +46,7 @@ public class Home extends AppCompatActivity {
   private ProgressBar progressBar;
   private Button helpOnDate;
   private Button askQuestion;
+  private PreferenceHandler prefHandler;
   Gson gson;
 
   /**
@@ -59,6 +60,7 @@ public class Home extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
 
+    prefHandler = new PreferenceHandler(this);
     progressBar = findViewById(R.id.progress_bar);
     helpOnDate = findViewById(R.id.help_date_button);
     askQuestion = findViewById(R.id.ask_question_button);
@@ -83,12 +85,13 @@ public class Home extends AppCompatActivity {
   void updateSharedP(){
     //Log.d(TAG, "updateSharedP() -> the changes were made, we have questions after async inside synchronized == " + questionsMaster.getQuestionsMasterMap().size());
 
-    SharedPreferences.Editor editor = sharedPreferences.edit();
+
     String tmJson = gson.toJson(tagMaster);
     String qmJason = gson.toJson(questionsMaster);
-    editor.putString(MainActivity.TAG_MASTER, qmJason);
-    editor.putString(MainActivity.QUESTION_MASTER, tmJson);
-    editor.apply();
+
+    prefHandler.setTagMaster(tagMaster);
+    prefHandler.setQuestionMaster(questionsMaster);
+
     //Log.d(TAG, "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
     System.out.println(TAG +  "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
     //Toast.makeText(Home.this, " updateSharedP() -> AsyncTask Done, updated data is now in shared preferences, number of questions == " + questionsMaster.getQuestionsMasterMap().size() + " And number of Tags == " + tagMaster.getAllTags().size() , Toast.LENGTH_LONG).show();
@@ -310,7 +313,7 @@ public class Home extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    String login = sharedPreferences.getString(MainActivity.LOGIN, "LOGIN CLIENT ERROR");
+    String login = prefHandler.getLogin();
     switch(item.getItemId()){
       case R.id.logout:
         switch (login){

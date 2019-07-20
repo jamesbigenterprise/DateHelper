@@ -29,7 +29,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   private Button next;
   private Button addMore;
   private String areaSelected;
-  private PreferenceHandler prefHandler = new PreferenceHandler(this);
+  private PreferenceHandler prefHandler;
   ArrayAdapter<String> listAdapter;
 
   public static final String SHARED_PREFS = "sharedPrefs";
@@ -38,6 +38,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_study_area);
+    prefHandler = new PreferenceHandler(this);
     areas = new ArrayList<>(Arrays.asList(getResources().
             getStringArray(R.array.study_area)));
     next = findViewById(R.id.study_next_bt);

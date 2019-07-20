@@ -34,14 +34,14 @@ public class ProfilePicture extends AppCompatActivity implements View.OnClickLis
   private EditText interests;
   private Spinner genderSpinner;
   private List<View> profileViews;
-  private PreferenceHandler prefHandler = new PreferenceHandler(this);
+  private PreferenceHandler prefHandler;
   private final String[] GENDER = {"Male", "Female"};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_profile_picture);
-
+    prefHandler = new PreferenceHandler(this);
     String imageURL = prefHandler.getPhotoURL();
     account =  prefHandler.getAccount();
 

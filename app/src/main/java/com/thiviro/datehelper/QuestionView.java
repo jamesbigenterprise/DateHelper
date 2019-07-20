@@ -32,11 +32,16 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
   private Button addCommentButton;
   private ListView commentList;
   private ProgressBar progressBar;
-    public static final String SHARED_PREFS = "sharedPrefs";
+  private PreferenceHandler prefHandler;
+  public static final String SHARED_PREFS = "sharedPrefs";
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_question_view);
+
+      prefHandler = new PreferenceHandler(this);
       progressBar = findViewById(R.id.progressCircle);
       upVote = findViewById(R.id.up_button);
       downVote = findViewById(R.id.down_button);
@@ -52,8 +57,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
 
       String accountJson;
       String questionJson = getIntent().getDataString();
-      accountJson = sharedPreferences.getString(MainActivity.ACCOUNT,"error shared pref");
-      account =  gson.fromJson(accountJson, Account.class);
+      account =  prefHandler.getAccount();
       question = gson.fromJson(questionJson, Question.class);
       commentList = findViewById(R.id.interestList);
       comments = question.getComments();

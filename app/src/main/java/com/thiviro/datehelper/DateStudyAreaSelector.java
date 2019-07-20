@@ -47,7 +47,8 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     private String areaSelected;
     private Person profile;
     private Account userAccount;
-    ArrayAdapter<String> listAdapter;
+    private ArrayAdapter<String> listAdapter;
+    private PreferenceHandler prefHandler;
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public final static String HELP_RESULTS = "help_results";
@@ -57,6 +58,7 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_study_area_selector);
+        prefHandler = new PreferenceHandler(this);
         areas = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.study_area)));
         helpOnDate = findViewById(R.id.help_date_button);
@@ -65,10 +67,7 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
         createList();
 
         //get the user account
-        Gson gson = new Gson();
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String jsonAccount = sharedPreferences.getString(MainActivity.ACCOUNT, "");
-        userAccount = gson.fromJson(jsonAccount, Account.class);
+        userAccount = prefHandler.getAccount();
     }
 
     private void createList(){

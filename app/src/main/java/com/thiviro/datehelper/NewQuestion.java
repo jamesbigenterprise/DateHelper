@@ -46,7 +46,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     private QuestionsMaster questionsMaster;
     private TextView authorTextVew;
     private TextView question_sugestion;
-    private PreferenceHandler prefHandler = new PreferenceHandler(this);
+    private PreferenceHandler prefHandler;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NEW_QUESTION_TOAST = "new_question_toast";
     public static final String NEW_QUESTION_EXTRA = "new_question_extra";
@@ -55,6 +55,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_question);
+        prefHandler = new PreferenceHandler(this);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         Gson gson = new Gson();
 
