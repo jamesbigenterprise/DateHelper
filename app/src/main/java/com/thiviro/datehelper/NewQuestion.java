@@ -78,7 +78,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         String login = prefHandler.getLogin();
         account =  prefHandler.getAccount();
         tagMaster = prefHandler.getTagMaster();
-        
         APIWorker api =
             new APINewQuestion(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.GET);
         api.execute();
