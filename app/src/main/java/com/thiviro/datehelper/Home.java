@@ -1,6 +1,7 @@
 package com.thiviro.datehelper;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -46,6 +47,7 @@ public class Home extends AppCompatActivity {
   private Button helpOnDate;
   private Button askQuestion;
   private PreferenceHandler prefHandler;
+  private GetAPIWorker getAPIWorker;
   Gson gson;
 
   /**
@@ -63,7 +65,8 @@ public class Home extends AppCompatActivity {
     progressBar = findViewById(R.id.progress_bar);
     helpOnDate = findViewById(R.id.help_date_button);
     askQuestion = findViewById(R.id.ask_question_button);
-
+    getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET);
+    getAPIWorker.execute();
     sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 //
 //    gson = new Gson();
@@ -378,5 +381,25 @@ public class Home extends AppCompatActivity {
   public void visitProfile(View view) throws JSONException {
 
     startActivity(new Intent(this, ProfileViewer.class));
+  }
+
+
+
+  public class UserPutAPIWorker extends APIWorker{
+
+    public UserPutAPIWorker(Activity activity, String endpoint, String method, Object object){
+      super(activity, endpoint, method, object);
+    }
+
+    @Override
+    public void onPostExecute(String response) throws NullPointerException {
+      try{
+        System.out.println("Response:" + response + " Length: "+response.length());
+      } catch (NullPointerException e){
+        System.out.println(e.getMessage());
+      }
+
+    }
+
   }
 }

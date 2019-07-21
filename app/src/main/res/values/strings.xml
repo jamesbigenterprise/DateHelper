@@ -31,7 +31,7 @@
     <string name="img_title_incognito">Incognito</string>
     <string name="ask_new_question">Ask New Question</string>
     <string name="tags_label">Tags</string>
-    <string name="name_activity_hint">Name the Activity</string>
+    <string name="name_activity_hint">Rephrase your question as a verb</string>
     <string name="add_tag_button">+</string>
     <string name="results_suggest_new_question">Or you can ask a new question.</string>
     <string name="hom_help_button">Help me on a date</string>

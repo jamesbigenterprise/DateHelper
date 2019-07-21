@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -117,7 +118,14 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
       }
     }).start();
 
-    Glide.with(this).load(image_url).into(profilePhoto);
+    try {
+      Glide.with(this).load(image_url).into(profilePhoto);
+    } catch (Exception e){
+      Toast.makeText(getParent(),
+          "Image could not be loaded, check connectivity",
+          Toast.LENGTH_SHORT).show();
+    }
+
     // item not found:
     //authorTextVew.setText(account.getName());
   }
@@ -164,6 +172,12 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         suggestionsAdapter = new ArrayAdapter<>(mActivity,
             android.R.layout.simple_list_item_1, suggestions);
         questionSuggestion.setAdapter(suggestionsAdapter);
+        questionSuggestion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+          }
+        });
       }
     }).start();
 
@@ -257,8 +271,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
       suggestion();
-      Toast.makeText(NewQuestion.this, NEW_QUESTION_TOAST + "onTextChanged()", Toast.LENGTH_LONG).show();
-      Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "onTextChanged()");
     }
     @Override
     public void afterTextChanged(Editable s) {
@@ -299,20 +311,30 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    protected void onPostExecute(String response) {
-      //final Activity activityRef = activity.get();
-      Gson gson = new Gson();
-      Type questionList = new TypeToken<ArrayList<Question>>() {}.getType();
-      final List<Question> questionList1 = gson.fromJson(response, questionList);
-      String JSON = gson.toJson(question);
-      suggestions.clear();
-      for (Question q : questionList1){
-        suggestions.add(q.getSummary());
-      }
+    protected void onPostExecute(String response){
+      final Activity activityRef = activity.get();
+
+        Gson gson = new Gson();
+        Type questionList = new TypeToken<ArrayList<Question>>() {}.getType();
+        final List<Question> questionList1 = gson.fromJson(response, questionList);
+        if (questionList1 != null) {
+          String JSON = gson.toJson(question);
+          suggestions.clear();
+          for (Question q : questionList1) {
+            suggestions.add(q.getSummary());
+          }
+        } else {
+          Toast.makeText(activityRef
+              , "Request was not completed, the device might not be connected",
+              Toast.LENGTH_SHORT).show();
+        }
+
+        }
+
 
 //            TextView questionSuggestion = activityRef.findViewById(R.id.questionSuggestion);
 //            questionSuggestion.setText(response);
     }
   }
 
-}
+

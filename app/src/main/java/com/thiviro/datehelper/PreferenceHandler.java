@@ -20,6 +20,7 @@ public class PreferenceHandler{
   public static final String PHOTO_URL= "Photo_URL";
   public static final String PROFILE_TYPE= "PROFILE";
   public static final String ERROR = "ERROR";
+  public static final String STUDY_AREA = "STUDY AREA";
   public static final String ERROR_OBJECT = "{}";
   public static final String GENDER = "gender";
 
@@ -136,6 +137,15 @@ public class PreferenceHandler{
 
   public String getProfileType(){
     return activitySP.getString(PROFILE_TYPE, ERROR);
+  }
+
+  public void setStudyArea(String studyArea){
+    editor.putString(STUDY_AREA, studyArea);
+    editor.apply();
+  }
+
+  public String getStudyArea(){
+    return activitySP.getString(STUDY_AREA, ERROR);
   }
 
   public void deleteAll(){

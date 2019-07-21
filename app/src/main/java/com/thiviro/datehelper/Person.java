@@ -68,6 +68,9 @@ public class Person {
   public String getFullName() {
     return firstName.concat(" " + lastName);
   }
+  public String getFirstName(){ return firstName; }
+  public String getLastName(){ return lastName; }
+
 
   /**
    * Get a list of keys to get the questions that describe this Person

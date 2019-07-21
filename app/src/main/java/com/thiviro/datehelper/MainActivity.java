@@ -1,5 +1,6 @@
 package com.thiviro.datehelper;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -32,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,11 +49,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LoginButton loginButton;
-    private CircleImageView circleImage;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
     private Button signOutButton;
-    private TextView nameDisplay;
+    private userGetAPIWorker userGetAPIWorker;
+
 
     private CallbackManager callbackManager;
 
@@ -100,10 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginButton.setPermissions(Arrays.asList("email", "public_profile"));
         checkLoginStatus();
 
+
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 signInButton.setVisibility(View.GONE);
+
             }
             @Override
             public void onCancel() {
@@ -159,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String lastName = object.getString("last_name");
                     String id = object.getString("id");
 
-
                     if (false /*the account already exists*/){
                         startActivity(new Intent(MainActivity.this, ProfileSelector.class));
                     }else {
+
                         prefHandler.setFirstName(firstName);
                         prefHandler.setLastName(lastName);
                         prefHandler.setID(id);
@@ -171,6 +177,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             prefHandler.getGender(), new ArrayList<Tag>(), new TagMaster());
                         prefHandler.setAccount(new Account(person, prefHandler.getId(), prefHandler.getPhotoURL()));
                         prefHandler.setLogin("FACEBOOK");
+
+                        Profile profile = Profile.getCurrentProfile();
+                        if (profile != null){
+                            userGetAPIWorker =
+                                new userGetAPIWorker(getParent(), APIWorker.ENDPOINT_USERS +
+                                    "/" + profile.getId(), APIWorker.GET);
+                            userGetAPIWorker.execute();
+                        }
 
                         //get the tag and questions master from the server
                         TagMaster tagmaster = new TagMaster();
@@ -248,6 +262,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 prefHandler.getGender(), new ArrayList<Tag>(), new TagMaster());
             prefHandler.setAccount(new Account(person, account.getId(), account.getPhotoUrl().toString()));
             prefHandler.setLogin("GOOGLE");
+            userGetAPIWorker =
+                new userGetAPIWorker(this,
+                    APIWorker.ENDPOINT_USERS + "/"+account.getId(), APIWorker.GET);
+            userGetAPIWorker.execute();
             startActivity(new Intent(MainActivity.this, ProfileSelector.class));
             signInButton.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
@@ -268,6 +286,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (AccessToken.getCurrentAccessToken() != null) {
             loadAccount(AccessToken.getCurrentAccessToken());
         }
+    }
+
+    private class userGetAPIWorker extends APIWorker{
+
+        protected userGetAPIWorker(Activity activity, String endpoint, String method){
+            super(activity, endpoint, method);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (response.equals("")){
+                Gender gender = prefHandler.getGender();
+                String photoURL = prefHandler.getPhotoURL();
+                Person mPerson =
+                    new Person(prefHandler.getFirstName(), prefHandler.getLastName(),
+                        prefHandler.getGender(), new ArrayList<Tag>(), new TagMaster());
+                Account mAccount = new Account(mPerson, prefHandler.getId(), photoURL);
+                mAccount.setStudyArea(prefHandler.getStudyArea());
+                userPostAPIWorker userPostAPIWorker =
+                    new userPostAPIWorker(getParent(), APIWorker.ENDPOINT_USERS, APIWorker.POST, mAccount);
+                userPostAPIWorker.execute();
+            }
+
+
+        }
+    }
+
+    private class userPostAPIWorker extends APIWorker{
+
+        protected userPostAPIWorker(Activity activity, String endpoint, String method, Object object){
+            super(activity, endpoint, method, object);
+        }
+
+        @Override
+        protected void onPostExecute(String response) throws NullPointerException {
+           try{
+               System.out.println("Response:" + response + " Length: "+response.length());
+           } catch (NullPointerException e){
+               System.out.println(e.getMessage());
+           }
+
+        }
+
     }
 
 }

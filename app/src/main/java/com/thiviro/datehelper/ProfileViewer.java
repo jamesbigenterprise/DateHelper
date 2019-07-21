@@ -35,6 +35,7 @@ public class ProfileViewer extends AppCompatActivity implements View.OnClickList
   private Spinner genderSpinner;
   private List<View> profileViews;
   private PreferenceHandler prefHandler;
+  private GetAPIWorker getAPIWorker;
   private final String[] GENDER = {"Male", "Female"};
 
   @Override
@@ -60,6 +61,7 @@ public class ProfileViewer extends AppCompatActivity implements View.OnClickList
     // Populate fields with current values
     firstName.setText(prefHandler.getFirstName());
     lastName.setText(prefHandler.getLastName());
+    studyArea.setText(prefHandler.getStudyArea());
     genderSpinner.setSelection(account.getGender() == Gender.MALE ? 0 : 1);
 
     profileViews = new ArrayList<>();
@@ -93,6 +95,10 @@ public class ProfileViewer extends AppCompatActivity implements View.OnClickList
             prefHandler.setFirstName(firstName.getText().toString());
             prefHandler.setLastName(lastName.getText().toString());
             prefHandler.setGender(Gender.getEnum(GENDER[genderSpinner.getSelectedItemPosition()]));
+            prefHandler.setStudyArea(studyArea.getText().toString());
+            getAPIWorker = new GetAPIWorker(getParent(), APIWorker.ENDPOINT_USERS, APIWorker.GET);
+            getAPIWorker.execute();
+
           }
         }
 

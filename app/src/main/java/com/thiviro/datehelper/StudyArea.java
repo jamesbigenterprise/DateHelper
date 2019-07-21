@@ -99,6 +99,7 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
     switch (view.getId()) {
       case R.id.study_next_bt:
         areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
+        prefHandler.setStudyArea(areaSelected);
         System.out.println("Selection: " + areaSelected);
         Tag studyAreaTag = new Tag(areaSelected);
         Log.d(LOG_DEBUG, "GETTING THE TAGS");
@@ -130,18 +131,10 @@ public class StudyArea extends AppCompatActivity implements View.OnClickListener
         Person newProfile = new Person(firstName,lastName,gender,listofTags,tagmaster);
 
         String login = prefHandler.getLogin();
-        String image_url = "";
+        String image_url = prefHandler.getPhotoURL();
 
-        switch (login){
-          case "FACEBOOK":
-            image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
-            break;
 
-          case "GOOGLE":
-            image_url = prefHandler.getPhotoURL();
-            break;
 
-        }
         //Now create the account
         Account newAccount = new Account(newProfile, id, image_url);
         prefHandler.setAccount(newAccount);

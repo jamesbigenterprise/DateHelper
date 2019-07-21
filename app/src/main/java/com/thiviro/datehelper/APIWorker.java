@@ -24,7 +24,7 @@ import java.util.List;
  * The APIWorker class retrieves the questions from
  * the backend service and populates the objects in the app
  */
-public class APIWorker extends AsyncTask<Void, String, String> implements Runnable {
+public class APIWorker extends AsyncTask<Void, String, String>{
 
   public static final String HOST = "http://35.222.214.134:8080";
   public static final String ENDPOINT_QUESTIONS = HOST + "/api/questions";
@@ -33,6 +33,7 @@ public class APIWorker extends AsyncTask<Void, String, String> implements Runnab
   public static final String ENDPOINT_COMMENTS_BY_QUESTION = HOST + "/api/comments/question/";
   public static final String GET = "GET";
   public static final String POST = "POST";
+  public static final String PUT = "PUT";
 
   protected WeakReference<Activity> activity;
   protected String method;
@@ -101,7 +102,7 @@ public class APIWorker extends AsyncTask<Void, String, String> implements Runnab
       postConnection.setRequestMethod("POST");
       postConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
-      postConnection.setRequestProperty("Content-Length", "" + body.getBytes().length);
+      postConnection.setRequestProperty("Content-Length", "" + body.getBytes("UTF-8").length);
       postConnection.setRequestProperty("Content-Language", "en-US");
 
       postConnection.setUseCaches(false);
@@ -111,7 +112,50 @@ public class APIWorker extends AsyncTask<Void, String, String> implements Runnab
       //Send request
       DataOutputStream wr = new DataOutputStream(
           postConnection.getOutputStream());
-      wr.writeBytes(body);
+      wr.write(body.getBytes("UTF-8"));
+      wr.flush();
+      wr.close();
+
+      InputStream is = postConnection.getInputStream();
+      BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+      String line;
+      StringBuilder response = new StringBuilder();
+      while ((line = rd.readLine()) != null) {
+        response.append(line);
+        response.append('\r');
+      }
+      rd.close();
+      return response.toString();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return null;
+    } finally {
+
+      if (postConnection != null) {
+        postConnection.disconnect();
+      }
+
+    }
+  }
+
+  public String putRequestResponse(String body, String endpoint) {
+    HttpURLConnection postConnection = null;
+    try {
+      postConnection = (HttpURLConnection) new URL(endpoint).openConnection();
+      postConnection.setRequestMethod("PUT");
+      postConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+      postConnection.setRequestProperty("Content-Length", "" + body.getBytes("UTF-8").length);
+      postConnection.setRequestProperty("Content-Language", "en-US");
+
+      postConnection.setUseCaches(false);
+      postConnection.setDoInput(true);
+      postConnection.setDoOutput(true);
+
+      //Send request
+      DataOutputStream wr = new DataOutputStream(
+          postConnection.getOutputStream());
+      wr.write(body.getBytes("UTF-8"));
       wr.flush();
       wr.close();
 
@@ -150,7 +194,15 @@ public class APIWorker extends AsyncTask<Void, String, String> implements Runnab
           response = postRequestResponse(requestBody, endpoint);
         } else {
           String request = gson.toJson(objectToJSON);
-          response = postRequestResponse(requestBody, endpoint);
+          response = postRequestResponse(request, endpoint);
+        }
+        break;
+      case PUT:
+        if (objectToJSON == null) {
+          response = putRequestResponse(requestBody, endpoint);
+        } else {
+          String request = gson.toJson(objectToJSON);
+          response = putRequestResponse(request, endpoint);
         }
         break;
       case GET:
@@ -166,57 +218,6 @@ public class APIWorker extends AsyncTask<Void, String, String> implements Runnab
     Toast.makeText(activityRef, response, Toast.LENGTH_SHORT).show();
   }
 
-  @Override
-  public void run() {
-    System.out.println("Running in the background");
-    final Activity activityRef = activity.get();
-    final String response;
-    Gson gson = new Gson();
-    switch (method) {
-      case POST:
-        if (objectToJSON == null) {
-          response = postRequestResponse(requestBody, endpoint);
-        } else {
-          String request = gson.toJson(objectToJSON);
-          response = postRequestResponse(requestBody, endpoint);
-        }
-        activityRef.runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            Toast.makeText(activityRef, "Result: " + response, Toast.LENGTH_LONG).show();
-          }
-        });
-        break;
-      case GET:
-
-        response = getRequestResponse(endpoint);
-        activityRef.runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            Toast.makeText(activityRef, "Result: " + response, Toast.LENGTH_LONG).show();
-
-          }
-        });
-        break;
-    }
-
-    //String response = getRequestResponse(ENDPOINT_GET_QUESTIONS);
-    Person person =
-        new Person("Rolando", "Rodriguez", Gender.MALE, new ArrayList<Tag>(), new TagMaster());
-    Account account = new Account(person, "oijfoijfowef", "Picture.jpg");
-    Question question = new Question(account, "My Question is", "Here comes the long version",
-        new ArrayList<Tag>(), new TagMaster());
-    String body = "{" +
-        "\"id\": 25, \"userId\": 2345123123, \"title\": \"This is a test\", \"text\": \"Complete Question\"" +
-        "}";
-
-//      Type questionList = new TypeToken<ArrayList<Question>>() {
-//      }.getType();
-//      final List<Question> questionList1 = JSON.fromJson(response, questionList);
-//      String JSON = gson.toJson(question);
-
-
-  }
 
 
 }
