@@ -82,21 +82,23 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
+        helpOnDate.setOnClickListener(this);
+
         switch (view.getId()) {
             case R.id.help_date_button:
-                helpOnDate.setOnClickListener(this);
                 SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                 Gson gson = new Gson();
                 areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
                 Tag studyAreaTag = new Tag(areaSelected);
                 //add this Tag to the list of Tags
-                String json = sharedPref.getString(DateInterestsSelector.LIST_DATE_TAGS, null);
+
+                String json =getIntent().getStringExtra(DateInterestsSelector.LIST_DATE_TAGS);
                 Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
-                List<Tag> listofTags = new ArrayList<Tag>();
-                listofTags = gson.fromJson(json, type);
-                listofTags.add(studyAreaTag);
+                List<Tag> listOfTags = new ArrayList<Tag>();
+                listOfTags = gson.fromJson(json, type);
+                listOfTags.add(studyAreaTag);
                 CreateProfileAsyncTask task1 = new CreateProfileAsyncTask(DateStudyAreaSelector.this);
-                task1.execute(listofTags);
+                task1.execute(listOfTags);
                 break;
         }
     }
@@ -133,6 +135,10 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
              * TODO download the tagmaster
              * Download the TagMaster
              */
+            //----------------------------------------------------------------------------
+            //For now I will create the TagMaster directly
+            tagMaster = new TagMaster();
+            //----------------------------------------------------------------------------
             downloadedTagMaster = tagMaster;
             publishProgress(50);
             Person person = new Person(askerAccount, tags[0], downloadedTagMaster);
@@ -162,6 +168,7 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     private class HelpOnDateAsyncTask extends AsyncTask<Person, Integer, List<Question>> {
         private WeakReference<DateStudyAreaSelector> weakReference;
 
+
         public HelpOnDateAsyncTask(DateStudyAreaSelector weakReference) {
             this.weakReference = new WeakReference<>(weakReference);
         }
@@ -188,13 +195,35 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
              * TODO download the tagmaster
              * Download the TagMaster
              */
+            tagMaster = new TagMaster();
             publishProgress(50);
+            //---------------------------------------------
+            //Test Remove latter
+            Account testAccount = weakReference.get().userAccount;
+            Tag tag1 = new Tag("Movies");
+            Tag tag2 = new Tag("sports");
+            Tag tag3 = new Tag("pets");
+            ArrayList<Tag> otherTags = new ArrayList<>();
+            otherTags.add(tag1);
+            otherTags.add(tag2);
+            otherTags.add(tag3);
+            //As a test I will create the list of questions
+            Question myQ1 = new Question(testAccount,"Should I take her to the movies?", "Go to the movies",otherTags, tagMaster );
+            Question myQ2 = new Question(testAccount,"Should I Kiss her on the first date?", "Kiss on the first date",otherTags, tagMaster );
+            Question myQ3 = new Question(testAccount,"Should I spend any money on the first date?", "Spend money",otherTags, tagMaster );
+            ArrayList<Question> topQuestions = new ArrayList<>();
+            topQuestions.add(myQ1);
+            topQuestions.add(myQ2);
+            topQuestions.add(myQ3);
+            //---------------------------------------------
             results = questionsMaster.helpOnDate(persons[0], tagMaster);
+            results = topQuestions;
             publishProgress(100);
             /**
              * BACKEND
              * //Todo Upload the TagMaster with the changes
              */
+
             return results;
         }
 
