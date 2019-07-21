@@ -15,10 +15,9 @@ import java.util.List;
 public class Question {
   @SerializedName("id")
   private String id;
+  @SerializedName("accountId")
   private String author;
-  @SerializedName("text")
   private String question;
-  @SerializedName("title")
   private String summary;//The question summarized in an action like: "Go to the movies;"
 
 

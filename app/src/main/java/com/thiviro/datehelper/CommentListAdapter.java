@@ -18,11 +18,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentListAdapter extends ArrayAdapter<Comment> {
     private Context context;
-    int resource;
+    private int resource;
 
     public CommentListAdapter(@NonNull Context context, int resource, @NonNull List<Comment> comments) {
         super(context, resource, comments);
-        context = context;
+        this.context = context;
 
     }
 

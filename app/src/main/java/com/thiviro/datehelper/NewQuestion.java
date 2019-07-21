@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -253,7 +254,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
       return false;
     }else {
       newQuestion = new Question(account,question,summary,listofTags, tagMaster);
-      Log.d(DEBUG_LOG, "Question text == " + newQuestion.getQuestion());
+      //Log.d(DEBUG_LOG, "Question text == " + newQuestion.getQuestion());
       /**
        * BACKEND
        *
@@ -270,38 +271,23 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     }
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-      suggestion();
+
     }
     @Override
     public void afterTextChanged(Editable s) {
+      suggestion(s.toString());
     }
   };
 
-  public void suggestion() {
+  public void suggestion(String s) {
 
-    APIWorker api =
-        new APINewQuestion(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.GET);
+    APINewQuestion api =
+        new APINewQuestion(this,
+            APIWorker.ENDPOINT_QUESTIONS + "/summary/" + s,
+            APIWorker.GET);
     api.execute();
     suggestionsAdapter.notifyDataSetChanged();
 
-        /*
-        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Starting");
-        EditText writeQuestion = findViewById(R.id.write_new_question);
-        String currentText = writeQuestion.getText().toString();
-        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Retrieved the current text that is == " + currentText);
-        Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() - Number of questions saved == " + questionsMaster.getQuestionsMasterMap().size());
-        for (Map.Entry<String, Question> entry : questionsMaster.getQuestionsMasterMap().entrySet()){
-            String question = entry.getValue().getQuestion();
-            Log.d(DEBUG_LOG, NEW_QUESTION_TOAST + "suggestion() -  Loop comparing this question ==  " + question +" With the text == " + currentText);
-            boolean hasQuestion = question.contains(currentText);
-            if(hasQuestion) {
-              //set the text view
-                question_suggestion.setText(question);
-              //create intent to the question
-              break;
-            }
-        }
-        */
   }
 
   protected class APINewQuestion extends APIWorker {
@@ -313,7 +299,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onPostExecute(String response){
       final Activity activityRef = activity.get();
-
+      System.out.println("PostExecuteResponse: " + response);
         Gson gson = new Gson();
         Type questionList = new TypeToken<ArrayList<Question>>() {}.getType();
         final List<Question> questionList1 = gson.fromJson(response, questionList);
@@ -323,17 +309,10 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
           for (Question q : questionList1) {
             suggestions.add(q.getSummary());
           }
-        } else {
-          Toast.makeText(activityRef
-              , "Request was not completed, the device might not be connected",
-              Toast.LENGTH_SHORT).show();
         }
 
         }
 
-
-//            TextView questionSuggestion = activityRef.findViewById(R.id.questionSuggestion);
-//            questionSuggestion.setText(response);
     }
   }
 
