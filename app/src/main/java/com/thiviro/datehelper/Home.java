@@ -65,7 +65,7 @@ public class Home extends AppCompatActivity {
     progressBar = findViewById(R.id.progress_bar);
     helpOnDate = findViewById(R.id.help_date_button);
     askQuestion = findViewById(R.id.ask_question_button);
-    getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET);
+    getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET, prefHandler);
     getAPIWorker.execute();
     sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 //

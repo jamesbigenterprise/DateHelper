@@ -1,5 +1,6 @@
 package com.thiviro.datehelper;
 
+import android.app.Activity;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,7 @@ import android.widget.Switch;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,15 +38,19 @@ public class ProfileViewer extends AppCompatActivity implements View.OnClickList
   private List<View> profileViews;
   private PreferenceHandler prefHandler;
   private GetAPIWorker getAPIWorker;
+  private WeakReference<Activity> activityWeakReference;
+
   private final String[] GENDER = {"Male", "Female"};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_profile_picture);
+    activityWeakReference = new WeakReference<>(getParent());
     prefHandler = new PreferenceHandler(this);
     String imageURL = prefHandler.getPhotoURL();
     account =  prefHandler.getAccount();
+
 
     next = findViewById(R.id.picture_next);
     editProfile = findViewById(R.id.edit_switch);
@@ -96,7 +102,8 @@ public class ProfileViewer extends AppCompatActivity implements View.OnClickList
             prefHandler.setLastName(lastName.getText().toString());
             prefHandler.setGender(Gender.getEnum(GENDER[genderSpinner.getSelectedItemPosition()]));
             prefHandler.setStudyArea(studyArea.getText().toString());
-            getAPIWorker = new GetAPIWorker(getParent(), APIWorker.ENDPOINT_USERS, APIWorker.GET);
+            getAPIWorker = new GetAPIWorker(activityWeakReference.get(),
+                APIWorker.ENDPOINT_USERS, APIWorker.GET, prefHandler);
             getAPIWorker.execute();
 
           }

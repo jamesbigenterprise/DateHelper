@@ -9,8 +9,9 @@ public class GetAPIWorker extends APIWorker {
   private PreferenceHandler prefHandler;
 
 
-  public GetAPIWorker(Activity activity, String endpoint, String method){
+  public GetAPIWorker(Activity activity, String endpoint, String method, PreferenceHandler prefHandler){
     super(activity, endpoint, method);
+    this.prefHandler = prefHandler;
   }
 
   @Override

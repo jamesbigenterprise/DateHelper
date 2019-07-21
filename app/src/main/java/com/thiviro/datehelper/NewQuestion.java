@@ -121,7 +121,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     try {
       Glide.with(this).load(image_url).into(profilePhoto);
     } catch (Exception e){
-      Toast.makeText(getParent(),
+      Toast.makeText(this,
           "Image could not be loaded, check connectivity",
           Toast.LENGTH_SHORT).show();
     }
