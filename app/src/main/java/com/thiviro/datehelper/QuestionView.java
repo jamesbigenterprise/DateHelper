@@ -69,17 +69,19 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       question = gson.fromJson(questionJson, Question.class);
       Glide.with(this).load(account.getImageURL()).into(profilePictureView);
 
+    questionTextView.setText(question.getQuestion());
+    author_name_textView.setText(account.getName());
+    markVote();
+
       commentList = findViewById(R.id.interestList);
-      if(question.getComments() != null){
-        comments = question.getComments();
-        createList();
+      if(question.getComments().size() == 0){
+        this.comments = new ArrayList<Comment>();
       }else{
-        comments = new ArrayList<Comment>();
+        this.comments = question.getComments();
+        createList();
       }
 
-      questionTextView.setText(question.getQuestion());
-      author_name_textView.setText(account.getName());
-      markVote();
+
   }
 
     private class UploadTagMasterAsyncTask extends AsyncTask<TagMaster, Integer, Void> {

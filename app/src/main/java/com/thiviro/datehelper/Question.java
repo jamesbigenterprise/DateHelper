@@ -114,12 +114,7 @@ public class Question {
   }
 
   public List<Comment> getComments(){
-    if (!comments.isEmpty()){
       return comments;
-    }else{
-      return null;
-    }
-
   }
 
   /**

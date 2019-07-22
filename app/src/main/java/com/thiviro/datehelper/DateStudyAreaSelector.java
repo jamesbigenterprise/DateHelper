@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +39,7 @@ import java.util.List;
  * This method will create an intent with the list of results and start the
  * intent for the ShowResults Class
  */
-public class DateStudyAreaSelector extends AppCompatActivity implements View.OnClickListener {
+public class DateStudyAreaSelector extends AppCompatActivity {
 
     private List<String> areas;
     private ListView studyArea;
@@ -54,20 +55,26 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     public final static String HELP_RESULTS = "help_results";
     private final static String LOG_DEBUG = "StudyArea()";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_DEBUG,"Startiing on create");
         setContentView(R.layout.activity_date_study_area_selector);
         prefHandler = new PreferenceHandler(this);
         areas = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.study_area)));
-        helpOnDate = findViewById(R.id.help_date_button);
+        helpOnDate = findViewById(R.id.study_next_bt);
         studyArea = findViewById(R.id.studyArea);
         progressBar = findViewById(R.id.progress_bar);
+        Log.d(LOG_DEBUG,"everything set ");
         createList();
 
         //get the user account
         userAccount = prefHandler.getAccount();
+
+
+        Log.d(LOG_DEBUG,"on create done");
     }
 
     private void createList(){
@@ -80,27 +87,24 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
     }
 
 
-    @Override
-    public void onClick(View view) {
-        helpOnDate.setOnClickListener(this);
+    public void help(View v) {
 
-        switch (view.getId()) {
-            case R.id.help_date_button:
+                Log.d(LOG_DEBUG,"HELPONDATE Startng........");
                 SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                 Gson gson = new Gson();
                 areaSelected = listAdapter.getItem(studyArea.getCheckedItemPosition());
                 Tag studyAreaTag = new Tag(areaSelected);
                 //add this Tag to the list of Tags
 
+                Log.d(LOG_DEBUG,"HELPONDATE Middle........");
                 String json =getIntent().getStringExtra(DateInterestsSelector.LIST_DATE_TAGS);
                 Type type = new TypeToken<ArrayList<Tag>>() {}.getType();
                 List<Tag> listOfTags = new ArrayList<Tag>();
                 listOfTags = gson.fromJson(json, type);
                 listOfTags.add(studyAreaTag);
                 CreateProfileAsyncTask task1 = new CreateProfileAsyncTask(DateStudyAreaSelector.this);
+                Log.d(LOG_DEBUG,"HELPONDATE before task");
                 task1.execute(listOfTags);
-                break;
-        }
     }
 
     private class CreateProfileAsyncTask extends AsyncTask<List<Tag>, Integer, Person> {
@@ -216,7 +220,7 @@ public class DateStudyAreaSelector extends AppCompatActivity implements View.OnC
             topQuestions.add(myQ2);
             topQuestions.add(myQ3);
             //---------------------------------------------
-            results = questionsMaster.helpOnDate(persons[0], tagMaster);
+            //results = questionsMaster.helpOnDate(persons[0], tagMaster);
             results = topQuestions;
             publishProgress(100);
             /**
