@@ -24,6 +24,10 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * This activity will display a Question passed on an Intent
+ * It will give the ability for the user to up or Downvote
+ */
 public class QuestionView extends AppCompatActivity implements View.OnClickListener {
 
   private Account account;
@@ -105,9 +109,6 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(TagMaster ...tagMasters) {
           Gson gson = new Gson();
-          //tagMasters[0]
-          //this one will be uploaded
-
           /**
            * BACKEND
            * //Todo Upload the TagMaster with the changes
@@ -285,17 +286,17 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       switch (v.getId()){
           case R.id.up_button:
             question.upVote(account, tagMaster);
-            UploadTagMasterAsyncTask task1 = new UploadTagMasterAsyncTask(QuestionView.this);
-            task1.execute();
-            UploadQuestionAsyncTask task2 = new UploadQuestionAsyncTask(QuestionView.this);
-            task2.execute();
+            //UploadTagMasterAsyncTask task1 = new UploadTagMasterAsyncTask(QuestionView.this);
+            //task1.execute();
+            //UploadQuestionAsyncTask task2 = new UploadQuestionAsyncTask(QuestionView.this);
+            //task2.execute();
             break;
           case R.id.down_button:
             question.downVote(account, tagMaster);
-            UploadTagMasterAsyncTask task1case2 = new UploadTagMasterAsyncTask(QuestionView.this);
-            task1case2.execute();
-            UploadQuestionAsyncTask task2case2 = new UploadQuestionAsyncTask(QuestionView.this);
-            task2case2.execute();
+            //UploadTagMasterAsyncTask task1case2 = new UploadTagMasterAsyncTask(QuestionView.this);
+            //task1case2.execute();
+            //UploadQuestionAsyncTask task2case2 = new UploadQuestionAsyncTask(QuestionView.this);
+            //task2case2.execute();
             break;
           case R.id.add_comment:
             Editable editable = commentEditText.getText();

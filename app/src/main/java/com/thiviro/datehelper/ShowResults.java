@@ -33,7 +33,7 @@ public class ShowResults extends AppCompatActivity {
         setContentView(R.layout.activity_show_results);
         //get the 3 buttons
 
-        result1 = findViewById(R.id.result_1);
+        result1 = findViewById(R.id.EditTextNewQuestion);
         result2 = findViewById(R.id.result_2);
         result3 = findViewById(R.id.result_3);
         List<Button> resultButtons = new ArrayList<>();
@@ -65,5 +65,18 @@ public class ShowResults extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * The askaQuestion method launches the activity
+     * to start asking questions. It calls the NewQuestion class
+     *
+     * @param view view clicked used to call the next activity
+     */
+    public void askaQuestion(View view) {
+
+
+        Intent intent = new Intent(this, NewQuestion.class);
+        startActivity(intent);
+    }
 
 }

@@ -93,7 +93,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         profilePhoto = findViewById(R.id.profile_photo);
 
         //authorTextVew =  findViewById(R.id.author_name_textView);
-        writeQuestion = findViewById(R.id.write_new_question);
+        writeQuestion = findViewById(R.id.EditTextNewQuestion);
         writeQuestion.addTextChangedListener(watcher);
         writeQuestion.setOnFocusChangeListener(new View.OnFocusChangeListener() {
           @Override
@@ -244,7 +244,7 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
   }
 
   public boolean askNewQuestion () {
-    EditText writeQuestion = findViewById(R.id.write_new_question);
+    EditText writeQuestion = findViewById(R.id.EditTextNewQuestion);
     EditText writeSummary = findViewById(R.id.write_comment_edit);
     question = writeQuestion.getText().toString();
     summary = writeSummary.getText().toString();

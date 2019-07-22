@@ -40,9 +40,8 @@ public class Home extends AppCompatActivity {
 
   public static final String SHARED_PREFS = "sharedPrefs";
   public static final String TAG = "Home";
+  private Account account;
   private TagMaster tagMaster;
-  private QuestionsMaster questionsMaster;
-  private SharedPreferences sharedPreferences;
   private ProgressBar progressBar;
   private Button helpOnDate;
   private Button askQuestion;
@@ -65,39 +64,13 @@ public class Home extends AppCompatActivity {
     progressBar = findViewById(R.id.progress_bar);
     helpOnDate = findViewById(R.id.help_date_button);
     askQuestion = findViewById(R.id.ask_question_button);
+    account = prefHandler.getAccount();
+    tagMaster = prefHandler.getTagMaster();
     getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET, prefHandler);
     getAPIWorker.execute();
-    sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-//
-//    gson = new Gson();
-//    String tagMasterJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "");
-//    tagMaster = gson.fromJson(tagMasterJson, TagMaster.class);
-//    String questionMasterJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "");
-//    questionsMaster = gson.fromJson(questionMasterJson, QuestionsMaster.class);
-//    CreateTagMasterAsyncTask task = new CreateTagMasterAsyncTask(Home.this);
-//
-//    //Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
-//    synchronized (this){
-//      task.execute(tagMaster);
-//    }
-
 
   }
 
-  void updateSharedP(){
-    //Log.d(TAG, "updateSharedP() -> the changes were made, we have questions after async inside synchronized == " + questionsMaster.getQuestionsMasterMap().size());
-
-
-    String tmJson = gson.toJson(tagMaster);
-    String qmJason = gson.toJson(questionsMaster);
-    tagMaster.addTag(new Tag("Reserved"));
-    prefHandler.setTagMaster(tagMaster);
-    prefHandler.setQuestionMaster(questionsMaster);
-
-    //Log.d(TAG, "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
-    System.out.println(TAG +  "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
-    //Toast.makeText(Home.this, " updateSharedP() -> AsyncTask Done, updated data is now in shared preferences, number of questions == " + questionsMaster.getQuestionsMasterMap().size() + " And number of Tags == " + tagMaster.getAllTags().size() , Toast.LENGTH_LONG).show();
-  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,7 +137,7 @@ public class Home extends AppCompatActivity {
 //    thread.start();
     //========================================================================
     Intent intent = new Intent(this, DateInterestsSelector.class);
-    startActivity(intent);
+   startActivity(intent);
   }
 
   /**

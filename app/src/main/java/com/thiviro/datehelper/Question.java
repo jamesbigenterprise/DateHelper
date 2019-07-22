@@ -143,5 +143,12 @@ public class Question {
     comments.add(newComment);
   }
 
+  /**
+   * Get the ID generated on the Backend
+   * @return the ID
+   */
+  public String getId(){
+    return id;
+  }
 }
 
