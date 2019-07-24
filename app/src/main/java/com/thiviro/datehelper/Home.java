@@ -68,35 +68,7 @@ public class Home extends AppCompatActivity {
     getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET, prefHandler);
     getAPIWorker.execute();
     sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-//
-//    gson = new Gson();
-//    String tagMasterJson = sharedPreferences.getString(MainActivity.TAG_MASTER, "");
-//    tagMaster = gson.fromJson(tagMasterJson, TagMaster.class);
-//    String questionMasterJson = sharedPreferences.getString(MainActivity.QUESTION_MASTER, "");
-//    questionsMaster = gson.fromJson(questionMasterJson, QuestionsMaster.class);
-//    CreateTagMasterAsyncTask task = new CreateTagMasterAsyncTask(Home.this);
-//
-//    //Log.d(TAG, "the changes were made, we have questions == " + questionsMaster.getQuestionsMasterMap().size());
-//    synchronized (this){
-//      task.execute(tagMaster);
-//    }
 
-
-  }
-
-  void updateSharedP(){
-    //Log.d(TAG, "updateSharedP() -> the changes were made, we have questions after async inside synchronized == " + questionsMaster.getQuestionsMasterMap().size());
-
-
-    String tmJson = gson.toJson(tagMaster);
-    String qmJason = gson.toJson(questionsMaster);
-    tagMaster.addTag(new Tag("Reserved"));
-    prefHandler.setTagMaster(tagMaster);
-    prefHandler.setQuestionMaster(questionsMaster);
-
-    //Log.d(TAG, "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
-    System.out.println(TAG +  "updateSharedP() -> this is what we are putting into the shared preferences == " + qmJason);
-    //Toast.makeText(Home.this, " updateSharedP() -> AsyncTask Done, updated data is now in shared preferences, number of questions == " + questionsMaster.getQuestionsMasterMap().size() + " And number of Tags == " + tagMaster.getAllTags().size() , Toast.LENGTH_LONG).show();
   }
 
   @Override

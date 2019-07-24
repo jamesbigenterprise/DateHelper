@@ -25,6 +25,7 @@ public class Comment {
 
 
   // Getters
+
   public String getComment() {
     return comment;
   }
@@ -34,6 +35,7 @@ public class Comment {
   }
 
   //Setter
+
   public void setComment(String comment) {
     this.comment = comment;
 

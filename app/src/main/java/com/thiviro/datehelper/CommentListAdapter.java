@@ -16,6 +16,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * The CommentListAdapter handles the views in a list view fo comments
+ *
+ * @author Thiago
+ *
+ */
 public class CommentListAdapter extends ArrayAdapter<Comment> {
     private Context context;
     private int resource;
@@ -31,12 +37,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         Account author = null;
-        /**
-         * BACKEND
-         *
-         * Download the account of the author
-         * To then get the name of the author
-         */
+
         String name = author.getName();
         String comment = getItem(position).getComment();
         String imageURL = getItem(position).getImageURl();
