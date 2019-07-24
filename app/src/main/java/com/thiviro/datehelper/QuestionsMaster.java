@@ -105,13 +105,15 @@ public class QuestionsMaster {
     }
     //get the top question of each tag
     Map<Question, Question> topQuestions = new HashMap<Question, Question>(); //use a map because if we get repetitive Questions they will be overridden
-    for (Tag tag : topTags) {
-      topQuestions.put(tag.getTopQuestion(dateProfile), tag.getTopQuestion(dateProfile));
-    }
+//    for (Tag tag : topTags) {
+//      topQuestions.put(tag.getTopQuestion(dateProfile), tag.getTopQuestion(dateProfile));
+//    }
     ArrayList<Question> resultsList = new ArrayList<Question>();
     for (Map.Entry<Question, Question> entry: topQuestions.entrySet()){
       resultsList.add(entry.getValue());
     }
     return resultsList;
   }
+
+
 }

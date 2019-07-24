@@ -1,12 +1,11 @@
 package com.thiviro.datehelper;
 
-import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +16,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,22 +69,25 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       Gson gson = new Gson();
 
       //String accountJson;
-      String questionJson = getIntent().getStringExtra(NewQuestion.NEW_QUESTION_EXTRA);
+      String questionID = getIntent().getStringExtra(NewQuestion.NEW_QUESTION_EXTRA);
+      APINewQuestion newQ = new APINewQuestion(this,
+          APIWorker.ENDPOINT_QUESTIONS + "/"+ questionID,APIWorker.GET);
+      newQ.execute();
       account =  prefHandler.getAccount();
-      question = gson.fromJson(questionJson, Question.class);
+      //question = gson.fromJson(questionJson, Question.class);
       Glide.with(this).load(account.getImageURL()).into(profilePictureView);
 
-    questionTextView.setText(question.getQuestion());
+    //questionTextView.setText(question.getQuestion());
     author_name_textView.setText(account.getName());
-    markVote();
+//    markVote();
 
-      commentList = findViewById(R.id.interestList);
-      if(question.getComments().size() == 0){
-        this.comments = new ArrayList<Comment>();
-      }else{
-        this.comments = question.getComments();
-        createList();
-      }
+//      commentList = findViewById(R.id.interestList);
+//      if(question.getCommentsID().size() == 0){
+//        this.comments = new ArrayList<Comment>();
+//      }else{
+//        this.comments = question.getCommentsID();
+//        createList();
+//      }
 
 
   }
@@ -120,7 +124,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(Void  v) {
             super.onPostExecute(v);
-            markVote();
+//            markVote();
             upVote.setVisibility(View.VISIBLE);
             downVote.setVisibility(View.VISIBLE);
             questionTextView.setVisibility(View.VISIBLE);
@@ -164,7 +168,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(Void  v) {
             super.onPostExecute(v);
-            markVote();
+//            markVote();
             tagMaster = downloadedTagMaster; //set the new tagmaster
             upVote.setVisibility(View.VISIBLE);
             downVote.setVisibility(View.VISIBLE);
@@ -211,7 +215,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       @Override
       protected void onPostExecute(Void aVoid) {
           super.onPostExecute(aVoid);
-          markVote();
+//          markVote();
           upVote.setVisibility(View.VISIBLE);
           downVote.setVisibility(View.VISIBLE);
           questionTextView.setVisibility(View.VISIBLE);
@@ -245,7 +249,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       @Override
       protected Question doInBackground(String... strings) {
           Comment newComment = new Comment(thisaccount, strings[0], thisaccount.getImageURL());
-          thisQuestion.addComment(newComment);
+//          thisQuestion.addComment(newComment);
           /**
            * Todo Upload question with the new comment
            */
@@ -255,7 +259,7 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       @Override
       protected void onPostExecute(Question question) {
           super.onPostExecute(question);
-          markVote();
+//          markVote();
           upVote.setVisibility(View.VISIBLE);
           downVote.setVisibility(View.VISIBLE);
           questionTextView.setVisibility(View.VISIBLE);
@@ -268,31 +272,31 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
   }
 
 
-  public void markVote(){
-    if(question.hasVoted(account)){
-        if(question.getVote(account).equals(1)){
-            //set the upVote Button to blue
-            upVote.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            downVote.setBackgroundColor(getResources().getColor(R.color.colorTopBar));
-        }else {
-          //set the downvote to blue
-            downVote.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            upVote.setBackgroundColor(getResources().getColor(R.color.colorTopBar));
-        }
-    }
-  }
+//  public void markVote(){
+//    if(question.hasVoted(account)){
+//        if(question.getVote(account).equals(1)){
+//            //set the upVote Button to blue
+//            upVote.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//            downVote.setBackgroundColor(getResources().getColor(R.color.colorTopBar));
+//        }else {
+//          //set the downvote to blue
+//            downVote.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//            upVote.setBackgroundColor(getResources().getColor(R.color.colorTopBar));
+//        }
+//    }
+//  }
     @Override
     public void onClick(View v) {
       switch (v.getId()){
           case R.id.up_button:
-            question.upVote(account, tagMaster);
+//            question.upVote(account, tagMaster);
             //UploadTagMasterAsyncTask task1 = new UploadTagMasterAsyncTask(QuestionView.this);
             //task1.execute();
             //UploadQuestionAsyncTask task2 = new UploadQuestionAsyncTask(QuestionView.this);
             //task2.execute();
             break;
           case R.id.down_button:
-            question.downVote(account, tagMaster);
+//            question.downVote(account, tagMaster);
             //UploadTagMasterAsyncTask task1case2 = new UploadTagMasterAsyncTask(QuestionView.this);
             //task1case2.execute();
             //UploadQuestionAsyncTask task2case2 = new UploadQuestionAsyncTask(QuestionView.this);
@@ -312,4 +316,19 @@ public class QuestionView extends AppCompatActivity implements View.OnClickListe
       commentList.setAdapter(listAdapter);
     }
 
+  protected class APINewQuestion extends APIWorker {
+
+    protected APINewQuestion(Activity activity, String endpoint, String method){
+      super(activity, endpoint, method);
+    }
+
+    @Override
+    protected void onPostExecute(String response){
+      Gson gson = new Gson();
+      Question q = gson.fromJson(response, Question.class);
+      questionTextView.setText(q.getQuestion());
+
+    }
+
+  }
 }

@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +18,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewQuestion extends AppCompatActivity implements View.OnClickListener {
@@ -224,13 +218,13 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         //The selections were made, so lets turn them into tags
         // turn each string into a Tag
         listofTags = new ArrayList<Tag>();
-        for (String tag : interests) {
+        for (String tag : getSelection()) {
           listofTags.add(new Tag(tag));
         }
         boolean savedQuestion = askNewQuestion();
         if(savedQuestion) {
           Intent intent = new Intent(this, QuestionView.class);
-          String questionJson = new Gson().toJson(newQuestion);
+          String questionJson = newQuestion.getId();
           intent.putExtra(NEW_QUESTION_EXTRA, questionJson);
           startActivity(intent);
         }
@@ -254,13 +248,8 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
       return false;
     }else {
       newQuestion = new Question(account,question,summary,listofTags, tagMaster);
-      //Log.d(DEBUG_LOG, "Question text == " + newQuestion.getQuestion());
-      /**
-       * BACKEND
-       *
-       * Save the questions Master in the server
-       */
-
+      questionPostAPIWorker qpWorker = new questionPostAPIWorker(this, APIWorker.ENDPOINT_QUESTIONS, APIWorker.POST,newQuestion);
+      qpWorker.execute();
       return true;
     }
   }
@@ -299,7 +288,6 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onPostExecute(String response){
       final Activity activityRef = activity.get();
-      System.out.println("PostExecuteResponse: " + response);
         Gson gson = new Gson();
         Type questionList = new TypeToken<ArrayList<Question>>() {}.getType();
         final List<Question> questionList1 = gson.fromJson(response, questionList);
@@ -314,6 +302,24 @@ public class NewQuestion extends AppCompatActivity implements View.OnClickListen
         }
 
     }
+
+  private class questionPostAPIWorker extends APIWorker{
+
+    protected questionPostAPIWorker(Activity activity, String endpoint, String method, Object object){
+      super(activity, endpoint, method, object);
+    }
+
+    @Override
+    protected void onPostExecute(String response) throws NullPointerException {
+      try{
+        System.out.println("Response:" + response + " Length: "+response.length());
+      } catch (NullPointerException e){
+        System.out.println(e.getMessage());
+      }
+
+    }
+
+  }
   }
 
 

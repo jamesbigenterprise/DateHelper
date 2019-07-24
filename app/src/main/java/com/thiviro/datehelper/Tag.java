@@ -56,30 +56,30 @@ public class Tag {
     }
   }
 
-  /**
-   * Check all the questions that use this Tag and return the question with the highest number of votes
-   *
-   * Organize the questions by the votes they received in a HashMap using the vote as a key and question as object
-   * Put the results in a tree that will automatically organize the results by the keys and return the first,
-   * that is the Top Question
-   * @param person Person to get the gender for the votes
-   * @return
-   */
-  public Question getTopQuestion(Person person) {
-    Map<Float, Question> questionsMap = new HashMap<>();
-    List<Question> questionsInUseDownloaded = new ArrayList<>();
-    /**
-     * BACKEND
-     *
-     * Download all the questions in use
-     * and save in questionsInUseDownloaded
-     */
-    for (Question question : questionsInUseDownloaded) {
-      questionsMap.put(question.getPercentOfUpVotes(person), question);
-      }
-    TreeMap<Float, Question> treeOfQuestions = new TreeMap<>(questionsMap);
-    return treeOfQuestions.get(( treeOfQuestions).firstKey());
-  }
+//  /**
+//   * Check all the questions that use this Tag and return the question with the highest number of votes
+//   *
+//   * Organize the questions by the votes they received in a HashMap using the vote as a key and question as object
+//   * Put the results in a tree that will automatically organize the results by the keys and return the first,
+//   * that is the Top Question
+//   * @param person Person to get the gender for the votes
+//   * @return
+//   */
+//  public Question getTopQuestion(Person person) {
+//    Map<Float, Question> questionsMap = new HashMap<>();
+//    List<Question> questionsInUseDownloaded = new ArrayList<>();
+//    /**
+//     * BACKEND
+//     *
+//     * Download all the questions in use
+//     * and save in questionsInUseDownloaded
+//     */
+//    for (Question question : questionsInUseDownloaded) {
+//      questionsMap.put(question.getPercentOfUpVotes(person), question);
+//      }
+//    TreeMap<Float, Question> treeOfQuestions = new TreeMap<>(questionsMap);
+//    return treeOfQuestions.get(( treeOfQuestions).firstKey());
+//  }
 
   /**
    * Get a the name of the Tag that can be used as a key to retrieve the Tag in the Tag master

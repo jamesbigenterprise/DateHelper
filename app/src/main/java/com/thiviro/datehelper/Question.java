@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Store the question and a summary of it in Strings
@@ -19,13 +20,16 @@ public class Question {
   private String author;
   private String question;
   private String summary;//The question summarized in an action like: "Go to the movies;"
+  private int upVotes;
+  private int downVotes;
 
 
 
   //Collections
-  public VoteTracker voteTracker;
-  private List<String> tagKeys;
-  private List<Comment> comments;
+  //public VoteTracker voteTracker;
+  private List<String> tagsID;
+  private List<String> commentsID;
+  //private List<Comment> commentsID;
   //use this to avoid duplicate questions and have them in a single place
 
 
@@ -41,18 +45,21 @@ public class Question {
    * @param tagMaster The way to keep all the tags in one place
    */
   public Question(Account author, String question, String summary, List<Tag> tags, TagMaster tagMaster) {
+    this.id = UUID.randomUUID().toString();
     this.author = author.getId();
     this.question = question;
     this.summary = summary;
-    this.voteTracker = new VoteTracker();
+    //this.voteTracker = new VoteTracker();
+    this.upVotes = 0;
+    this.downVotes = 0;
     //this tag master is to make sure we are using unique tags
-    this.tagKeys = new ArrayList<>();
-    this.comments = new ArrayList();
+    this.tagsID = new ArrayList<>();
+    this.commentsID = new ArrayList();
 
     for (Tag tag: tags){
       //make sure the tag is listed in the tag master before adding to this person
       tag.addQuestion(this);
-      this.tagKeys.add(tagMaster.addTag(tag));
+      this.tagsID.add(tagMaster.addTag(tag));
     }
   }
 
@@ -72,49 +79,53 @@ public class Question {
     return summary;
   }
 
-  /**
-   * Get the percentage of up Votes using the vote Tracker
-   * @param person Use the person to know the gender
-   * @return the percentage from the vote tracker
-   */
-  public float getPercentOfUpVotes (Person person) {
-    return voteTracker.getPercentageOfUpVotes(person);
-  }
+//  /**
+//   * Get the percentage of up Votes using the vote Tracker
+//   * @param person Use the person to know the gender
+//   * @return the percentage from the vote tracker
+//   */
+//  public float getPercentOfUpVotes (Person person) {
+//    return voteTracker.getPercentageOfUpVotes(person);
+//  }
 
-  /**
-   * Up vote the question and all the children Tags
-   *
-   * Use the vote tracker to up vote
-   * get a list of tags using the keys
-   * Up vote all the tags
-   * @param user account to use in the vote
-   */
-  void upVote(Account user, TagMaster tagMaster) {
-      voteTracker.upVote(user);
-      List<Tag> tags = tagMaster.getTagsPack(tagKeys);
-      for (Tag tag : tags) {//apply the same vote to all the children tags
-         tag.upVote(user);
-      }
-  }
+//  /**
+//   * Up vote the question and all the children Tags
+//   *
+//   * Use the vote tracker to up vote
+//   * get a list of tags using the keys
+//   * Up vote all the tags
+//   * @param user account to use in the vote
+//   */
+//  void upVote(Account user, TagMaster tagMaster) {
+//      voteTracker.upVote(user);
+//      List<Tag> tags = tagMaster.getTagsPack(tagsID);
+//      for (Tag tag : tags) {//apply the same vote to all the children tags
+//         tag.upVote(user);
+//      }
+//  }
 
-  /**
-   * Down vote the question and all the children Tags
-   *
-   * Use the vote tracker to up vote
-   * get a list of tags using the keys
-   * down vote all the tags
-   * @param user account to use in the vote
-   */
-  void downVote(Account user, TagMaster tagMaster) {
-    voteTracker.downVote(user);
-    List<Tag> tags = new ArrayList<>(tagMaster.getTagsPack(tagKeys));
-    for (Tag tag : tags) {//apply the same vote to all the children tags
-      tag.downVote(user);
-    }
-  }
+//  /**
+//   * Down vote the question and all the children Tags
+//   *
+//   * Use the vote tracker to up vote
+//   * get a list of tags using the keys
+//   * down vote all the tags
+//   * @param user account to use in the vote
+//   */
+//  void downVote(Account user, TagMaster tagMaster) {
+//    voteTracker.downVote(user);
+//    List<Tag> tags = new ArrayList<>(tagMaster.getTagsPack(tagsID));
+//    for (Tag tag : tags) {//apply the same vote to all the children tags
+//      tag.downVote(user);
+//    }
+//  }
 
-  public List<Comment> getComments(){
-      return comments;
+//  public List<Comment> getCommentsID(){
+//      return commentsID;
+//  }
+
+    public List<String> getCommentsID(){
+      return commentsID;
   }
 
   /**
@@ -122,25 +133,29 @@ public class Question {
    * @param user the user that will be checked
    * @return true if has voted(Account is on the Collection), false if it has not (Account is not the Collection)
    */
-  public boolean hasVoted(Account user) {
-    return voteTracker.hasVoted(user);
-  }
+//  public boolean hasVoted(Account user) {
+//    return voteTracker.hasVoted(user);
+//  }
 
   /**
    * Return a Integer to show the vote
    * @param user the user that will be checked
    * @return 1 if has upVoted, false if it has downVoted
    */
-  public Integer getVote(Account user) {
-    return voteTracker.getVote(user);
-  }
+//  public Integer getVote(Account user) {
+//    return voteTracker.getVote(user);
+//  }
 
   /**
    * Add new comment to the question
    * @param newComment the comment to be added
    */
-  public void addComment(Comment newComment){
-    comments.add(newComment);
+//  public void addComment(Comment newComment){
+//    commentsID.add(newComment);
+//  }
+
+  public void addComment(String newComment){
+    commentsID.add(newComment);
   }
 
   /**
