@@ -114,12 +114,7 @@ public class Question {
   }
 
   public List<Comment> getComments(){
-    if (!comments.isEmpty()){
       return comments;
-    }else{
-      return null;
-    }
-
   }
 
   /**
@@ -148,5 +143,12 @@ public class Question {
     comments.add(newComment);
   }
 
+  /**
+   * Get the ID generated on the Backend
+   * @return the ID
+   */
+  public String getId(){
+    return id;
+  }
 }
 

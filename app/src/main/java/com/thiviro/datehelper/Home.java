@@ -40,9 +40,8 @@ public class Home extends AppCompatActivity {
 
   public static final String SHARED_PREFS = "sharedPrefs";
   public static final String TAG = "Home";
+  private Account account;
   private TagMaster tagMaster;
-  private QuestionsMaster questionsMaster;
-  private SharedPreferences sharedPreferences;
   private ProgressBar progressBar;
   private Button helpOnDate;
   private Button askQuestion;
@@ -65,11 +64,13 @@ public class Home extends AppCompatActivity {
     progressBar = findViewById(R.id.progress_bar);
     helpOnDate = findViewById(R.id.help_date_button);
     askQuestion = findViewById(R.id.ask_question_button);
+    account = prefHandler.getAccount();
+    tagMaster = prefHandler.getTagMaster();
     getAPIWorker = new GetAPIWorker(this, APIWorker.ENDPOINT_USERS, APIWorker.GET, prefHandler);
     getAPIWorker.execute();
-    sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
   }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
